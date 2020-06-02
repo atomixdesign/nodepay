@@ -1,4 +1,4 @@
-import { TestGateway } from './testGateway'
+import { TestGateway } from './test-gateway'
 
 describe('test gateway', () => {
   let gateway: TestGateway

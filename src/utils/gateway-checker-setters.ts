@@ -8,12 +8,13 @@ export type GatewayMap = Map<string, Gateway>
 
 export type GatewayRecord = Record<string, Gateway>
 
-export type GatewayArrayOrMapOrRecord = GatewayArray | GatewayMap | GatewayRecord | null
+export type GatewayArrayOrMapOrRecord = GatewayArray | GatewayMap | GatewayRecord | undefined
 
-export type GatewayMapCheckerSetter = [
-  (gateways: GatewayArrayOrMapOrRecord) => boolean,
-  (gateways: any) => GatewayMap,
-]
+export type Checker = (gateways: GatewayArrayOrMapOrRecord) => boolean
+
+export type Setter<T> = (gateways: T) => GatewayMap
+
+export type GatewayMapCheckerSetter<T> = [Checker, Setter<T>]
 
 export const isArray = (gateways: GatewayArrayOrMapOrRecord): boolean => {
   return Array.isArray(gateways)
@@ -22,7 +23,7 @@ export const isArray = (gateways: GatewayArrayOrMapOrRecord): boolean => {
 export const gatewaysFromArray = (gateways: GatewayArray): GatewayMap => {
   const gatewayMap = new Map<string, Gateway>()
 
-  for (let gateway of gateways) {
+  for (const gateway of gateways) {
     gatewayMap.set(gateway.shortName, gateway)
   }
 
@@ -51,8 +52,8 @@ export const gatewaysFromRecord = (gateways: GatewayRecord): GatewayMap => {
   return gatewayMap
 }
 
-export const checkerSetters: GatewayMapCheckerSetter[] = [
-  [isArray, gatewaysFromArray],
-  [isMap, gatewaysFromMap],
-  [isRecord, gatewaysFromRecord],
-]
+const arrayCheckerSetter: GatewayMapCheckerSetter<GatewayArray> = [isArray, gatewaysFromArray]
+const mapCheckerSetter: GatewayMapCheckerSetter<GatewayMap> = [isMap, gatewaysFromMap]
+const recordCheckerSetter: GatewayMapCheckerSetter<GatewayRecord> = [isRecord, gatewaysFromRecord]
+
+export const checkerSetters = [arrayCheckerSetter, mapCheckerSetter, recordCheckerSetter]

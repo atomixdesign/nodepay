@@ -1,1 +1,1 @@
-export * from './gatewayCheckerSetters'
+export * from './gateway-checker-setters'

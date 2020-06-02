@@ -1,1 +1,1 @@
-export * from './testGateway'
+export * from './test-gateway'

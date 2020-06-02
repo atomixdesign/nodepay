@@ -1,4 +1,4 @@
-import { BaseGateway } from '../baseGateway'
+import { BaseGateway } from '../base-gateway'
 import { DirectDebit, OnceOffPayment, RecurringPayment } from '../../features'
 
 export class TestGateway extends BaseGateway implements RecurringPayment, DirectDebit, OnceOffPayment {
@@ -10,15 +10,15 @@ export class TestGateway extends BaseGateway implements RecurringPayment, Direct
     return 'test'
   }
 
-  charge(): any {
+  charge(): string {
     return 'once-off'
   }
 
-  chargeRecurring(): any {
+  chargeRecurring(): string {
     return 'recurring'
   }
 
-  directDebit(): any {
+  directDebit(): string {
     return 'direct-debit'
   }
 }

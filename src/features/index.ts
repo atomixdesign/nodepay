@@ -1,3 +1,3 @@
-export * from './recurringPayment'
-export * from './onceOffPayment'
-export * from './directDebit'
+export * from './recurring-payment'
+export * from './once-off-payment'
+export * from './direct-debit'

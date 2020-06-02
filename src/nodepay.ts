@@ -3,13 +3,14 @@ import { checkerSetters, Gateway, GatewayArrayOrMapOrRecord, GatewayMap } from '
 export class Nodepay {
   public readonly gateways: GatewayMap
 
-  constructor(gateways: GatewayArrayOrMapOrRecord = null) {
+  constructor(gateways?: GatewayArrayOrMapOrRecord) {
     this.gateways = this.buildGatewayMap(gateways)
   }
 
   private buildGatewayMap(gateways: GatewayArrayOrMapOrRecord): GatewayMap {
-    for (let [checker, setter] of checkerSetters) {
+    for (const [checker, setter] of checkerSetters) {
       if (checker(gateways)) {
+        // @ts-ignore
         return setter(gateways)
       }
     }

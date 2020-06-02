@@ -1,2 +1,2 @@
-export * from './baseGateway'
+export * from './base-gateway'
 export * from './test'

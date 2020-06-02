@@ -29,7 +29,7 @@ describe('nodepay entry', () => {
       const nodepay = new Nodepay([gateway])
 
       expect(nodepay.gateways.size).toBe(1)
-      expect(Array.from(nodepay.gateways.keys())).toStrictEqual(['mock'])
+      expect([...nodepay.gateways.keys()]).toStrictEqual(['mock'])
     })
 
     it('can be created with an object', () => {
@@ -38,7 +38,7 @@ describe('nodepay entry', () => {
       })
 
       expect(nodepay.gateways.size).toBe(1)
-      expect(Array.from(nodepay.gateways.keys())).toStrictEqual(['mock'])
+      expect([...nodepay.gateways.keys()]).toStrictEqual(['mock'])
     })
 
     it('can be created with a map', () => {
@@ -47,7 +47,7 @@ describe('nodepay entry', () => {
       const nodepay = new Nodepay(gatewayMap)
 
       expect(nodepay.gateways.size).toBe(1)
-      expect(Array.from(nodepay.gateways.keys())).toStrictEqual(['mock'])
+      expect([...nodepay.gateways.keys()]).toStrictEqual(['mock'])
     })
   })
 
@@ -58,7 +58,7 @@ describe('nodepay entry', () => {
       })
 
       expect(nodepay.gateways.size).toBe(1)
-      expect(Array.from(nodepay.gateways.keys())).toStrictEqual(['myMock'])
+      expect([...nodepay.gateways.keys()]).toStrictEqual(['myMock'])
     })
 
     it('can be created with a map', () => {
@@ -67,7 +67,7 @@ describe('nodepay entry', () => {
       const nodepay = new Nodepay(gatewayMap)
 
       expect(nodepay.gateways.size).toBe(1)
-      expect(Array.from(nodepay.gateways.keys())).toStrictEqual(['myMock'])
+      expect([...nodepay.gateways.keys()]).toStrictEqual(['myMock'])
     })
   })
 })

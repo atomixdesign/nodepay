@@ -1,3 +1,3 @@
 export interface RecurringPayment {
-  chargeRecurring(): any
+  chargeRecurring(): string
 }
