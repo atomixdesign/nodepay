@@ -1,0 +1,14 @@
+node_modules/
+build/
+.idea/
+coverage/
+
+tags
+.DS_Store
+*.log
+error_log
+*.sql
+*.dat
+*.gz
+*.tar
+*.zip
