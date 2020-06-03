@@ -8,5 +8,4 @@ package/
 tags
 .DS_Store
 tsconfig.json
-README.md
 jest.config.js
