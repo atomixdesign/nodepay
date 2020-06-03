@@ -15,7 +15,10 @@
     "start": "ts-node-dev --respawn src/index.ts",
     "test": "yarn jest",
     "test:watch": "yarn test --watch",
-    "lint": "eslint ./src"
+    "lint": "eslint ./src",
+    "version:patch": "npm version patch --git-tag-version -m '🔖 v%s' -s",
+    "version:minor": "npm version minor --git-tag-version -m '🔖 v%s' -s",
+    "version:major": "npm version major --git-tag-version -m '🔖 v%s' -s"
   },
   "devDependencies": {
     "@types/jest": "^25.2.3",
