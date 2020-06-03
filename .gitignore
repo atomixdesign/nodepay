@@ -2,6 +2,7 @@ node_modules/
 build/
 .idea/
 coverage/
+package/
 
 tags
 .DS_Store
@@ -12,3 +13,4 @@ error_log
 *.gz
 *.tar
 *.zip
+*.tgz

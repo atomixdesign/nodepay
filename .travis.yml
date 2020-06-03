@@ -1,0 +1,27 @@
+language: nodejs
+
+before_script:
+  - yarn
+
+script:
+  - yarn build
+  - yarn lint
+  - yarn test
+
+after_success:
+  - yarn pack
+
+deploy:
+  - provider: releases
+    api_key: $GITHUB_TOKEN
+    file_glob: true
+    file: "atomixdesign-nodepay-*.tgz"
+    skip_cleanup: true
+    on:
+      tags: true
+  - provider: npm
+    api_key: $NPM_TOKEN
+    email: "jack@atomix.com.au"
+    skip_cleanup: true
+    on:
+      tags: true
