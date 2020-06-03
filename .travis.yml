@@ -6,6 +6,7 @@ branches:
   only:
     - master
     - next
+    - /^v\d+\.\d+\.\d+$/
 
 before_script:
   - yarn
