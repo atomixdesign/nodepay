@@ -1,7 +1,17 @@
 import { BaseGateway } from '../base-gateway'
 import { DirectDebit, OnceOffPayment, RecurringPayment } from '../../features'
 
-export class TestGateway extends BaseGateway implements RecurringPayment, DirectDebit, OnceOffPayment {
+export type Config = {
+  apiKey: string
+}
+
+export class TestGateway extends BaseGateway<Config> implements RecurringPayment, DirectDebit, OnceOffPayment {
+  protected get baseConfig(): Config {
+    return {
+      apiKey: 'default-api-key',
+    }
+  }
+
   get name(): string {
     return 'Test payment gateway'
   }
@@ -19,6 +29,6 @@ export class TestGateway extends BaseGateway implements RecurringPayment, Direct
   }
 
   directDebit(): string {
-    return 'direct-debit'
+    return this.config.apiKey
   }
 }

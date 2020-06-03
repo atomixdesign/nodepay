@@ -17,4 +17,14 @@ describe('test gateway', () => {
     expect(gateway.chargeRecurring()).toBe('recurring')
     expect(gateway.directDebit()).toBe('direct-debit')
   })
+
+  test('it can be configured', () => {
+    expect(gateway.config.apiKey).toBe('default-api-key')
+
+    const newGateway = new TestGateway({
+      apiKey: 'new-api-key',
+    })
+
+    expect(newGateway.config.apiKey).toBe('new-api-key')
+  })
 })
