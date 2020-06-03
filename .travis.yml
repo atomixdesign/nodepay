@@ -2,6 +2,11 @@ language: nodejs
 node_js:
   - 12
 
+branches:
+  only:
+    - master
+    - next
+
 before_script:
   - yarn
 
