@@ -1,4 +1,6 @@
 language: nodejs
+node_js:
+  - 12
 
 before_script:
   - yarn
