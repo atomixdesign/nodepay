@@ -2,3 +2,10 @@ node_modules/
 src/
 .idea/
 coverage/
+/.*
+package/
+/*.tgz
+tags
+.DS_Store
+tsconfig.json
+jest.config.js
