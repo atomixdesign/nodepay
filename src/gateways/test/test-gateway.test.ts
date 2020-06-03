@@ -27,4 +27,14 @@ describe('test gateway', () => {
 
     expect(newGateway.config.apiKey).toBe('new-api-key')
   })
+
+  test('before and after hooks work', () => {
+    const gateway = new TestGateway({
+      backwards: 'hello world',
+      apiKey: '',
+    })
+
+    expect(gateway.config.backwards).toBe('dlrow olleh')
+    expect(gateway.config.apiKey).toBe('empty-api-key')
+  })
 })
