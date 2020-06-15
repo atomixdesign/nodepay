@@ -6,7 +6,7 @@ export type Config = {
   backwards: string
 }
 
-export class TestGateway extends BaseGateway<Config> implements RecurringPayment, DirectDebit, OnceOffPayment {
+export class TestGateway extends BaseGateway<Config> implements DirectDebit, OnceOffPayment, RecurringPayment {
   protected get baseConfig(): Config {
     return {
       apiKey: 'default-api-key',
@@ -48,6 +48,6 @@ export class TestGateway extends BaseGateway<Config> implements RecurringPayment
   }
 
   directDebit(): string {
-    return this.config.apiKey
+    return 'direct-debit'
   }
 }

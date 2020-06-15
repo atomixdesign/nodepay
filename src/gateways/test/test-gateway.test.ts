@@ -38,3 +38,4 @@ describe('test gateway', () => {
     expect(gateway.config.apiKey).toBe('empty-api-key')
   })
 })
+
