@@ -38,5 +38,8 @@
     "ts-node": "^8.10.2",
     "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.9.3"
+  },
+  "dependencies": {
+    "class-validator": "^0.12.2"
   }
 }
