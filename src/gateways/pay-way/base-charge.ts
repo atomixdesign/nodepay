@@ -17,7 +17,6 @@ export class BaseCharge {
     this.customerNumber = customerNumber
     this.transactionType = 'payment'
     this.principalAmount = principalAmount
-    this.currency = 'aud' // TODO: only AUD supported with PayWay. Consider enum.
     this.orderNumber = orderNumber
     this.customerIpAddress = customerIpAddress
   }
@@ -39,8 +38,6 @@ export class BaseCharge {
     message: 'principalAmount is not a number. Number required, received $value.'
   })
   principalAmount: number;
-
-  currency: string;
 
   @IsOptional()
   @MaxLength(20, {
