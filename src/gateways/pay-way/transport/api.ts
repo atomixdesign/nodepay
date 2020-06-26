@@ -1,15 +1,17 @@
 // handles configurable retry
-import axios, { AxiosInstance, AxiosResponse } from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import { Config } from '../config'
+import { BaseAPI } from '../../../network/base-api'
 
-export class API {
+
+export class API extends BaseAPI {
   private config: Config
   private idempotencyKey: string
   private authHeader: string
-  private httpClient: AxiosInstance
 
   constructor(config: Config) {
+    super()
     this.config = config
     this.idempotencyKey = uuidv4()
     const encodedAuth: string = Buffer.from(config.apiKey, 'binary').toString('base64')
@@ -23,11 +25,12 @@ export class API {
         'Idempotency-Key': this.idempotencyKey, // TODO: persist the idempotency key/ensure close coupling with request signature
       }
     })
+    this.registerLogger()
   }
 
   // Verify key expiry/validity
   async verifyKey(): Promise<AxiosResponse> {
-    const response = await this.httpClient.request({
+    const response = await this.httpClient!.request({
       url: '/api-keys/latest',
     })
     if (response.status === 200) {
