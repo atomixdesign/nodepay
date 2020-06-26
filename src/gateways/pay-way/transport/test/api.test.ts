@@ -12,8 +12,8 @@ describe('test payway api transport', () => {
     })
   })
 
-  test('it can authenticate', async () => {
-    const response: AxiosResponse = await api.authenticate()
+  test('the key validity is verified', async () => {
+    const response: AxiosResponse = await api.verifyKey()
     expect(response.status).toBe(200)
   })
 })

@@ -9,7 +9,7 @@ export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffP
   protected get baseConfig(): Config {
     return {
       apiKey: '',
-      apiRoot: process.env['PAYWAY_ROOT']!,
+      apiRoot: '',
       responseType: 'json'
     }
   }
