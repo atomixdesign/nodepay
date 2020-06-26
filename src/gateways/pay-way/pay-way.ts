@@ -1,15 +1,21 @@
 import { BaseGateway } from '../base-gateway'
 import { DirectDebit, OnceOffPayment, RecurringPayment } from '../../features'
-
-export type Config = {
-  apiKey: string
-}
+import { API as Transport } from './transport/api'
+import { Config } from './config'
 
 export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffPayment, RecurringPayment {
+  private api: Transport
+
   protected get baseConfig(): Config {
     return {
-      apiKey: 'default-api-key',
+      apiKey: '',
+      apiRoot: 'https://api.payway.com.au/rest/v1',
     }
+  }
+
+  constructor(config?: Partial<Config>) {
+    super(config)
+    this.api = new Transport(this.config)
   }
 
   get name(): string {

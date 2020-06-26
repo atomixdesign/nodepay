@@ -40,6 +40,9 @@
     "typescript": "^3.9.3"
   },
   "dependencies": {
-    "class-validator": "^0.12.2"
+    "@types/uuid": "^8.0.0",
+    "axios": "^0.19.2",
+    "class-validator": "^0.12.2",
+    "uuid": "^8.2.0"
   }
 }

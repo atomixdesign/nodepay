@@ -10,20 +10,25 @@ import {
 import {
   ErrorType,
   Errors,
-} from './errors'
+} from '../errors'
 
-export class BaseCharge {
+export class ChargeDTO {
   constructor(
     customerNumber: string,
     principalAmount: number,
     orderNumber?: string,
     customerIpAddress?: string,
+    merchantId?: string,
+    bankAccountId?: string,
   ) {
     this.customerNumber = customerNumber
     this.transactionType = 'payment'
     this.principalAmount = principalAmount
+    this.currency = 'aud'
     this.orderNumber = orderNumber
     this.customerIpAddress = customerIpAddress
+    this.merchantId = merchantId
+    this.bankAccountId = bankAccountId
   }
 
   // * customerNumber
@@ -40,6 +45,9 @@ export class BaseCharge {
 
   // * transactionType
   transactionType: string;
+
+  // * currency
+  currency: string;
 
   // * principalAmount
   @IsNumber(undefined, {
@@ -59,4 +67,10 @@ export class BaseCharge {
     message: Errors.getErrorMessage(ErrorType.IpInvalid, 'customerIpAddress')
   })
   customerIpAddress: string | undefined;
+
+  // * merchantId
+  merchantId: string | undefined;
+
+  // * bankAccountId
+  bankAccountId: string | undefined;
 }
