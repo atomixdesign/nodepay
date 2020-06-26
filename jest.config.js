@@ -5,4 +5,5 @@ module.exports = {
     'src/**/*.ts',
     '!src/**/index.ts',
   ],
+  setupFiles: ['dotenv/config'],
 };

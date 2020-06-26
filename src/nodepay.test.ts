@@ -2,6 +2,10 @@ import { Nodepay } from './nodepay'
 import { BaseGateway } from './gateways'
 
 class MockGateway extends BaseGateway {
+  protected get baseConfig(): Record<string, unknown> {
+    return {}
+  }
+
   get name(): string {
     return 'Mock gateway'
   }

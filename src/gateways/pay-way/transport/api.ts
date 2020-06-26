@@ -1,4 +1,5 @@
 // handles configurable retry
+import axios, { AxiosResponse } from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import { Config } from '../config'
 
@@ -11,9 +12,14 @@ export class API {
     this.idempotencyKey = uuidv4()
   }
 
-  authenticate(): boolean {
+  authenticate(): Promise<AxiosResponse> {
     // Perform authentication query
-    return false
+    return axios.get(this.config.apiRoot, {
+      auth: {
+        username: this.config.apiKey,
+        password: ''
+      }
+    })
   }
 
   verifyKey(): boolean {

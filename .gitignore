@@ -3,6 +3,7 @@ build/
 .idea/
 coverage/
 package/
+.env
 
 tags
 .DS_Store
