@@ -7,6 +7,11 @@ import {
   IsIP,
 } from 'class-validator'
 
+import {
+  ErrorType,
+  Errors,
+} from './errors'
+
 export class BaseCharge {
   constructor(
     customerNumber: string,
@@ -21,32 +26,37 @@ export class BaseCharge {
     this.customerIpAddress = customerIpAddress
   }
 
+  // * customerNumber
   @IsNotEmpty({
-    message: 'customerNumber is empty. Value is required.'
+    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'customerNumber')
   })
   @IsAlphanumeric('en-US', {
-    message: 'customerNumber contains illegal characters. Only letters and numbers allowed, received $value.'
+    message: Errors.getErrorMessage(ErrorType.AlphanumRequired, 'customerNumber')
   })
   @MaxLength(20, {
-    message: 'customerNumber is too long. Maximal length is $constraint1 characters, but actual is $value.'
+    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'customerNumber')
   })
   customerNumber: string;
 
+  // * transactionType
   transactionType: string;
 
+  // * principalAmount
   @IsNumber(undefined, {
-    message: 'principalAmount is not a number. Number required, received $value.'
+    message: Errors.getErrorMessage(ErrorType.NumberRequired, 'principalAmount')
   })
   principalAmount: number;
 
+  // * orderNumber
   @IsOptional()
   @MaxLength(20, {
-    message: 'orderNumber is too long. Maximal length is $constraint1 characters, but actual is $value.'
+    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'orderNumber')
   })
   orderNumber: string | undefined;
 
+  // * customerIpAddress
   @IsIP('4', {
-    message: 'customerIpAddress is invalid. Received $value.'
+    message: Errors.getErrorMessage(ErrorType.IpInvalid, 'customerIpAddress')
   })
   customerIpAddress: string | undefined;
 }
