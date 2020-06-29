@@ -1,12 +1,24 @@
 import { BaseGateway } from '../base-gateway'
+import { DirectDebit, OnceOffPayment, RecurringPayment } from '../../features'
+import { API as Transport } from './transport/api'
+import { Config } from './config'
 
-export type Config = {
-  //
-}
+export class Ezidebit extends BaseGateway<Config> implements DirectDebit, OnceOffPayment, RecurringPayment {
+  private api: Transport
 
-export class Ezidebit extends BaseGateway<Config> {
   protected get baseConfig(): Config {
-    return {}
+    return {
+      clientId: '',
+      digitalKey: '',
+      publicKey: '',
+      testAPI: '',
+      liveAPI: '',
+    }
+  }
+
+  constructor(config?: Partial<Config>) {
+    super(config)
+    this.api = new Transport(this.config)
   }
 
   get name(): string {
@@ -15,5 +27,17 @@ export class Ezidebit extends BaseGateway<Config> {
 
   get shortName(): string {
     return 'ezidebit'
+  }
+
+  charge(): string {
+    return 'once-off'
+  }
+
+  chargeRecurring(): string {
+    return 'recurring'
+  }
+
+  directDebit(): string {
+    return 'direct-debit'
   }
 }
