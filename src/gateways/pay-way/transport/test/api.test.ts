@@ -1,6 +1,9 @@
 import { API } from '../api'
 import { AxiosResponse } from 'axios'
-import { CreditCardDTO } from '../../dtos'
+import {
+  BankAccountDTO,
+  CreditCardDTO,
+} from '../../dtos'
 
 describe('test payway api transport', () => {
   let api: API
@@ -28,6 +31,16 @@ describe('test payway api transport', () => {
       expiryDateYear: '29'
     })
     const response: AxiosResponse = await api.getCCtoken(creditCard)
+    expect(response.status).toBe(200)
+  })
+
+  test('it retrieves a single use token for the bank account', async () => {
+    const bankAccount = new BankAccountDTO({
+      bsb: '650-000',
+      accountNumber: '999994',
+      accountName: 'John Doe',
+    })
+    const response: AxiosResponse = await api.getBankAccountToken(bankAccount)
     expect(response.status).toBe(200)
   })
 })

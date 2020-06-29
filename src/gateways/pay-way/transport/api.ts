@@ -4,7 +4,10 @@ import qs from 'qs'
 import { v4 as uuidv4 } from 'uuid'
 import { Config } from '../config'
 import { BaseAPI } from '../../../network/base-api'
-import { CreditCardDTO } from '../dtos'
+import {
+  BankAccountDTO,
+  CreditCardDTO,
+} from '../dtos'
 
 export class API extends BaseAPI {
   private config: Config
@@ -58,10 +61,18 @@ export class API extends BaseAPI {
     return response
   }
 
-  getBankAccountToken(): string {
-    return ''
-  }
+  async getBankAccountToken(bankAccount: BankAccountDTO): Promise<AxiosResponse> {
+    const response = await this.httpClient!.request({
+      method: 'post',
+      url: '/single-use-tokens',
+      data: qs.stringify({ ...bankAccount }),
+      headers: {
+        Authorization: this.publicAuthHeader,
+      }
+    })
 
+    return response
+  }
   addCustomer(customerNumber?: string): string | undefined {
     return customerNumber
   }
