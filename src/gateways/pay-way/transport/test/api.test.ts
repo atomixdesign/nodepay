@@ -35,6 +35,12 @@ const fixtures = {
     customerIpAddress: '169.254.169.254',
     merchantId: 'TEST',
   },
+  directDebitCharge: {
+    customerNumber: 'customerWithBanking',
+    principalAmount: 22.37,
+    orderNumber: '123456789',
+    customerIpAddress: '169.254.169.254',
+  },
   customerWithCC: {
     customerNumber: 'customerWithCC',
     merchantId: 'TEST',
@@ -60,6 +66,7 @@ describe('test payway api transport', () => {
 
   afterAll(async () => {
     await api.deleteCustomer(fixtures.customerWithCC.customerNumber)
+    // TODO: 'Could not delete customer because they have made payments in the past 220 days.'
     await api.deleteCustomer(fixtures.customerWithBanking.customerNumber)
   })
 
@@ -112,6 +119,21 @@ describe('test payway api transport', () => {
       bankAccountId: fixtures.customerWithBanking.bankAccountId,
     })
     const response: AxiosResponse = await api.addCustomer(customer)
+    expect(validCodes).toContain(response.status)
+  }, 60000)
+
+  test('it places a direct debit charge using bank account', async () => {
+    const bankAccount = new BankAccountDTO(fixtures.bankAccount1)
+    const bankingResponse: AxiosResponse = await api.getBankAccountToken(bankAccount)
+    const customer = new CustomerDTO({
+      singleUseTokenId: bankingResponse?.data.singleUseTokenId,
+      customerNumber: fixtures.customerWithBanking.customerNumber,
+      merchantId: fixtures.customerWithBanking.merchantId,
+      bankAccountId: fixtures.customerWithBanking.bankAccountId,
+    })
+    await api.addCustomer(customer)
+    const directDebitCharge = new ChargeDTO(fixtures.directDebitCharge)
+    const response: AxiosResponse = await api.placeDirectCharge(directDebitCharge)
     expect(validCodes).toContain(response.status)
   }, 60000)
 

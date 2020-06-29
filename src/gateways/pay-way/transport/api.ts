@@ -119,6 +119,16 @@ export class API extends BaseAPI {
     return response
   }
 
+  async placeDirectCharge(charge: ChargeDTO): Promise<AxiosResponse> {
+    const response = await this.httpClient!.request({
+      method: 'post',
+      url: '/transactions',
+      data: qs.stringify({ ...charge }),
+    })
+
+    return response
+  }
+
   schedulePayment(/* customerNumber: string, schedule: PaymentScheduleDTO */): boolean {
     return false
   }
