@@ -15,16 +15,19 @@ export class CustomerDTO {
       customerNumber,
       singleUseTokenId,
       merchantId,
+      bankAccountId,
     }:
       {
         customerNumber: string
         singleUseTokenId: string
-        merchantId: string
+        merchantId?: string
+        bankAccountId?: string
       }
   ) {
     this.customerNumber = customerNumber
     this.singleUseTokenId = singleUseTokenId
     this.merchantId = merchantId
+    this.bankAccountId = bankAccountId
   }
 
   // * customerNumber
@@ -46,8 +49,8 @@ export class CustomerDTO {
   singleUseTokenId: string;
 
   // * merchantId
-  @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'merchantId')
-  })
-  merchantId: string;
+  merchantId: string | undefined;
+
+  // * bankAccountId
+  bankAccountId: string | undefined;
 }

@@ -35,7 +35,7 @@ export abstract class BaseAPI<T extends Record<string, unknown> = Record<string,
         // Do something with response error
         if (DEBUG) {
           // console.dir(error, { depth: undefined })
-          // console.dir(error?.response?.data, { depth: undefined })
+          console.table(error?.response?.data.data) // , { depth: undefined })
         }
         return Promise.reject(error)
       })

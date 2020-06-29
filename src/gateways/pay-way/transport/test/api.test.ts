@@ -7,6 +7,11 @@ import {
   CustomerDTO,
 } from '../../dtos'
 
+const validCodes = [
+  200,
+  201,
+]
+
 const fixtures = {
   creditCard: {
     cardNumber: '4564710000000004',
@@ -15,11 +20,14 @@ const fixtures = {
     expiryDateMonth: '02',
     expiryDateYear: '29'
   },
-  bankAccount: {
+  bankAccount1: {
     bsb: '650-000',
     accountNumber: '999994',
     accountName: 'John Doe',
   },
+  /* bankAccountForDebit: {
+    bsb: '000-000',
+  }, */
   onceOffCharge: {
     customerNumber: 'onceoffCustomer',
     principalAmount: 10.87,
@@ -27,9 +35,14 @@ const fixtures = {
     customerIpAddress: '169.254.169.254',
     merchantId: 'TEST',
   },
-  customer: {
-    customerNumber: 'customerTestFixture',
+  customerWithCC: {
+    customerNumber: 'customerWithCC',
     merchantId: 'TEST',
+  },
+  customerWithBanking: {
+    customerNumber: 'customerWithBanking',
+    merchantId: 'TEST',
+    bankAccountId: '0000000A'
   }
 }
 
@@ -47,21 +60,21 @@ describe('test payway api transport', () => {
 
   test('it verifies the key validity', async () => {
     const response: AxiosResponse = await api.verifyKey()
-    expect(response.status).toBe(200)
+    expect(validCodes).toContain(response.status)
   })
 
   // See: https://www.payway.com.au/docs/net.html#test-card-numbers
   test('it retrieves a single use token for the credit card', async () => {
     const creditCard = new CreditCardDTO(fixtures.creditCard)
     const response: AxiosResponse = await api.getCCtoken(creditCard)
-    expect(response.status).toBe(200)
+    expect(validCodes).toContain(response.status)
   })
 
   // See: https://quickstream.westpac.com.au/docs/general/test-account-numbers/#test-bank-accounts
   test('it retrieves a single use token for the bank account', async () => {
-    const bankAccount = new BankAccountDTO(fixtures.bankAccount)
+    const bankAccount = new BankAccountDTO(fixtures.bankAccount1)
     const response: AxiosResponse = await api.getBankAccountToken(bankAccount)
-    expect(response.status).toBe(200)
+    expect(validCodes).toContain(response.status)
   })
 
   test('it places a once-off charge using credit card', async () => {
@@ -69,7 +82,7 @@ describe('test payway api transport', () => {
     const ccResponse: AxiosResponse = await api.getCCtoken(creditCard)
     const onceOffCharge = new ChargeDTO(fixtures.onceOffCharge)
     const response: AxiosResponse = await api.placeCharge(ccResponse?.data.singleUseTokenId, onceOffCharge)
-    expect(response.status).toBe(201)
+    expect(validCodes).toContain(response.status)
   }, 60000)
 
   test('it adds a customer using a credit card', async () => {
@@ -77,11 +90,24 @@ describe('test payway api transport', () => {
     const ccResponse: AxiosResponse = await api.getCCtoken(creditCard)
     const customer = new CustomerDTO({
       singleUseTokenId: ccResponse?.data.singleUseTokenId,
-      customerNumber: fixtures.customer.customerNumber,
-      merchantId: fixtures.customer.merchantId,
+      customerNumber: fixtures.customerWithCC.customerNumber,
+      merchantId: fixtures.customerWithCC.merchantId,
     })
     const response: AxiosResponse = await api.addCustomer(customer)
-    expect(response.status).toBe(201)
+    expect(validCodes).toContain(response.status)
+  }, 60000)
+
+  test('it adds a customer using a bank account', async () => {
+    const bankAccount = new BankAccountDTO(fixtures.bankAccount1)
+    const bankingResponse: AxiosResponse = await api.getBankAccountToken(bankAccount)
+    const customer = new CustomerDTO({
+      singleUseTokenId: bankingResponse?.data.singleUseTokenId,
+      customerNumber: fixtures.customerWithBanking.customerNumber,
+      merchantId: fixtures.customerWithBanking.merchantId,
+      bankAccountId: fixtures.customerWithBanking.bankAccountId,
+    })
+    const response: AxiosResponse = await api.addCustomer(customer)
+    expect(validCodes).toContain(response.status)
   }, 60000)
 
 })
