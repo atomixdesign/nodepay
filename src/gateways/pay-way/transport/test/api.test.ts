@@ -14,12 +14,12 @@ describe('test payway api transport', () => {
     })
   })
 
-  test('the key validity is verified', async () => {
+  test('it verifies the key validity', async () => {
     const response: AxiosResponse = await api.verifyKey()
     expect(response.status).toBe(200)
   })
 
-  test('the credit card returns a single use token', async () => {
+  test('it retrieves a single use token for the credit card', async () => {
     const creditCard = new CreditCardDTO({
       cardNumber: '4564710000000004',
       cardholderName: 'John Doe',

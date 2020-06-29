@@ -13,7 +13,7 @@
   "scripts": {
     "build": "tsc",
     "start": "ts-node-dev --respawn src/index.ts",
-    "test": "yarn jest",
+    "test": "yarn jest --coverage",
     "test:watch": "yarn test --watch",
     "lint": "eslint ./src",
     "version:patch": "npm version patch --git-tag-version -m '🔖 v%s' -s",

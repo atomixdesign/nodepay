@@ -8,7 +8,8 @@ export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffP
 
   protected get baseConfig(): Config {
     return {
-      apiKey: '',
+      secretKey: '',
+      publishableKey: '',
       apiRoot: '',
       responseType: 'json'
     }

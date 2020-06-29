@@ -6,4 +6,5 @@ module.exports = {
     '!src/**/index.ts',
   ],
   setupFiles: ['dotenv/config'],
-};
+  verbose: true,
+}
