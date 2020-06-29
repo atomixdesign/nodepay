@@ -4,6 +4,7 @@ import {
   BankAccountDTO,
   ChargeDTO,
   CreditCardDTO,
+  CustomerDTO,
 } from '../../dtos'
 
 const fixtures = {
@@ -20,12 +21,16 @@ const fixtures = {
     accountName: 'John Doe',
   },
   onceOffCharge: {
-    customerNumber: '987654321',
+    customerNumber: 'onceoffCustomer',
     principalAmount: 10.87,
     orderNumber: '123456789',
     customerIpAddress: '169.254.169.254',
     merchantId: 'TEST',
   },
+  customer: {
+    customerNumber: 'customerTestFixture',
+    merchantId: 'TEST',
+  }
 }
 
 describe('test payway api transport', () => {
@@ -64,6 +69,18 @@ describe('test payway api transport', () => {
     const ccResponse: AxiosResponse = await api.getCCtoken(creditCard)
     const onceOffCharge = new ChargeDTO(fixtures.onceOffCharge)
     const response: AxiosResponse = await api.placeCharge(ccResponse?.data.singleUseTokenId, onceOffCharge)
+    expect(response.status).toBe(201)
+  }, 60000)
+
+  test('it adds a customer using a credit card', async () => {
+    const creditCard = new CreditCardDTO(fixtures.creditCard)
+    const ccResponse: AxiosResponse = await api.getCCtoken(creditCard)
+    const customer = new CustomerDTO({
+      singleUseTokenId: ccResponse?.data.singleUseTokenId,
+      customerNumber: fixtures.customer.customerNumber,
+      merchantId: fixtures.customer.merchantId,
+    })
+    const response: AxiosResponse = await api.addCustomer(customer)
     expect(response.status).toBe(201)
   }, 60000)
 

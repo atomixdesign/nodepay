@@ -8,6 +8,7 @@ import {
   BankAccountDTO,
   ChargeDTO,
   CreditCardDTO,
+  CustomerDTO,
 } from '../dtos'
 
 export class API extends BaseAPI {
@@ -75,8 +76,17 @@ export class API extends BaseAPI {
     return response
   }
 
-  addCustomer(customerNumber?: string): string | undefined {
-    return customerNumber
+  async addCustomer(customer: CustomerDTO): Promise<AxiosResponse> {
+    const payload = { ...customer }
+    delete payload.customerNumber
+
+    const response = await this.httpClient!.request({
+      method: 'put',
+      url: `/customers/${customer.customerNumber}`,
+      data: qs.stringify({ ...payload }),
+    })
+
+    return response
   }
 
   async placeCharge(singleUseTokenId: string, charge: ChargeDTO): Promise<AxiosResponse> {

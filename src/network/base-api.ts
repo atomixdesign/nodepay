@@ -28,11 +28,15 @@ export abstract class BaseAPI<T extends Record<string, unknown> = Record<string,
         // Do something with the response data
         if (DEBUG) {
           // console.log(response.status, response.statusText)
+          // console.dir(response, { depth: undefined })
         }
         return response
       }, function (error: AxiosError) {
         // Do something with response error
-        // console.dir(error, { depth: undefined })
+        if (DEBUG) {
+          // console.dir(error, { depth: undefined })
+          // console.dir(error?.response?.data, { depth: undefined })
+        }
         return Promise.reject(error)
       })
     }
