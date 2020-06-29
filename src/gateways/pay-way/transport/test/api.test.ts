@@ -7,9 +7,9 @@ describe('test payway api transport', () => {
 
   beforeEach(() => {
     api = new API({
-      secretKey: process.env['PAYWAY_SECRET_KEY']!,
-      publishableKey: process.env['PAYWAY_PUBLISHABLE_KEY']!,
-      apiRoot: process.env['PAYWAY_ROOT']!,
+      secretKey: process.env['PAYWAY_TEST_SECRET_KEY']!,
+      publishableKey: process.env['PAYWAY_TEST_PUBLISHABLE_KEY']!,
+      apiRoot: process.env['PAYWAY_API_ROOT']!,
       responseType: 'json'
     })
   })
