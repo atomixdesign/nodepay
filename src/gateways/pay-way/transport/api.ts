@@ -6,6 +6,7 @@ import { Config } from '../config'
 import { BaseAPI } from '../../../network/base-api'
 import {
   BankAccountDTO,
+  ChargeDTO,
   CreditCardDTO,
 } from '../dtos'
 
@@ -73,12 +74,19 @@ export class API extends BaseAPI {
 
     return response
   }
+
   addCustomer(customerNumber?: string): string | undefined {
     return customerNumber
   }
 
-  placeCharge(/* singleUseTokenId?: string, charge: ChargeDTO */): boolean {
-    return false
+  async placeCharge(singleUseTokenId: string, charge: ChargeDTO): Promise<AxiosResponse> {
+    const response = await this.httpClient!.request({
+      method: 'post',
+      url: '/transactions',
+      data: qs.stringify({ singleUseTokenId, ...charge }),
+    })
+
+    return response
   }
 
   schedulePayment(/* customerNumber: string, schedule: PaymentScheduleDTO */): boolean {
