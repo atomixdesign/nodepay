@@ -89,6 +89,26 @@ export class API extends BaseAPI {
     return response
   }
 
+  async stopCustomerPayments(customerNumber: string): Promise<AxiosResponse> {
+    const response = await this.httpClient!.request({
+      method: 'patch',
+      url: `/customers/${customerNumber}/payment-setup`,
+      data: qs.stringify({ stopped: true }),
+    })
+
+    return response
+  }
+
+  async deleteCustomer(customerNumber: string): Promise<AxiosResponse> {
+    await this.stopCustomerPayments(customerNumber)
+    const response = await this.httpClient!.request({
+      method: 'delete',
+      url: `/customers/${customerNumber}`,
+    })
+
+    return response
+  }
+
   async placeCharge(singleUseTokenId: string, charge: ChargeDTO): Promise<AxiosResponse> {
     const response = await this.httpClient!.request({
       method: 'post',

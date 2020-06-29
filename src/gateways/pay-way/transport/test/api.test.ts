@@ -58,6 +58,11 @@ describe('test payway api transport', () => {
     })
   })
 
+  afterAll(async () => {
+    await api.deleteCustomer(fixtures.customerWithCC.customerNumber)
+    await api.deleteCustomer(fixtures.customerWithBanking.customerNumber)
+  })
+
   test('it verifies the key validity', async () => {
     const response: AxiosResponse = await api.verifyKey()
     expect(validCodes).toContain(response.status)
