@@ -9,6 +9,7 @@ import {
   ChargeDTO,
   CreditCardDTO,
   CustomerDTO,
+  PaymentScheduleDTO,
 } from '../dtos'
 
 export class API extends BaseAPI {
@@ -129,7 +130,13 @@ export class API extends BaseAPI {
     return response
   }
 
-  schedulePayment(/* customerNumber: string, schedule: PaymentScheduleDTO */): boolean {
-    return false
+  async schedulePayment(customerNumber: string, schedule: PaymentScheduleDTO): Promise<AxiosResponse> {
+    const response = await this.httpClient!.request({
+      method: 'put',
+      url: `/customers/${customerNumber}/schedule`,
+      data: qs.stringify({ ...schedule }),
+    })
+
+    return response
   }
 }

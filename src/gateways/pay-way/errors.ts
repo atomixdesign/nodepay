@@ -5,6 +5,7 @@ export enum ErrorType {
   IpInvalid = '$[identifier] is invalid. Received $value.',
   FieldTooLong = '$[identifier] is too long. Maximal length is $constraint1 characters, but actual is $value.',
   NotACreditCard = '$[identifier] is not a valid credit card number.',
+  NotADate = '$[identifier] is not a valid date.',
   LengthOutOfBounds = '$[identifier] falls out of the expected length. Expected length between $constraint1 and $constraint2. Was $value.',
 }
 

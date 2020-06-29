@@ -1,10 +1,13 @@
-import { API } from '../api'
 import { AxiosResponse } from 'axios'
+import moment from 'moment'
+import { API } from '../api'
 import {
   BankAccountDTO,
   ChargeDTO,
   CreditCardDTO,
   CustomerDTO,
+  PaymentScheduleDTO,
+  PaymentFrequency,
 } from '../../dtos'
 
 const validCodes = [
@@ -49,7 +52,12 @@ const fixtures = {
     customerNumber: 'customerWithBanking',
     merchantId: 'TEST',
     bankAccountId: '0000000A'
-  }
+  },
+  schedule: {
+    frequency: PaymentFrequency.Weekly,
+    nextPaymentDate: moment().add(2, 'days').format('D MMM YYYY'),
+    regularPrincipalAmount: 17.89,
+  },
 }
 
 describe('test payway api transport', () => {
@@ -134,6 +142,22 @@ describe('test payway api transport', () => {
     await api.addCustomer(customer)
     const directDebitCharge = new ChargeDTO(fixtures.directDebitCharge)
     const response: AxiosResponse = await api.placeDirectCharge(directDebitCharge)
+    expect(validCodes).toContain(response.status)
+  }, 60000)
+
+  test('it places a recurring charge using bank account', async () => {
+    const bankAccount = new BankAccountDTO(fixtures.bankAccount1)
+    const bankingResponse: AxiosResponse = await api.getBankAccountToken(bankAccount)
+    const { customerNumber } = fixtures.customerWithBanking
+    const customer = new CustomerDTO({
+      singleUseTokenId: bankingResponse?.data.singleUseTokenId,
+      customerNumber,
+      merchantId: fixtures.customerWithBanking.merchantId,
+      bankAccountId: fixtures.customerWithBanking.bankAccountId,
+    })
+    await api.addCustomer(customer)
+    const paymentSchedule = new PaymentScheduleDTO(fixtures.schedule)
+    const response: AxiosResponse = await api.schedulePayment(customerNumber, paymentSchedule)
     expect(validCodes).toContain(response.status)
   }, 60000)
 
