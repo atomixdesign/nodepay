@@ -41,9 +41,11 @@
     "typescript": "^3.9.3"
   },
   "dependencies": {
+    "@types/qs": "^6.9.3",
     "@types/uuid": "^8.0.0",
     "axios": "^0.19.2",
     "class-validator": "^0.12.2",
+    "qs": "^6.9.4",
     "uuid": "^8.2.0"
   }
 }

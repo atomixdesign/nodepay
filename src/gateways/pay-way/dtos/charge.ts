@@ -14,12 +14,22 @@ import {
 
 export class ChargeDTO {
   constructor(
-    customerNumber: string,
-    principalAmount: number,
-    orderNumber?: string,
-    customerIpAddress?: string,
-    merchantId?: string,
-    bankAccountId?: string,
+    {
+      customerNumber,
+      principalAmount,
+      orderNumber,
+      customerIpAddress,
+      merchantId,
+      bankAccountId
+    } :
+    {
+      customerNumber: string
+      principalAmount: number
+      orderNumber?: string
+      customerIpAddress?: string
+      merchantId?: string
+      bankAccountId?: string
+    }
   ) {
     this.customerNumber = customerNumber
     this.transactionType = 'payment'

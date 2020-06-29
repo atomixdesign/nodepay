@@ -15,6 +15,7 @@ export abstract class BaseAPI<T extends Record<string, unknown> = Record<string,
         // Do something before request is sent
         if (DEBUG) {
           console.log(`${config.baseURL}${config.url}`)
+          // console.dir(config, { depth: undefined })
         }
         return config
       }, function (error: AxiosError) {

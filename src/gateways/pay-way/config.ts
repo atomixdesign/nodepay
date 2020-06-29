@@ -1,5 +1,6 @@
 export type Config = {
-    apiKey: string
+    secretKey: string
+    publishableKey: string
     apiRoot: string
     responseType: 'json' | 'xml'
   }
