@@ -47,6 +47,8 @@
     "class-validator": "^0.12.2",
     "moment": "^2.27.0",
     "qs": "^6.9.4",
+    "reflect-metadata": "^0.1.13",
+    "typedi": "^0.8.0",
     "uuid": "^8.2.0"
   }
 }
