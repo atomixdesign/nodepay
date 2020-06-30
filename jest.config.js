@@ -7,4 +7,7 @@ module.exports = {
   ],
   setupFiles: ['dotenv/config'],
   verbose: true,
+  moduleNameMapper: {
+    '^@atomixdesign/nodepay(.*)$': '<rootDir>/src/$1'
+  }
 }

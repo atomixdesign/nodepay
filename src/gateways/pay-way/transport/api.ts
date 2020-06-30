@@ -3,7 +3,7 @@ import { AxiosInstance, AxiosResponse } from 'axios'
 import qs from 'qs'
 import { v4 as uuidv4 } from 'uuid'
 import { Config } from '../config'
-import { HttpClientFactory } from '../../../network/http-client-factory'
+import { HttpClientFactory } from '@atomixdesign/nodepay/network/http-client-factory'
 import {
   BankAccountDTO,
   ChargeDTO,

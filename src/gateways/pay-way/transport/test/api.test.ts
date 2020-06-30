@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios'
 import moment from 'moment'
 import { API } from '../api'
 import { Container } from 'typedi'
-import { HttpClientFactory } from '../../../../network/http-client-factory'
+import { HttpClientFactory } from '@atomixdesign/nodepay/network/http-client-factory'
 import {
   BankAccountDTO,
   ChargeDTO,
