@@ -7,40 +7,33 @@ import {
 import {
   ErrorType,
   Errors,
-} from '../errors'
+} from '../transport/errors'
 
-export enum PaymentFrequency {
-  Weekly = 'weekly',
-  Fortnightly = 'fortnightly',
-  Monthly = 'monthly',
-  Quarterly = 'quarterly',
-  SixMonthly = 'six-monthly',
-  Yearly = 'yearly'
-}
+import { PaymentFrequency } from '../payment-frequency'
 
 export class PaymentScheduleDTO {
   constructor(
     {
       frequency,
       nextPaymentDate,
-      nextPrincipalAmount,
       regularPrincipalAmount,
+      nextPrincipalAmount,
       numberOfPaymentsRemaining,
       finalPrincipalAmount
     } :
     {
       frequency: PaymentFrequency
       nextPaymentDate: string
-      nextPrincipalAmount?: number
       regularPrincipalAmount: number
+      nextPrincipalAmount?: number
       numberOfPaymentsRemaining?: number
       finalPrincipalAmount?: number
     }
   ) {
     this.frequency = frequency
     this.nextPaymentDate = nextPaymentDate
-    this.nextPrincipalAmount = nextPrincipalAmount
     this.regularPrincipalAmount = regularPrincipalAmount
+    this.nextPrincipalAmount = nextPrincipalAmount
     this.numberOfPaymentsRemaining = numberOfPaymentsRemaining
     this.finalPrincipalAmount = finalPrincipalAmount
   }

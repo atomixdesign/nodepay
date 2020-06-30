@@ -39,15 +39,15 @@ export class TestGateway extends BaseGateway<Config> implements DirectDebit, Onc
     return 'test'
   }
 
-  charge(): string {
-    return 'once-off'
+  async charge(): Promise<Record<string, string>> {
+    return Promise.resolve({ 'result' : 'once-off' })
   }
 
-  chargeRecurring(): string {
-    return 'recurring'
+  async chargeRecurring(): Promise<Record<string, string>> {
+    return Promise.resolve({ 'result' : 'recurring' })
   }
 
-  directDebit(): string {
-    return 'direct-debit'
+  async directDebit(): Promise<Record<string, string>> {
+    return Promise.resolve({ 'result' : 'direct-debit' })
   }
 }

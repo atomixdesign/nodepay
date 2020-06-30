@@ -10,7 +10,7 @@ import {
 import {
   ErrorType,
   Errors,
-} from '../errors'
+} from '../transport/errors'
 
 export class ChargeDTO {
   constructor(

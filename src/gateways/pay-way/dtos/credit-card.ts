@@ -8,7 +8,7 @@ import {
 import {
   ErrorType,
   Errors,
-} from '../errors'
+} from '../transport/errors'
 
 export class CreditCardDTO {
   constructor(

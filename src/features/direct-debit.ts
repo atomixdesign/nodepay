@@ -1,3 +1,3 @@
 export interface DirectDebit {
-  directDebit(): string
+  directDebit(...args: unknown[]): Promise<unknown>
 }

@@ -1,3 +1,3 @@
 export interface OnceOffPayment {
-  charge(): string
+  charge(...args: unknown[]): Promise<unknown>
 }

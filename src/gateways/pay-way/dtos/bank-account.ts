@@ -5,7 +5,7 @@ import {
 import {
   ErrorType,
   Errors,
-} from '../errors'
+} from '../transport/errors'
 
 export class BankAccountDTO {
   constructor(

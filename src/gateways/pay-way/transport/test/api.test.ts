@@ -9,8 +9,9 @@ import {
   CreditCardDTO,
   CustomerDTO,
   PaymentScheduleDTO,
-  PaymentFrequency,
 } from '../../dtos'
+import { PaymentFrequency } from '../../payment-frequency'
+import { APIResponse } from '../../response'
 
 const validCodes = [
   200,
@@ -66,7 +67,7 @@ describe('test payway api transport', () => {
   let api: PayWayTransport
 
   beforeAll(() => {
-    Container.set('config', {
+    Container.set('payway.config', {
       secretKey: process.env['PAYWAY_TEST_SECRET_KEY']!,
       publishableKey: process.env['PAYWAY_TEST_PUBLISHABLE_KEY']!,
       apiRoot: process.env['PAYWAY_API_ROOT']!,
@@ -104,8 +105,9 @@ describe('test payway api transport', () => {
     const creditCard = new CreditCardDTO(fixtures.creditCard)
     const ccResponse: AxiosResponse = await api.getCCtoken(creditCard)
     const onceOffCharge = new ChargeDTO(fixtures.onceOffCharge)
-    const response: AxiosResponse = await api.placeCharge(ccResponse?.data.singleUseTokenId, onceOffCharge)
-    expect(validCodes).toContain(response.status)
+    const payload: APIResponse = await api.placeCharge(ccResponse?.data.singleUseTokenId, onceOffCharge)
+
+    expect(validCodes).toContain(payload.response?.status)
   }, 60000)
 
   test('it adds a customer using a credit card', async () => {
@@ -144,8 +146,8 @@ describe('test payway api transport', () => {
     })
     await api.addCustomer(customer)
     const directDebitCharge = new ChargeDTO(fixtures.directDebitCharge)
-    const response: AxiosResponse = await api.placeDirectCharge(directDebitCharge)
-    expect(validCodes).toContain(response.status)
+    const payload: APIResponse = await api.placeDirectCharge(directDebitCharge)
+    expect(validCodes).toContain(payload.response?.status)
   }, 60000)
 
   test('it places a recurring charge using bank account', async () => {
@@ -160,8 +162,8 @@ describe('test payway api transport', () => {
     })
     await api.addCustomer(customer)
     const paymentSchedule = new PaymentScheduleDTO(fixtures.schedule)
-    const response: AxiosResponse = await api.schedulePayment(customerNumber, paymentSchedule)
-    expect(validCodes).toContain(response.status)
+    const payload: APIResponse = await api.schedulePayment(customerNumber, paymentSchedule)
+    expect(validCodes).toContain(payload.response?.status)
   }, 60000)
 
 })

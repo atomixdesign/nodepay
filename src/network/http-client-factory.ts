@@ -15,10 +15,9 @@ export class HttpClientFactory implements INetworkFactory<AxiosInstance> {
     const httpClient = axios.create(config)
 
     httpClient.interceptors.request.use(function (config: AxiosRequestConfig) {
-      // Do something before request is sent
+      // TODO: allow custom interceptor callbacks
       if (DEBUG) {
         // console.log(`${config.baseURL}${config.url}`)
-        // console.dir(config, { depth: undefined })
       }
       return config
     }, function (error: AxiosError) {
@@ -31,13 +30,11 @@ export class HttpClientFactory implements INetworkFactory<AxiosInstance> {
       // Do something with the response data
       if (DEBUG) {
         // console.log(response.status, response.statusText)
-        // console.dir(response, { depth: undefined })
       }
       return response
     }, function (error: AxiosError) {
       // Do something with response error
       if (DEBUG) {
-        // console.dir(error, { depth: undefined })
         console.table(error?.response?.data.data) // , { depth: undefined })
       }
       return Promise.reject(error)

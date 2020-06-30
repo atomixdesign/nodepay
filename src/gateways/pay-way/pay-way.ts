@@ -1,12 +1,18 @@
 import { Container } from 'typedi'
+import { validateOrReject } from 'class-validator'
 import { BaseGateway } from '../base-gateway'
 import { DirectDebit, OnceOffPayment, RecurringPayment } from '@atomixdesign/nodepay/features'
-import { API as PayWayTransport } from './transport/api'
 import { Config } from './config'
-// import { HttpClientFactory } from '@atomixdesign/nodepay/network/http-client-factory'
+import { API } from './transport/api'
+import {
+  ChargeDTO,
+  PaymentScheduleDTO,
+} from './dtos'
+import { PaymentFrequency } from './payment-frequency'
+import { APIResponse } from './response'
 
 export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffPayment, RecurringPayment {
-  private api: PayWayTransport
+  private api: API
 
   protected get baseConfig(): Config {
     return {
@@ -19,7 +25,8 @@ export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffP
 
   constructor(config?: Partial<Config>) {
     super(config)
-    this.api = Container.get(PayWayTransport) // new Transport(this.config, Container.get(HttpClientFactory))
+    Container.set('payway.config', config)
+    this.api = Container.get('payway.api')
   }
 
   get name(): string {
@@ -30,15 +37,90 @@ export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffP
     return 'pay-way'
   }
 
-  charge(): string {
-    return 'once-off'
+  async charge(
+    singleUserTokenId: string,
+    customerNumber: string,
+    principalAmount: number,
+    orderNumber?: string | undefined,
+    customerIpAddress?: string | undefined,
+    merchantId?: string | undefined,
+    bankAccountId?: string | undefined,
+  ): Promise<APIResponse | [string]> {
+    const chargeObject = new ChargeDTO({
+      customerNumber,
+      principalAmount,
+      orderNumber,
+      customerIpAddress,
+      merchantId,
+      bankAccountId,
+    })
+
+    let payload: APIResponse
+
+    try {
+      await validateOrReject(chargeObject)
+      payload = await this.api.placeCharge(singleUserTokenId, chargeObject)
+    } catch(error) {
+      return Promise.reject(error)
+    }
+    return Promise.resolve(payload)
   }
 
-  chargeRecurring(): string {
-    return 'recurring'
+  async chargeRecurring(
+    customerNumber: string,
+    frequency: PaymentFrequency,
+    nextPaymentDate: string,
+    regularPrincipalAmount: number,
+    nextPrincipalAmount?: number,
+    numberOfPaymentsRemaining?: number,
+    finalPrincipalAmount?: number,
+  ): Promise<APIResponse | [string]> {
+    const scheduleObject = new PaymentScheduleDTO({
+      frequency,
+      nextPaymentDate,
+      regularPrincipalAmount,
+      nextPrincipalAmount,
+      numberOfPaymentsRemaining,
+      finalPrincipalAmount,
+    })
+
+    let payload: APIResponse
+
+    try {
+      await validateOrReject(scheduleObject)
+      payload = await this.api.schedulePayment(customerNumber, scheduleObject)
+    } catch(error) {
+      return Promise.reject(error)
+    }
+    return Promise.resolve(payload)
   }
 
-  directDebit(): string {
-    return 'direct-debit'
+  async directDebit(
+    customerNumber: string,
+    principalAmount: number,
+    orderNumber?: string | undefined,
+    customerIpAddress?: string | undefined,
+    merchantId?: string | undefined,
+    bankAccountId?: string | undefined,
+  ): Promise<APIResponse | [string]> {
+    const chargeObject = new ChargeDTO({
+      customerNumber,
+      principalAmount,
+      orderNumber,
+      customerIpAddress,
+      merchantId,
+      bankAccountId,
+    })
+
+    let payload: APIResponse
+
+    try {
+      await validateOrReject(chargeObject)
+      payload = await this.api.placeDirectCharge(chargeObject)
+    } catch(error) {
+      return Promise.reject(error)
+    }
+    return Promise.resolve(payload)
   }
+
 }

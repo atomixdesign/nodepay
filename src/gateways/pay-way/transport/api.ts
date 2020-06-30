@@ -14,6 +14,7 @@ import {
   CustomerDTO,
   PaymentScheduleDTO,
 } from '../dtos'
+import { APIResponse } from '../response'
 
 @Service('payway.api')
 export class API {
@@ -26,7 +27,7 @@ export class API {
   constructor(
     @Inject('http.client') httpClientFactory: HttpClientFactory
   ) {
-    const config: Config = Container.get('config')
+    const config: Config = Container.get('payway.config')
     this.idempotencyKey = uuidv4()
     this.secretAuthHeader = `Basic ${this.encodeKey(config.secretKey)}`
     this.publicAuthHeader = `Basic ${this.encodeKey(config.publishableKey)}`
@@ -47,7 +48,7 @@ export class API {
 
   // Verify key expiry/validity
   async verifyKey(): Promise<AxiosResponse> {
-    const config: Config = Container.get('config')
+    const config: Config = Container.get('payway.config')
     const response = await this.httpClient!.request({
       url: '/api-keys/latest',
     })
@@ -118,33 +119,51 @@ export class API {
     return response
   }
 
-  async placeCharge(singleUseTokenId: string, charge: ChargeDTO): Promise<AxiosResponse> {
+  async placeCharge(singleUseTokenId: string, charge: ChargeDTO): Promise<APIResponse> {
     const response = await this.httpClient!.request({
       method: 'post',
       url: '/transactions',
       data: qs.stringify({ singleUseTokenId, ...charge }),
     })
 
-    return response
+    return {
+      response: {
+        status: response.status,
+        statusText: response.statusText,
+      },
+      ...response.data
+    }
   }
 
-  async placeDirectCharge(charge: ChargeDTO): Promise<AxiosResponse> {
+  async placeDirectCharge(charge: ChargeDTO): Promise<APIResponse> {
     const response = await this.httpClient!.request({
       method: 'post',
       url: '/transactions',
       data: qs.stringify({ ...charge }),
     })
 
-    return response
+    return {
+      response: {
+        status: response.status,
+        statusText: response.statusText,
+      },
+      ...response.data
+    }
   }
 
-  async schedulePayment(customerNumber: string, schedule: PaymentScheduleDTO): Promise<AxiosResponse> {
+  async schedulePayment(customerNumber: string, schedule: PaymentScheduleDTO): Promise<APIResponse> {
     const response = await this.httpClient!.request({
       method: 'put',
       url: `/customers/${customerNumber}/schedule`,
       data: qs.stringify({ ...schedule }),
     })
 
-    return response
+    return {
+      response: {
+        status: response.status,
+        statusText: response.statusText,
+      },
+      ...response.data
+    }
   }
 }
