@@ -1,9 +1,12 @@
 // handles configurable retry
+import { Service, Inject, Container } from 'typedi'
 import { AxiosInstance, AxiosResponse } from 'axios'
-import qs from 'qs'
 import { v4 as uuidv4 } from 'uuid'
+import qs from 'qs'
 import { Config } from '../config'
-import { HttpClientFactory } from '@atomixdesign/nodepay/network/http-client-factory'
+import {
+  HttpClientFactory,
+} from '@atomixdesign/nodepay/network'
 import {
   BankAccountDTO,
   ChargeDTO,
@@ -12,39 +15,44 @@ import {
   PaymentScheduleDTO,
 } from '../dtos'
 
+@Service('payway.api')
 export class API {
   private idempotencyKey: string
   private secretAuthHeader: string
   private publicAuthHeader: string
+
   private httpClient: AxiosInstance
 
   constructor(
-    private config: Config,
-    httpClientFactory: HttpClientFactory
+    @Inject('http.client') httpClientFactory: HttpClientFactory
   ) {
+    const config: Config = Container.get('config')
     this.idempotencyKey = uuidv4()
-    const encodedSecretKey: string = Buffer.from(config.secretKey, 'binary').toString('base64')
-    this.secretAuthHeader = `Basic ${encodedSecretKey}`
-    const encodedPublicKey: string = Buffer.from(config.publishableKey, 'binary').toString('base64')
-    this.publicAuthHeader = `Basic ${encodedPublicKey}`
+    this.secretAuthHeader = `Basic ${this.encodeKey(config.secretKey)}`
+    this.publicAuthHeader = `Basic ${this.encodeKey(config.publishableKey)}`
 
-    this.httpClient = httpClientFactory.getHttpClient({
-      baseURL: this.config.apiRoot,
+    this.httpClient = httpClientFactory.create({
+      baseURL: config.apiRoot,
       headers: {
         Authorization: this.secretAuthHeader,
-        Accept: `application/${this.config.responseType}`,
+        Accept: `application/${config.responseType}`,
         'Idempotency-Key': this.idempotencyKey,
       }
     })
   }
 
+  private encodeKey(key: string): string {
+    return Buffer.from(key, 'binary').toString('base64')
+  }
+
   // Verify key expiry/validity
   async verifyKey(): Promise<AxiosResponse> {
+    const config: Config = Container.get('config')
     const response = await this.httpClient!.request({
       url: '/api-keys/latest',
     })
     if (response.status === 200) {
-      if (response?.data.key !== this.config.secretKey) {
+      if (response?.data.key !== config.secretKey) {
         console.error('Payway API key is about to expire. Please log in to your Payway admin and generate a new api key.')
       }
     }

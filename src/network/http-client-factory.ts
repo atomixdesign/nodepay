@@ -5,13 +5,15 @@ import axios, {
   AxiosError,
   AxiosResponse,
 } from 'axios'
+import { INetworkFactory } from './network-client-factory'
 
 const DEBUG = process.env.environment !== 'production'
 
-@Service()
-export class HttpClientFactory {
-  getHttpClient(config: AxiosRequestConfig): AxiosInstance{
-    const httpClient: AxiosInstance = axios.create(config)
+@Service('http.client')
+export class HttpClientFactory implements INetworkFactory<AxiosInstance> {
+  create(config?: Partial<AxiosRequestConfig>): AxiosInstance{
+    const httpClient = axios.create(config)
+
     httpClient.interceptors.request.use(function (config: AxiosRequestConfig) {
       // Do something before request is sent
       if (DEBUG) {

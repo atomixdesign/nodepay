@@ -1,8 +1,8 @@
+import { Container } from 'typedi'
 import { AxiosResponse } from 'axios'
 import moment from 'moment'
-import { API } from '../api'
-import { Container } from 'typedi'
-import { HttpClientFactory } from '@atomixdesign/nodepay/network/http-client-factory'
+import { API as PayWayTransport } from '../api'
+// import { HttpClientFactory } from '@atomixdesign/nodepay/network/http-client-factory'
 import {
   BankAccountDTO,
   ChargeDTO,
@@ -63,18 +63,16 @@ const fixtures = {
 }
 
 describe('test payway api transport', () => {
-  let api: API
+  let api: PayWayTransport
 
-  beforeEach(() => {
-    api = new API(
-      {
-        secretKey: process.env['PAYWAY_TEST_SECRET_KEY']!,
-        publishableKey: process.env['PAYWAY_TEST_PUBLISHABLE_KEY']!,
-        apiRoot: process.env['PAYWAY_API_ROOT']!,
-        responseType: 'json'
-      },
-      Container.get(HttpClientFactory),
-    )
+  beforeAll(() => {
+    Container.set('config', {
+      secretKey: process.env['PAYWAY_TEST_SECRET_KEY']!,
+      publishableKey: process.env['PAYWAY_TEST_PUBLISHABLE_KEY']!,
+      apiRoot: process.env['PAYWAY_API_ROOT']!,
+      responseType: 'json'
+    })
+    api = Container.get(PayWayTransport)
   })
 
   afterAll(async () => {
