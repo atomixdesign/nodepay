@@ -1,7 +1,9 @@
 import { BaseGateway } from '../base-gateway'
 import { DirectDebit, OnceOffPayment, RecurringPayment } from '../../features'
 import { API as Transport } from './transport/api'
+import { Container } from 'typedi'
 import { Config } from './config'
+import { HttpClientFactory } from '../../network/http-client-factory'
 
 export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffPayment, RecurringPayment {
   private api: Transport
@@ -17,7 +19,7 @@ export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffP
 
   constructor(config?: Partial<Config>) {
     super(config)
-    this.api = new Transport(this.config)
+    this.api = new Transport(this.config, Container.get(HttpClientFactory))
   }
 
   get name(): string {

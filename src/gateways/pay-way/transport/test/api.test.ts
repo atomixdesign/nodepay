@@ -1,6 +1,8 @@
 import { AxiosResponse } from 'axios'
 import moment from 'moment'
 import { API } from '../api'
+import { Container } from 'typedi'
+import { HttpClientFactory } from '../../../../network/http-client-factory'
 import {
   BankAccountDTO,
   ChargeDTO,
@@ -64,12 +66,15 @@ describe('test payway api transport', () => {
   let api: API
 
   beforeEach(() => {
-    api = new API({
-      secretKey: process.env['PAYWAY_TEST_SECRET_KEY']!,
-      publishableKey: process.env['PAYWAY_TEST_PUBLISHABLE_KEY']!,
-      apiRoot: process.env['PAYWAY_API_ROOT']!,
-      responseType: 'json'
-    })
+    api = new API(
+      {
+        secretKey: process.env['PAYWAY_TEST_SECRET_KEY']!,
+        publishableKey: process.env['PAYWAY_TEST_PUBLISHABLE_KEY']!,
+        apiRoot: process.env['PAYWAY_API_ROOT']!,
+        responseType: 'json'
+      },
+      Container.get(HttpClientFactory),
+    )
   })
 
   afterAll(async () => {

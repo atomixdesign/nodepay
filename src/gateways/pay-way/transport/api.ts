@@ -1,9 +1,9 @@
 // handles configurable retry
-import axios, { AxiosResponse } from 'axios'
+import { AxiosInstance, AxiosResponse } from 'axios'
 import qs from 'qs'
 import { v4 as uuidv4 } from 'uuid'
 import { Config } from '../config'
-import { BaseAPI } from '../../../network/base-api'
+import { HttpClientFactory } from '../../../network/http-client-factory'
 import {
   BankAccountDTO,
   ChargeDTO,
@@ -12,30 +12,30 @@ import {
   PaymentScheduleDTO,
 } from '../dtos'
 
-export class API extends BaseAPI {
-  private config: Config
+export class API {
   private idempotencyKey: string
   private secretAuthHeader: string
   private publicAuthHeader: string
+  private httpClient: AxiosInstance
 
-  constructor(config: Config) {
-    super()
-    this.config = config
+  constructor(
+    private config: Config,
+    httpClientFactory: HttpClientFactory
+  ) {
     this.idempotencyKey = uuidv4()
     const encodedSecretKey: string = Buffer.from(config.secretKey, 'binary').toString('base64')
     this.secretAuthHeader = `Basic ${encodedSecretKey}`
     const encodedPublicKey: string = Buffer.from(config.publishableKey, 'binary').toString('base64')
     this.publicAuthHeader = `Basic ${encodedPublicKey}`
 
-    this.httpClient = axios.create({
+    this.httpClient = httpClientFactory.getHttpClient({
       baseURL: this.config.apiRoot,
       headers: {
         Authorization: this.secretAuthHeader,
         Accept: `application/${this.config.responseType}`,
-        'Idempotency-Key': this.idempotencyKey, // TODO: persist the idempotency key/ensure close coupling with request signature
+        'Idempotency-Key': this.idempotencyKey,
       }
     })
-    this.registerLogger()
   }
 
   // Verify key expiry/validity
