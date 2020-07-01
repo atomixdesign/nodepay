@@ -40,6 +40,18 @@ describe('test ezidebit api transport', () => {
   test('it places a once-off charge using credit card', async () => {
     const onceOffCharge = new OnceOffChargeDTO(fixtures.creditCard)
     const result: Record<string, unknown> = await api.placeCharge(onceOffCharge)
-    expect(result.Error).toBe(0)
+    const data = (result.Data as Record<string, unknown>)
+    expect(data.PaymentResultText).toBe('APPROVED')
+  })
+
+  test('it reports an error when a once-off charge is declined', async () => {
+    const onceOffCharge = new OnceOffChargeDTO(
+      {
+        ...fixtures.creditCard,
+        ...{ PaymentAmountInCents: 1012 }
+      }
+    )
+    const result: Record<string, unknown> = await api.placeCharge(onceOffCharge)
+    expect(result.ErrorMessage).toBe('Declined')
   })
 })
