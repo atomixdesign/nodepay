@@ -1,4 +1,4 @@
-import { Service, Inject, Container } from 'typedi'
+import { Service, Inject } from 'typedi'
 import {
   Client as SoapClient,
 } from 'soap'
@@ -37,22 +37,14 @@ export class API {
     let result
     try {
       result = await this.soapClient!.ProcessRealtimeCreditCardPaymentAsync({
-        ...{ DigitalKey: this.config!.digitalKey },
+        ...{ DigitalKey: this.config.digitalKey },
         ...charge,
       })
     } catch (error) {
-      // eslint-disable-next-line unicorn/no-null
-      console.dir(this.soapClient!.lastRequest, { depth: null })
-      console.error(error)
+      return Promise.reject(error)
     }
 
-    return {
-      response: {
-        status: 200,
-        statusText: 'OK',
-      },
-      ...result
-    }
+    return result[0].ProcessRealtimeCreditCardPaymentResult
   }
 
 

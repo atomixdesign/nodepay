@@ -9,5 +9,6 @@ module.exports = {
   verbose: true,
   moduleNameMapper: {
     '^@atomixdesign/nodepay(.*)$': '<rootDir>/src/$1'
-  }
+  },
+  testTimeout: 60000
 }

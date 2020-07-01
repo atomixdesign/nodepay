@@ -1,3 +1,4 @@
+import { Container } from 'typedi'
 import { BaseGateway } from '../base-gateway'
 import { DirectDebit, OnceOffPayment, RecurringPayment } from '../../features'
 import { API as Transport } from './transport/api'
@@ -17,7 +18,8 @@ export class Ezidebit extends BaseGateway<Config> implements DirectDebit, OnceOf
 
   constructor(config?: Partial<Config>) {
     super(config)
-    this.api = new Transport(this.config)
+    Container.set('ezidebit.config', config)
+    this.api = Container.get('ezidebit.api')
   }
 
   get name(): string {

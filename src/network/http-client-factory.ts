@@ -7,7 +7,7 @@ import axios, {
 } from 'axios'
 import { INetworkFactory } from './network-client-factory'
 
-const DEBUG = process.env.environment !== 'production'
+const DEBUG = false // process.env.environment !== 'production'
 
 @Service('http.client')
 export class HttpClientFactory implements INetworkFactory<AxiosInstance> {
@@ -17,7 +17,7 @@ export class HttpClientFactory implements INetworkFactory<AxiosInstance> {
     httpClient.interceptors.request.use(function (config: AxiosRequestConfig) {
       // TODO: allow custom interceptor callbacks
       if (DEBUG) {
-        // console.log(`${config.baseURL}${config.url}`)
+        console.log(`${config.baseURL}${config.url}`)
       }
       return config
     }, function (error: AxiosError) {
@@ -35,7 +35,7 @@ export class HttpClientFactory implements INetworkFactory<AxiosInstance> {
     }, function (error: AxiosError) {
       // Do something with response error
       if (DEBUG) {
-        console.table(error?.response?.data.data) // , { depth: undefined })
+        console.table(error?.response?.data.data)
       }
       return Promise.reject(error)
     })
