@@ -1,15 +1,21 @@
-import { API } from '../api'
+import { Container } from 'typedi'
+import { API as EzidebitTransport } from '../api'
 
 describe('test ezidebit api transport', () => {
-  let api: API
+  let api: EzidebitTransport
 
-  beforeEach(() => {
-    api = new API({
+  beforeAll(() => {
+    Container.set('ezidebit.config', {
       clientId: process.env['EZIDEBIT_CLIENT_ID']!,
       digitalKey: process.env['EZIDEBIT_DIGITAL_KEY']!,
       publicKey: process.env['EZIDEBIT_PUBLIC_KEY']!,
       apiRoot: process.env['EZIDEBIT_TEST_API_ROOT']!,
     })
+    api = Container.get(EzidebitTransport)
+  })
+
+  afterAll(async () => {
+    Container.reset()
   })
 
   test('it describes the web service', async () => {

@@ -2,11 +2,10 @@ import {
   IsNotEmpty,
   IsNumberString,
   IsCreditCard,
+  IsNumber,
   MaxLength,
   Length,
-  IsNumber,
   IsOptional,
-  IsIP,
 } from 'class-validator'
 
 import {
@@ -22,18 +21,18 @@ export class OnceOffChargeDTO {
     CreditCardCCV,
     NameOnCreditCard,
     PaymentAmountInCents,
-    CustomerName,
     PaymentReference,
+    CustomerName,
   } :
   {
     CreditCardNumber: string
-    CreditCardExpiryMonth: number
-    CreditCardExpiryYear: number
-    CreditCardCCV: number
+    CreditCardExpiryMonth: string
+    CreditCardExpiryYear: string
+    CreditCardCCV: string
     NameOnCreditCard: string
     PaymentAmountInCents: number
-    CustomerName?: string
     PaymentReference: string
+    CustomerName?: string
   }) {
     this.CreditCardNumber = CreditCardNumber
     this.CreditCardExpiryMonth = CreditCardExpiryMonth
@@ -41,8 +40,8 @@ export class OnceOffChargeDTO {
     this.CreditCardCCV = CreditCardCCV
     this.NameOnCreditCard = NameOnCreditCard
     this.PaymentAmountInCents = PaymentAmountInCents
-    this.CustomerName = CustomerName
     this.PaymentReference = PaymentReference
+    this.CustomerName = CustomerName
   }
 
   // * CreditCardNumber
@@ -58,83 +57,63 @@ export class OnceOffChargeDTO {
   CreditCardNumber: string;
 
   // * CreditCardExpiryMonth
-  CreditCardExpiryMonth: number;
+  @Length(2, 2, {
+    message: Errors.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardExpiryMonth')
+  })
+  @IsNumberString(undefined, {
+    message: Errors.getErrorMessage(ErrorType.NumberRequired, 'CreditCardExpiryMonth')
+  })
+  CreditCardExpiryMonth: string;
 
   // * CreditCardExpiryYear
-  CreditCardExpiryYear: number;
+  @Length(4, 4, {
+    message: Errors.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardExpiryYear')
+  })
+  @IsNumberString(undefined, {
+    message: Errors.getErrorMessage(ErrorType.NumberRequired, 'CreditCardExpiryYear')
+  })
+  CreditCardExpiryYear: string;
 
   // * CreditCardCCV
+  @IsNotEmpty({
+    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'CreditCardCCV')
+  })
   @Length(3, 4, {
     message: Errors.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardCCV')
   })
   @IsNumberString(undefined, {
     message: Errors.getErrorMessage(ErrorType.NumberRequired, 'CreditCardCCV')
   })
-  CreditCardCCV: number;
+  CreditCardCCV: string;
 
   // * NameOnCreditCard
+  @IsNotEmpty({
+    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'NameOnCreditCard')
+  })
+  @MaxLength(100, {
+    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'NameOnCreditCard')
+  })
   NameOnCreditCard: string;
 
   // * PaymentAmountInCents
+  @IsNumber(undefined, {
+    message: Errors.getErrorMessage(ErrorType.NumberRequired, 'PaymentAmountInCents')
+  })
   PaymentAmountInCents: number;
 
-  // * CustomerName
-  CustomerName: string | undefined;
-
   // * PaymentReference
+  @IsNotEmpty({
+    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'PaymentReference')
+  })
+  @MaxLength(50, {
+    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'PaymentReference')
+  })
   PaymentReference: string;
+
+  // * CustomerName
+  @IsOptional()
+  @MaxLength(255, {
+    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'CustomerName')
+  })
+  CustomerName: string | undefined;
 }
-
-/*
-CreditCardExpiryMonth (Required)
-Customer’s credit card expiry month
-
-Numeric
-(2 digits)
-
-12
-CreditCardExpiryYear (Required)
-Customer’s credit card expiry year
-
-Numeric
-(4 digits)
-
-2012
-CreditCardCCV (Required)
-The three or four digit Credit Card Security Number that is located on the signature panel (Visa/Mastercard) or front of the card.
-
-Numeric
-(4 digits)
-
-454
-NameOnCreditCard (Required)
-The name as it appears on the customer’s credit card
-
-String
-(Max. 100 char)
-
-J.P. Smith
-
-PaymentAmountInCents (Required)
-The amount to debit from your payer in cents. The system has a $2.00 minimum debit amount. If you would like to process smaller amounts please email partner@ezidebit.com.au
-
-E.g. $20.00 = 2000
-
-Numeric	2000
-CustomerName
-The name of your Customer
-
-NB - This is included for reporting purposes.
-
-String
-(Max. 255 char)
-
-Joe Smith
-
-PaymentReference (Required)
-Your unique identifier for the transaction
-
-String
-(Max 50 char)
-
-512458557 */
