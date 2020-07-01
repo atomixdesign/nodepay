@@ -80,6 +80,7 @@ describe('test payway api transport', () => {
     await api.deleteCustomer(fixtures.customerWithCC.customerNumber)
     // TODO: 'Could not delete customer because they have made payments in the past 220 days.'
     await api.deleteCustomer(fixtures.customerWithBanking.customerNumber)
+    Container.reset()
   })
 
   test('it verifies the key validity', async () => {

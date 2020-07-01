@@ -73,14 +73,17 @@ export class ChargeDTO {
   orderNumber: string | undefined;
 
   // * customerIpAddress
+  @IsOptional()
   @IsIP('4', {
     message: Errors.getErrorMessage(ErrorType.IpInvalid, 'customerIpAddress')
   })
   customerIpAddress: string | undefined;
 
   // * merchantId
+  @IsOptional()
   merchantId: string | undefined;
 
   // * bankAccountId
+  @IsOptional()
   bankAccountId: string | undefined;
 }

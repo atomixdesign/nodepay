@@ -2,6 +2,7 @@ import {
   IsNotEmpty,
   IsAlphanumeric,
   MaxLength,
+  IsOptional,
 } from 'class-validator'
 
 import {
@@ -49,8 +50,10 @@ export class CustomerDTO {
   singleUseTokenId: string;
 
   // * merchantId
+  @IsOptional()
   merchantId: string | undefined;
 
   // * bankAccountId
+  @IsOptional()
   bankAccountId: string | undefined;
 }

@@ -1,7 +1,7 @@
 import {
   IsNotEmpty,
   IsNumber,
-  IsDate,
+  IsOptional,
 } from 'class-validator'
 
 import {
@@ -48,13 +48,7 @@ export class PaymentScheduleDTO {
   @IsNotEmpty({
     message: Errors.getErrorMessage(ErrorType.NotEmpty, 'nextPaymentDate')
   })
-  @IsDate({
-    message: Errors.getErrorMessage(ErrorType.NotADate, 'nextPaymentDate')
-  })
   nextPaymentDate: string;
-
-  // * nextPrincipalAmount
-  nextPrincipalAmount?: number | undefined;
 
   // * regularPrincipalAmount
   @IsNumber(undefined, {
@@ -62,9 +56,15 @@ export class PaymentScheduleDTO {
   })
   regularPrincipalAmount: number;
 
+  // * nextPrincipalAmount
+  @IsOptional()
+  nextPrincipalAmount?: number | undefined;
+
   // * numberOfPaymentsRemaining
+  @IsOptional()
   numberOfPaymentsRemaining?: number | undefined;
 
   // * finalPrincipalAmount
+  @IsOptional()
   finalPrincipalAmount?: number | undefined;
 }

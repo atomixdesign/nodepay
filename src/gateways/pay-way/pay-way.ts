@@ -45,7 +45,7 @@ export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffP
     customerIpAddress?: string | undefined,
     merchantId?: string | undefined,
     bankAccountId?: string | undefined,
-  ): Promise<APIResponse | [string]> {
+  ): Promise<APIResponse> {
     const chargeObject = new ChargeDTO({
       customerNumber,
       principalAmount,
@@ -74,7 +74,7 @@ export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffP
     nextPrincipalAmount?: number,
     numberOfPaymentsRemaining?: number,
     finalPrincipalAmount?: number,
-  ): Promise<APIResponse | [string]> {
+  ): Promise<APIResponse> {
     const scheduleObject = new PaymentScheduleDTO({
       frequency,
       nextPaymentDate,
@@ -102,7 +102,7 @@ export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffP
     customerIpAddress?: string | undefined,
     merchantId?: string | undefined,
     bankAccountId?: string | undefined,
-  ): Promise<APIResponse | [string]> {
+  ): Promise<APIResponse> {
     const chargeObject = new ChargeDTO({
       customerNumber,
       principalAmount,
