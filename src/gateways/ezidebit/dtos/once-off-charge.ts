@@ -12,7 +12,7 @@ import {
 import {
   ErrorType,
   Errors,
-} from '@nodepay/validation/errors'
+} from '@atomixdesign/nodepay/validation/errors'
 
 export class OnceOffChargeDTO {
   constructor({

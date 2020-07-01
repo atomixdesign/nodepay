@@ -28,15 +28,15 @@ export class Ezidebit extends BaseGateway<Config> implements DirectDebit, OnceOf
     return 'ezidebit'
   }
 
-  charge(): string {
-    return 'once-off'
+  async charge(): Promise<Record<string, string>> {
+    return Promise.resolve({ 'result' : 'once-off' })
   }
 
-  chargeRecurring(): string {
-    return 'recurring'
+  async chargeRecurring(): Promise<Record<string, string>> {
+    return Promise.resolve({ 'result' : 'recurring' })
   }
 
-  directDebit(): string {
-    return 'direct-debit'
+  async directDebit(): Promise<Record<string, string>> {
+    return Promise.resolve({ 'result' : 'direct-debit' })
   }
 }

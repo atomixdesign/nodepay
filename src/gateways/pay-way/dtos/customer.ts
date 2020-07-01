@@ -8,7 +8,7 @@ import {
 import {
   ErrorType,
   Errors,
-} from '../transport/errors'
+} from '../../../validation/errors'
 
 export class CustomerDTO {
   constructor(

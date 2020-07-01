@@ -7,7 +7,7 @@ import {
 import {
   ErrorType,
   Errors,
-} from '../transport/errors'
+} from '../../../validation/errors'
 
 import { PaymentFrequency } from '../payment-frequency'
 
