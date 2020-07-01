@@ -1,5 +1,19 @@
 import { Container } from 'typedi'
 import { API as EzidebitTransport } from '../api'
+import { OnceOffChargeDTO } from '../../dtos/once-off-charge'
+import { APIResponse } from '@atomixdesign/nodepay/network/response'
+
+const fixtures = {
+  creditCard: {
+    CreditCardNumber: '5123456789012346',
+    CreditCardExpiryMonth: '05',
+    CreditCardExpiryYear: '2021',
+    CreditCardCCV: '847',
+    NameOnCreditCard: 'John Doe',
+    PaymentAmountInCents: 1012,
+    PaymentReference: '123456789',
+  },
+}
 
 describe('test ezidebit api transport', () => {
   let api: EzidebitTransport
@@ -24,6 +38,11 @@ describe('test ezidebit api transport', () => {
   })
 
   test('it places a once-off charge using credit card', async () => {
+    const onceOffCharge = new OnceOffChargeDTO(fixtures.creditCard)
+    const result: APIResponse = await api.placeCharge(onceOffCharge)
+
+    console.dir(result, { depth: 0 })
+    expect(true).toBe(true)
     // const creditCard = new CreditCardDTO(fixtures.creditCard)
     // const ccResponse: AxiosResponse = await api.getCCtoken(creditCard)
     // const onceOffCharge = new ChargeDTO(fixtures.onceOffCharge)

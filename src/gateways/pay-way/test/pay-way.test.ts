@@ -1,7 +1,7 @@
 import { Container } from 'typedi'
 import { PayWay } from '../pay-way'
 import { testAPI } from '../transport/test-api'
-import { APIResponse } from '../response'
+import { APIResponse } from '../../../network/response'
 import { PaymentFrequency } from '../payment-frequency'
 import moment from 'moment'
 

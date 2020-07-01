@@ -9,7 +9,7 @@ import {
   PaymentScheduleDTO,
 } from './dtos'
 import { PaymentFrequency } from './payment-frequency'
-import { APIResponse } from './response'
+import { APIResponse } from '../../network/response'
 
 export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffPayment, RecurringPayment {
   private api: API

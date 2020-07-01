@@ -7,8 +7,17 @@ import { INetworkFactory } from './network-client-factory'
 @Service('soap.client')
 export class SoapClientFactory implements INetworkFactory<Client> {
   async createAsync(config?: Partial<Record<string, unknown>>): Promise<Client>{
+    let soapClient: Client
+
     if (typeof config?.apiRoot === 'string') {
-      return createClientAsync(`${config.apiRoot}?wsdl`)
+      soapClient = createClientAsync(`${config.apiRoot}?singleWsdl`, {
+        preserveWhitespace: true
+      })
+      soapClient.on('request', (xml: string) => {
+        // eslint-disable-next-line unicorn/no-null
+        console.dir(xml, { depth: null })
+      })
+      return soapClient
     }
     return Promise.reject('Couldn\'t instantiate soap client')
   }

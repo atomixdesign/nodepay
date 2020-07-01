@@ -1,4 +1,4 @@
-import { APIResponse } from '../response'
+import { APIResponse } from '../../../network/response'
 import { ChargeDTO, PaymentScheduleDTO } from '../dtos'
 
 export const MockResponse = {

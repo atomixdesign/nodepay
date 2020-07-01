@@ -11,7 +11,7 @@ import {
   PaymentScheduleDTO,
 } from '../../dtos'
 import { PaymentFrequency } from '../../payment-frequency'
-import { APIResponse } from '../../response'
+import { APIResponse } from '../../../../network/response'
 
 const validCodes = [
   200,
