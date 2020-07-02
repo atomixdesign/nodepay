@@ -52,19 +52,28 @@ export class PaymentScheduleDTO {
 
   // * regularPrincipalAmount
   @IsNumber(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NumberRequired, 'regularPrincipalAmount')
+    message: Errors.getErrorMessage(ErrorType.NotANumber, 'regularPrincipalAmount')
   })
   regularPrincipalAmount: number;
 
   // * nextPrincipalAmount
   @IsOptional()
+  @IsNumber(undefined, {
+    message: Errors.getErrorMessage(ErrorType.NotANumber, 'nextPrincipalAmount')
+  })
   nextPrincipalAmount?: number | undefined;
 
   // * numberOfPaymentsRemaining
   @IsOptional()
+  @IsNumber(undefined, {
+    message: Errors.getErrorMessage(ErrorType.NotANumber, 'numberOfPaymentsRemaining')
+  })
   numberOfPaymentsRemaining?: number | undefined;
 
   // * finalPrincipalAmount
   @IsOptional()
+  @IsNumber(undefined, {
+    message: Errors.getErrorMessage(ErrorType.NotANumber, 'finalPrincipalAmount')
+  })
   finalPrincipalAmount?: number | undefined;
 }

@@ -61,7 +61,7 @@ export class ChargeDTO {
 
   // * principalAmount
   @IsNumber(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NumberRequired, 'principalAmount')
+    message: Errors.getErrorMessage(ErrorType.NotANumber, 'principalAmount')
   })
   principalAmount: number;
 

@@ -12,36 +12,18 @@ import {
   ErrorType,
   Errors,
 } from '@atomixdesign/nodepay/validation/errors'
+import { ICreditCardCharge } from '../types'
 
 export class OnceOffChargeDTO {
-  constructor({
-    CreditCardNumber,
-    CreditCardExpiryMonth,
-    CreditCardExpiryYear,
-    CreditCardCCV,
-    NameOnCreditCard,
-    PaymentAmountInCents,
-    PaymentReference,
-    CustomerName,
-  } :
-  {
-    CreditCardNumber: string
-    CreditCardExpiryMonth: string
-    CreditCardExpiryYear: string
-    CreditCardCCV: string
-    NameOnCreditCard: string
-    PaymentAmountInCents: number
-    PaymentReference: string
-    CustomerName?: string
-  }) {
-    this.CreditCardNumber = CreditCardNumber
-    this.CreditCardExpiryMonth = CreditCardExpiryMonth
-    this.CreditCardExpiryYear = CreditCardExpiryYear
-    this.CreditCardCCV = CreditCardCCV
-    this.NameOnCreditCard = NameOnCreditCard
-    this.PaymentAmountInCents = PaymentAmountInCents
-    this.PaymentReference = PaymentReference
-    this.CustomerName = CustomerName
+  constructor(public charge: ICreditCardCharge) {
+    this.CreditCardNumber = charge.CreditCardNumber
+    this.CreditCardExpiryMonth = charge.CreditCardExpiryMonth
+    this.CreditCardExpiryYear = charge.CreditCardExpiryYear
+    this.CreditCardCCV = charge.CreditCardCCV
+    this.NameOnCreditCard = charge.NameOnCreditCard
+    this.PaymentAmountInCents = charge.PaymentAmountInCents
+    this.PaymentReference = charge.PaymentReference
+    this.CustomerName = charge.CustomerName
   }
 
   // * CreditCardNumber
@@ -61,7 +43,7 @@ export class OnceOffChargeDTO {
     message: Errors.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardExpiryMonth')
   })
   @IsNumberString(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NumberRequired, 'CreditCardExpiryMonth')
+    message: Errors.getErrorMessage(ErrorType.NotANumber, 'CreditCardExpiryMonth')
   })
   CreditCardExpiryMonth: string;
 
@@ -70,19 +52,16 @@ export class OnceOffChargeDTO {
     message: Errors.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardExpiryYear')
   })
   @IsNumberString(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NumberRequired, 'CreditCardExpiryYear')
+    message: Errors.getErrorMessage(ErrorType.NotANumber, 'CreditCardExpiryYear')
   })
   CreditCardExpiryYear: string;
 
   // * CreditCardCCV
-  @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'CreditCardCCV')
-  })
   @Length(3, 4, {
     message: Errors.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardCCV')
   })
   @IsNumberString(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NumberRequired, 'CreditCardCCV')
+    message: Errors.getErrorMessage(ErrorType.NotANumber, 'CreditCardCCV')
   })
   CreditCardCCV: string;
 
@@ -97,7 +76,7 @@ export class OnceOffChargeDTO {
 
   // * PaymentAmountInCents
   @IsNumber(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NumberRequired, 'PaymentAmountInCents')
+    message: Errors.getErrorMessage(ErrorType.NotANumber, 'PaymentAmountInCents')
   })
   PaymentAmountInCents: number;
 
