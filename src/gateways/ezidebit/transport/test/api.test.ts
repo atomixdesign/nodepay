@@ -1,6 +1,6 @@
 import { Container } from 'typedi'
 import { API as EzidebitTransport } from '../api'
-import { CustomerDTO, OnceOffChargeDTO } from '../../dtos'
+import { CustomerDTO, OnceOffChargeDTO, CreditCardDTO } from '../../dtos'
 
 const fixtures = {
   creditCard: {
@@ -66,10 +66,39 @@ describe('test ezidebit api transport', () => {
     expect(result.ErrorMessage).toBe('Declined')
   })
 
-  test('it registers a customer account', async () => {
+  /* test('it registers a customer account', async () => {
     const customer = new CustomerDTO(fixtures.customer)
     const result: Record<string, unknown> = await api.addCustomer(customer)
     const data = (result.Data as Record<string, unknown>)
     expect(data.CustomerRef).toBeDefined()
+  }) */
+
+  test('it adds a credit card to a customer account', async () => {
+    const customer = new CustomerDTO(fixtures.customer)
+    const customerResult: Record<string, unknown> = await api.addCustomer(customer)
+    const customerData = (customerResult.Data as Record<string, unknown>)
+
+    // console.dir(customerResult, { depth: 0 })
+    // console.dir(customerData, { depth: 0 })
+
+    const creditCardFixture = fixtures.creditCard
+    const creditCard = new CreditCardDTO({
+      CreditCardNumber: creditCardFixture.CreditCardNumber,
+      CreditCardExpiryMonth: creditCardFixture.CreditCardExpiryMonth,
+      CreditCardExpiryYear: creditCardFixture.CreditCardExpiryYear,
+      NameOnCreditCard: creditCardFixture.NameOnCreditCard,
+      Reactivate: 'YES',
+      Username: customer.Username,
+    })
+    let creditCardUpdateData: Record<string, unknown>
+    let creditCardUpdateResult = ''
+
+    if (customerData.CustomerRef !== undefined) {
+      creditCardUpdateData = await api.addCustomerCC(customerData.CustomerRef as string, creditCard)
+      // console.dir(creditCardUpdateData, { depth: 0 })
+      creditCardUpdateResult = (creditCardUpdateData.Data as Record<string, unknown>)[0] as string
+    }
+
+    expect(creditCardUpdateResult).toBe('S')
   })
 })

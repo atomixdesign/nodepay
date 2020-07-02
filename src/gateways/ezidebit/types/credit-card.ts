@@ -8,3 +8,9 @@ export interface IBaseCreditCard {
 export interface ICreditCard extends IBaseCreditCard {
   CreditCardCCV: string
 }
+
+export interface INewCreditCard extends IBaseCreditCard {
+  Reactivate: string
+  YourSystemReference?: string
+  Username?: string
+}
