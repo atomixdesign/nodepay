@@ -3,4 +3,5 @@ export type Config = {
     digitalKey: string
     publicKey: string
     apiRoot: string
+    nonPCIApiRoot: string
   }

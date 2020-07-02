@@ -6,10 +6,13 @@ import { Config } from '../config'
 import { SoapClientFactory } from '@atomixdesign/nodepay/network/soap-client-factory'
 import { OnceOffChargeDTO } from '../dtos/once-off-charge'
 import { APIResponse } from '@atomixdesign/nodepay/network/response'
+import { CustomerDTO } from '../dtos/customer'
 
 @Service('ezidebit.api')
 export class API {
   private soapClient: SoapClient | undefined
+
+  private nonPCISoapClient: SoapClient | undefined
 
   constructor(
     @Inject('ezidebit.config') private config: Config,
@@ -21,6 +24,10 @@ export class API {
     // const config: Config = Container.get('ezidebit.config')
     try {
       this.soapClient = await this.soapClientFactory!.createAsync(this.config)
+      this.nonPCISoapClient = await this.soapClientFactory!.createAsync({
+        ...this.config,
+        ...{ apiRoot: this.config.nonPCIApiRoot }
+      })
     }
     catch(error) {
       console.error(error)
@@ -45,6 +52,21 @@ export class API {
     }
 
     return result[0].ProcessRealtimeCreditCardPaymentResult
+  }
+
+  async addCustomer(customer: CustomerDTO): Promise<APIResponse> {
+    await this.ensureClient()
+    let result
+    try {
+      result = await this.nonPCISoapClient!.AddCustomerAsync({
+        ...{ DigitalKey: this.config.digitalKey },
+        ...customer,
+      })
+    } catch (error) {
+      return Promise.reject(error)
+    }
+
+    return result[0].AddCustomerResult
   }
 
 

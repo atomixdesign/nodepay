@@ -1,7 +1,6 @@
 import { Container } from 'typedi'
 import { API as EzidebitTransport } from '../api'
-import { OnceOffChargeDTO } from '../../dtos/once-off-charge'
-// import { APIResponse } from '@atomixdesign/nodepay/network/response'
+import { CustomerDTO, OnceOffChargeDTO } from '../../dtos'
 
 const fixtures = {
   creditCard: {
@@ -13,6 +12,17 @@ const fixtures = {
     PaymentAmountInCents: 1000,
     PaymentReference: '123456789',
   },
+  customer: {
+    YourSystemReference: '123456789',
+    LastName: 'Doe',
+    SmsPaymentReminder: 'NO',
+    SmsFailedNotification: 'NO',
+    SmsExpiredCard: 'NO',
+    FirstName: 'John',
+    MobilePhoneNumber: '0400123456',
+    Username: 'jdoe',
+    ContractStartDate: '2021-12-22',
+  }
 }
 
 describe('test ezidebit api transport', () => {
@@ -24,6 +34,7 @@ describe('test ezidebit api transport', () => {
       digitalKey: process.env['EZIDEBIT_DIGITAL_KEY']!,
       publicKey: process.env['EZIDEBIT_PUBLIC_KEY']!,
       apiRoot: process.env['EZIDEBIT_TEST_API_ROOT']!,
+      nonPCIApiRoot: process.env['EZIDEBIT_TEST_API_NONPCI_ROOT']!,
     })
     api = Container.get(EzidebitTransport)
   })
@@ -53,5 +64,12 @@ describe('test ezidebit api transport', () => {
     )
     const result: Record<string, unknown> = await api.placeCharge(onceOffCharge)
     expect(result.ErrorMessage).toBe('Declined')
+  })
+
+  test('it registers a customer account', async () => {
+    const customer = new CustomerDTO(fixtures.customer)
+    const result: Record<string, unknown> = await api.addCustomer(customer)
+    const data = (result.Data as Record<string, unknown>)
+    expect(data.CustomerRef).toBeDefined()
   })
 })

@@ -118,6 +118,9 @@ export class BaseDebitDTO {
 
   // * EmailAddress
   @IsOptional()
+  @MaxLength(255, {
+    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'EmailAddress')
+  })
   @IsEmail(undefined, {
     message: Errors.getErrorMessage(ErrorType.NotAnEmail, 'EmailAddress')
   })
