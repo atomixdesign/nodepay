@@ -2,7 +2,7 @@ import { Container } from 'typedi'
 import { AxiosResponse } from 'axios'
 import moment from 'moment'
 import { API as PayWayTransport } from '../api'
-// import { HttpClientFactory } from '@atomixdesign/nodepay/network/http-client-factory'
+import { APIResponse } from '../api-response'
 import {
   BankAccountDTO,
   ChargeDTO,
@@ -11,7 +11,6 @@ import {
   PaymentScheduleDTO,
 } from '../../dtos'
 import { PaymentFrequency } from '../../payment-frequency'
-import { APIResponse } from '../../../../network/response'
 
 const validCodes = [
   200,

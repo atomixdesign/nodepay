@@ -3,13 +3,12 @@ import { validateOrReject } from 'class-validator'
 import { BaseGateway } from '../base-gateway'
 import { DirectDebit, OnceOffPayment, RecurringPayment } from '@atomixdesign/nodepay/features'
 import { Config } from './config'
-import { API } from './transport/api'
+import { API, APIResponse } from './transport'
 import {
   ChargeDTO,
   PaymentScheduleDTO,
 } from './dtos'
 import { PaymentFrequency } from './payment-frequency'
-import { APIResponse } from '../../network/response'
 
 export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffPayment, RecurringPayment {
   private api: API

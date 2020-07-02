@@ -5,7 +5,7 @@ import {
 import { Config } from '../config'
 import { SoapClientFactory } from '@atomixdesign/nodepay/network/soap-client-factory'
 import { OnceOffChargeDTO } from '../dtos/once-off-charge'
-import { APIResponse } from '@atomixdesign/nodepay/network/response'
+import { APIResponse } from './api-response'
 import { CustomerDTO, CreditCardDTO } from '../dtos'
 
 @Service('ezidebit.api')

@@ -14,7 +14,7 @@ import {
   CustomerDTO,
   PaymentScheduleDTO,
 } from '../dtos'
-import { APIResponse } from '../../../network/response'
+import { APIResponse } from './api-response'
 
 @Service('payway.api')
 export class API {

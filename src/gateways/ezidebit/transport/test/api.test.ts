@@ -1,5 +1,6 @@
 import { Container } from 'typedi'
 import { API as EzidebitTransport } from '../api'
+import { APIResponse } from '../api-response'
 import { CustomerDTO, OnceOffChargeDTO, CreditCardDTO } from '../../dtos'
 
 const fixtures = {
@@ -50,9 +51,8 @@ describe('test ezidebit api transport', () => {
 
   test('it places a once-off charge using credit card', async () => {
     const onceOffCharge = new OnceOffChargeDTO(fixtures.creditCard)
-    const result: Record<string, unknown> = await api.placeCharge(onceOffCharge)
-    const data = (result.Data as Record<string, unknown>)
-    expect(data.PaymentResultText).toBe('APPROVED')
+    const result: APIResponse = await api.placeCharge(onceOffCharge)
+    expect(result.Data.PaymentResultText).toBe('APPROVED')
   })
 
   test('it reports an error when a once-off charge is declined', async () => {
@@ -62,21 +62,19 @@ describe('test ezidebit api transport', () => {
         ...{ PaymentAmountInCents: 1012 }
       }
     )
-    const result: Record<string, unknown> = await api.placeCharge(onceOffCharge)
+    const result: APIResponse = await api.placeCharge(onceOffCharge)
     expect(result.ErrorMessage).toBe('Declined')
   })
 
   /* test('it registers a customer account', async () => {
     const customer = new CustomerDTO(fixtures.customer)
-    const result: Record<string, unknown> = await api.addCustomer(customer)
-    const data = (result.Data as Record<string, unknown>)
-    expect(data.CustomerRef).toBeDefined()
+    const result: APIResponse = await api.addCustomer(customer)
+    expect(result.Data.CustomerRef).toBeDefined()
   }) */
 
   test('it adds a credit card to a customer account', async () => {
     const customer = new CustomerDTO(fixtures.customer)
-    const customerResult: Record<string, unknown> = await api.addCustomer(customer)
-    const customerData = (customerResult.Data as Record<string, unknown>)
+    const customerResponse: APIResponse = await api.addCustomer(customer)
 
     // console.dir(customerResult, { depth: 0 })
     // console.dir(customerData, { depth: 0 })
@@ -90,13 +88,14 @@ describe('test ezidebit api transport', () => {
       Reactivate: 'YES',
       Username: customer.Username,
     })
-    let creditCardUpdateData: Record<string, unknown>
+    let creditCardUpdateData: APIResponse
     let creditCardUpdateResult = ''
 
-    if (customerData.CustomerRef !== undefined) {
-      creditCardUpdateData = await api.addCustomerCC(customerData.CustomerRef as string, creditCard)
+    if (customerResponse.Data.CustomerRef !== undefined) {
+      const { CustomerRef } = customerResponse.Data
+      creditCardUpdateData = await api.addCustomerCC(CustomerRef as string, creditCard)
       // console.dir(creditCardUpdateData, { depth: 0 })
-      creditCardUpdateResult = (creditCardUpdateData.Data as Record<string, unknown>)[0] as string
+      creditCardUpdateResult = creditCardUpdateData.Data[0] as string
     }
 
     expect(creditCardUpdateResult).toBe('S')
