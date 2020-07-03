@@ -1,12 +1,8 @@
 import {
   IsNotEmpty,
   IsNumberString,
-  IsCreditCard,
-  IsNumber,
   MaxLength,
-  Length,
   IsOptional,
-  Min,
   IsIn,
   IsEmail,
   IsMobilePhone,

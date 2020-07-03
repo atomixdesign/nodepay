@@ -1,5 +1,6 @@
 import { BaseDebitDTO } from './base-debit'
 
+import { ICreditCardDebit } from '../types'
 import {
   IsNotEmpty,
   IsNumberString,
@@ -12,7 +13,6 @@ import {
   ErrorType,
   Errors,
 } from '@atomixdesign/nodepay/validation/errors'
-import { ICreditCardDebit } from '../types'
 
 export class CardDebitDTO extends BaseDebitDTO {
   constructor(cardDebit: ICreditCardDebit) {

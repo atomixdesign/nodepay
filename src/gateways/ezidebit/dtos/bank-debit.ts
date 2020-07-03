@@ -1,5 +1,6 @@
 import { BaseDebitDTO } from './base-debit'
 
+import { IBankAccountDebit } from '../types'
 import {
   IsNotEmpty,
 } from 'class-validator'
@@ -8,7 +9,6 @@ import {
   ErrorType,
   Errors,
 } from '@atomixdesign/nodepay/validation/errors'
-import { IBankAccountDebit } from '../types'
 
 export class BankDebitDTO extends BaseDebitDTO {
   constructor(bankAccountDebit: IBankAccountDebit) {

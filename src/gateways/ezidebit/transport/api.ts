@@ -6,7 +6,7 @@ import { Config } from '../config'
 import { SoapClientFactory } from '@atomixdesign/nodepay/network/soap-client-factory'
 import { OnceOffChargeDTO } from '../dtos/once-off-charge'
 import { APIResponse } from './api-response'
-import { CustomerDTO, CreditCardDTO, PaymentDTO } from '../dtos'
+import { CustomerDTO, CreditCardDTO, PaymentDTO, PaymentScheduleDTO } from '../dtos'
 
 @Service('ezidebit.api')
 export class API {
@@ -103,5 +103,22 @@ export class API {
     }
 
     return result[0].AddPaymentResult
+  }
+
+  async schedulePayment(schedule: PaymentScheduleDTO): Promise<APIResponse> {
+    await this.ensureClient()
+    let result
+    try {
+      result = await this.nonPCISoapClient!.CreateScheduleAsync({
+        ...{
+          DigitalKey: this.config.digitalKey,
+        },
+        ...schedule,
+      })
+    } catch (error) {
+      return Promise.reject(error)
+    }
+
+    return result[0].CreateScheduleResult
   }
 }

@@ -1,7 +1,8 @@
 import { Container } from 'typedi'
 import { API as EzidebitTransport } from '../api'
 import { APIResponse } from '../api-response'
-import { CustomerDTO, OnceOffChargeDTO, CreditCardDTO, PaymentDTO } from '../../dtos'
+import { CustomerDTO, OnceOffChargeDTO, CreditCardDTO, PaymentDTO, PaymentScheduleDTO } from '../../dtos'
+import { PaymentFrequency, DayOfWeek } from '../../types'
 // import crypto from 'crypto'
 
 const fixtures = {
@@ -29,6 +30,21 @@ const fixtures = {
     DebitDate: '2022-01-01',
     PaymentAmountInCents: 2000,
     PaymentReference: '1234',
+    Username: 'jdoe',
+  },
+  paymentSchedule: {
+    ScheduleStartDate: '2022-01-01',
+    SchedulePeriodType: PaymentFrequency.Monthly,
+    DayOfWeek: DayOfWeek.MON,
+    DayOfMonth: 1,
+    FirstWeekOfMonth: 'YES',
+    SecondWeekOfMonth: 'NO',
+    ThirdWeekOfMonth: 'NO',
+    FourthWeekOfMonth: 'NO',
+    PaymentAmountInCents: 2500,
+    LimitToNumberOfPayments: 0,
+    LimitToTotalAmountInCents: 12500,
+    KeepManualPayments: 'NO',
     Username: 'jdoe',
   },
 }
@@ -119,7 +135,7 @@ describe('test ezidebit api transport', () => {
     expect(creditCardUpdateResult).toBe('S')
   }) */
 
-  test('it adds a credit card and direct debit payment to a customer account', async () => {
+  /* test('it adds a credit card and direct debit payment to a customer account', async () => {
     const customer = new CustomerDTO(fixtures.customer)
     const customerResponse: APIResponse = await api.addCustomer(customer)
 
@@ -135,13 +151,7 @@ describe('test ezidebit api transport', () => {
     let creditCardUpdateData: APIResponse
     let creditCardUpdateResult = ''
 
-    const paymentFixture = fixtures.payment
-    const payment = new PaymentDTO({
-      DebitDate: paymentFixture.DebitDate,
-      PaymentAmountInCents: paymentFixture.PaymentAmountInCents,
-      PaymentReference: paymentFixture.PaymentReference,
-      Username: paymentFixture.Username,
-    })
+    const payment = new PaymentDTO(fixtures.payment)
     let paymentUpdateData: APIResponse
     let paymentUpdateResult = ''
 
@@ -159,5 +169,41 @@ describe('test ezidebit api transport', () => {
     }
 
     expect(paymentUpdateResult).toBe('S')
+  }) */
+
+  test('it adds a credit card and a payment schedule to a customer account', async () => {
+    const customer = new CustomerDTO(fixtures.customer)
+    const customerResponse: APIResponse = await api.addCustomer(customer)
+
+    const creditCardFixture = fixtures.creditCard
+    const creditCard = new CreditCardDTO({
+      CreditCardNumber: creditCardFixture.CreditCardNumber,
+      CreditCardExpiryMonth: creditCardFixture.CreditCardExpiryMonth,
+      CreditCardExpiryYear: creditCardFixture.CreditCardExpiryYear,
+      NameOnCreditCard: creditCardFixture.NameOnCreditCard,
+      Reactivate: 'YES',
+      Username: customer.Username,
+    })
+    let creditCardUpdateData: APIResponse
+    let creditCardUpdateResult = ''
+
+    const paymentSchedule = new PaymentScheduleDTO(fixtures.paymentSchedule)
+    let paymentScheduleUpdateData: APIResponse
+    let paymentScheduleUpdateResult = ''
+
+    if (customerResponse.Data.CustomerRef !== undefined) {
+      const customerId  = customerResponse.Data.CustomerRef as string
+      creditCard.EziDebitCustomerID = customerId
+      creditCardUpdateData = await api.addCustomerCC(creditCard)
+      // console.dir(creditCardUpdateData, { depth: 0 })
+      creditCardUpdateResult = creditCardUpdateData.Data[0] as string
+      if (creditCardUpdateResult === 'S') {
+        paymentSchedule.EziDebitCustomerID = customerId
+        paymentScheduleUpdateData = await api.schedulePayment(paymentSchedule)
+        paymentScheduleUpdateResult = paymentScheduleUpdateData.Data[0] as string
+      }
+    }
+
+    expect(paymentScheduleUpdateResult).toBe('S')
   })
 })
