@@ -1,5 +1,5 @@
 import { INewCreditCard } from '../types'
-import { IsNotEmpty, IsCreditCard, MaxLength, Length, IsNumberString, IsOptional, IsIn } from 'class-validator'
+import { IsNotEmpty, IsCreditCard, MaxLength, Length, IsNumberString, IsIn } from 'class-validator'
 import { Errors, ErrorType } from '@atomixdesign/nodepay/validation/errors'
 
 export class CreditCardDTO {
@@ -16,14 +16,13 @@ export class CreditCardDTO {
     this.Username = creditCard.Username
   }
   // * EziDebitCustomerID
-  @IsOptional()
   @IsNumberString(undefined, {
     message: Errors.getErrorMessage(ErrorType.NotANumber, 'EziDebitCustomerID')
   })
   @MaxLength(50, {
     message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'EziDebitCustomerID')
   })
-  EziDebitCustomerID: string | undefined;
+  EziDebitCustomerID = '';
 
   // * CreditCardNumber
   @IsNotEmpty({
@@ -74,16 +73,14 @@ export class CreditCardDTO {
   Reactivate: string
 
   // * YourSystemReference
-  @IsOptional()
   @MaxLength(50, {
     message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'YourSystemReference')
   })
-  YourSystemReference: string | undefined;
+  YourSystemReference = '';
 
   // * Username
-  @IsOptional()
   @MaxLength(50, {
     message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'Username')
   })
-  Username: string | undefined;
+  Username = '';
 }

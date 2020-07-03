@@ -10,8 +10,8 @@ export interface ICreditCard extends IBaseCreditCard {
 }
 
 export interface INewCreditCard extends IBaseCreditCard {
-  EziDebitCustomerID?: string
+  EziDebitCustomerID: string
   Reactivate: string
-  YourSystemReference?: string
-  Username?: string
+  YourSystemReference: string
+  Username: string
 }

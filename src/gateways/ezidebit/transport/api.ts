@@ -16,7 +16,7 @@ export class API {
   constructor(
     @Inject('ezidebit.config') private config: Config,
     @Inject('soap.client') private soapClientFactory: SoapClientFactory
-  ) {}
+  ) { }
 
   private async ensureClient(): Promise<void> {
     if (this.soapClient !== undefined) return Promise.resolve()
@@ -27,7 +27,7 @@ export class API {
         ...{ apiRoot: this.config.nonPCIApiRoot }
       })
     }
-    catch(error) {
+    catch (error) {
       return Promise.reject(error)
     }
   }
@@ -93,9 +93,7 @@ export class API {
     let result
     try {
       result = await this.nonPCISoapClient!.AddPaymentAsync({
-        ...{
-          DigitalKey: this.config.digitalKey,
-        },
+        ...{ DigitalKey: this.config.digitalKey },
         ...payment,
       })
     } catch (error) {

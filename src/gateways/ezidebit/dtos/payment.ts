@@ -3,7 +3,7 @@ import { IsOptional, IsNumberString, MaxLength, IsNotEmpty, IsNumber } from 'cla
 import { Errors, ErrorType } from '@atomixdesign/nodepay/validation/errors'
 
 export class PaymentDTO {
-  constructor(public payment: IDirectDebitPayment) {
+  constructor(payment: IDirectDebitPayment) {
     if (payment.YourSystemReference === undefined)
       this.EziDebitCustomerID = payment.EziDebitCustomerID
     if (payment.EziDebitCustomerID === undefined)

@@ -5,7 +5,6 @@ import {
   IsNumber,
   MaxLength,
   Length,
-  IsOptional,
 } from 'class-validator'
 
 import {
@@ -15,15 +14,15 @@ import {
 import { ICreditCardCharge } from '../types'
 
 export class OnceOffChargeDTO {
-  constructor(public charge: ICreditCardCharge) {
+  constructor(charge: ICreditCardCharge) {
     this.CreditCardNumber = charge.CreditCardNumber
     this.CreditCardExpiryMonth = charge.CreditCardExpiryMonth
     this.CreditCardExpiryYear = charge.CreditCardExpiryYear
     this.CreditCardCCV = charge.CreditCardCCV
     this.NameOnCreditCard = charge.NameOnCreditCard
     this.PaymentAmountInCents = charge.PaymentAmountInCents
-    this.PaymentReference = charge.PaymentReference
     this.CustomerName = charge.CustomerName
+    this.PaymentReference = charge.PaymentReference
   }
 
   // * CreditCardNumber
@@ -80,6 +79,12 @@ export class OnceOffChargeDTO {
   })
   PaymentAmountInCents: number;
 
+  // * CustomerName
+  @MaxLength(255, {
+    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'CustomerName')
+  })
+  CustomerName = '';
+
   // * PaymentReference
   @IsNotEmpty({
     message: Errors.getErrorMessage(ErrorType.NotEmpty, 'PaymentReference')
@@ -88,11 +93,4 @@ export class OnceOffChargeDTO {
     message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'PaymentReference')
   })
   PaymentReference: string;
-
-  // * CustomerName
-  @IsOptional()
-  @MaxLength(255, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'CustomerName')
-  })
-  CustomerName: string | undefined;
 }

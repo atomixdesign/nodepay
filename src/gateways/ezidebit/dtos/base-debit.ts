@@ -7,7 +7,6 @@ import {
   IsIn,
   Min,
   MaxLength,
-  IsOptional,
 } from 'class-validator'
 
 import {
@@ -99,40 +98,35 @@ export class BaseDebitDTO {
   SmsExpiredCard: string;
 
   // * Username
-  @IsOptional()
-  Username: string | undefined;
+  Username = '';
 
   // * YourGeneralReference
-  @IsOptional()
   @MaxLength(50, {
     message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'YourGeneralReference')
   })
-  YourGeneralReference: string | undefined;
+  YourGeneralReference = '';
 
   // * FirstName
-  @IsOptional()
   @MaxLength(30, {
     message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'FirstName')
   })
-  FirstName: string | undefined;
+  FirstName = '';
 
   // * EmailAddress
-  @IsOptional()
   @MaxLength(255, {
     message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'EmailAddress')
   })
   @IsEmail(undefined, {
     message: Errors.getErrorMessage(ErrorType.NotAnEmail, 'EmailAddress')
   })
-  EmailAddress: string | undefined;
+  EmailAddress = '';
 
   // * MobilePhoneNumber
-  @IsOptional()
   @MaxLength(10, {
     message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'MobilePhoneNumber')
   })
   @IsMobilePhone('en-AU', undefined, {
     message: Errors.getErrorMessage(ErrorType.NotAMobilePhone, 'MobilePhoneNumber')
   })
-  MobilePhoneNumber: string | undefined;
+  MobilePhoneNumber = '';
 }

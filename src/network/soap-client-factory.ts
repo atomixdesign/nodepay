@@ -23,7 +23,8 @@ export class SoapClientFactory implements INetworkFactory<Client> {
       })
       if (DEBUG) {
         soapClient.on('request', (xml: string) => {
-          parseString(xml, this.parseResponse)
+          console.dirxml(xml)
+          // parseString(xml, this.parseResponse)
         })
         soapClient.on('response', (body) => {
           parseString(body, this.parseResponse)

@@ -1,9 +1,9 @@
 import { Container } from 'typedi'
 import { API as EzidebitTransport } from '../api'
 import { APIResponse } from '../api-response'
-import { CustomerDTO, OnceOffChargeDTO, CreditCardDTO, PaymentDTO, PaymentScheduleDTO } from '../../dtos'
+// import { CustomerDTO, OnceOffChargeDTO, CreditCardDTO, PaymentDTO, PaymentScheduleDTO } from '../../dtos'
 import { PaymentFrequency, DayOfWeek } from '../../types'
-// import crypto from 'crypto'
+import crypto from 'crypto'
 
 const fixtures = {
   creditCard: {
@@ -13,26 +13,36 @@ const fixtures = {
     CreditCardCCV: '847',
     NameOnCreditCard: 'John Doe',
     PaymentAmountInCents: 1000,
+    CustomerName: 'John Doe',
     PaymentReference: '123456789',
   },
   customer: {
-    YourSystemReference: '123456789',
+    YourSystemReference: '',
+    YourGeneralReference: '',
     LastName: 'Doe',
+    FirstName: 'John',
+    AddressLine1: '',
+    AddressLine2: '',
+    AddressSuburb: '',
+    AddressState: '',
+    AddressPostCode: '',
+    EmailAddress: '',
+    MobilePhoneNumber: '0400123456',
+    ContractStartDate: '2021-12-22',
     SmsPaymentReminder: 'NO',
     SmsFailedNotification: 'NO',
     SmsExpiredCard: 'NO',
-    FirstName: 'John',
-    MobilePhoneNumber: '0400123456',
     Username: 'jdoe',
-    ContractStartDate: '2021-12-22',
   },
   payment: {
+    YourSystemReference: '',
     DebitDate: '2022-01-01',
     PaymentAmountInCents: 2000,
     PaymentReference: '1234',
     Username: 'jdoe',
   },
   paymentSchedule: {
+    YourSystemReference: '',
     ScheduleStartDate: '2022-01-01',
     SchedulePeriodType: PaymentFrequency.Monthly,
     DayOfWeek: DayOfWeek.MON,
@@ -49,9 +59,9 @@ const fixtures = {
   },
 }
 
-/* function randomId(length: number): string {
+function randomId(length: number): string {
   return crypto.randomBytes(length / 2).toString('hex')
-} */
+}
 
 describe('test ezidebit api transport', () => {
   let api: EzidebitTransport
@@ -79,126 +89,148 @@ describe('test ezidebit api transport', () => {
   })
 
   test('it places a once-off charge using credit card', async () => {
-    const onceOffCharge = new OnceOffChargeDTO(fixtures.creditCard)
-    const result: APIResponse = await api.placeCharge(onceOffCharge)
+    // TODO: somehow enforce property order on DTOs, see Map
+    // const onceOffCharge = new OnceOffChargeDTO(fixtures.creditCard)
+    // console.dir(onceOffCharge, { depth: 0 })
+    const result: APIResponse = await api.placeCharge(fixtures.creditCard)
     expect(result.Data.PaymentResultText).toBe('APPROVED')
   })
 
   test('it reports an error when a once-off charge is declined', async () => {
-    const onceOffCharge = new OnceOffChargeDTO(
+    /* const onceOffCharge = new OnceOffChargeDTO(
       {
         ...fixtures.creditCard,
         ...{ PaymentAmountInCents: 1012 }
       }
-    )
-    const result: APIResponse = await api.placeCharge(onceOffCharge)
+    ) */
+    const badChargeFixture = fixtures.creditCard
+    badChargeFixture.PaymentAmountInCents = 1012
+    const result: APIResponse = await api.placeCharge(badChargeFixture)
     expect(result.ErrorMessage).toBe('Declined')
   })
 
-  /* test('it registers a customer account', async () => {
-    const customer = new CustomerDTO(fixtures.customer)
-    // customer.YourSystemReference = randomId(32)
-    console.dir(customer, { depth: 0 })
+  test('it registers a customer account', async () => {
+    // const customer = new CustomerDTO(fixtures.customer)
+    const { customer } = fixtures
+    customer.YourSystemReference = randomId(32)
     const result: APIResponse = await api.addCustomer(customer)
     expect(result.Data.CustomerRef).toBeDefined()
-  }) */
+  })
 
-  /* test('it adds a credit card to a customer account', async () => {
-    const customer = new CustomerDTO(fixtures.customer)
-    // customer.YourSystemReference = randomId(32)
-    console.dir(customer, { depth: 0 })
+  test('it adds a credit card to a customer account', async () => {
+    const { customer } = fixtures
+    customer.YourSystemReference = randomId(32)
     const customerResponse: APIResponse = await api.addCustomer(customer)
 
     // console.dir(customerResult, { depth: 0 })
     // console.dir(customerData, { depth: 0 })
 
-    const creditCardFixture = fixtures.creditCard
-    const creditCard = new CreditCardDTO({
-      CreditCardNumber: creditCardFixture.CreditCardNumber,
-      CreditCardExpiryMonth: creditCardFixture.CreditCardExpiryMonth,
-      CreditCardExpiryYear: creditCardFixture.CreditCardExpiryYear,
-      NameOnCreditCard: creditCardFixture.NameOnCreditCard,
-      Reactivate: 'YES',
-      Username: customer.Username,
-    })
     let creditCardUpdateData: APIResponse
     let creditCardUpdateResult = ''
 
     if (customerResponse.Data.CustomerRef !== undefined) {
-      const customerId  = customerResponse.Data.CustomerRef as string
-      creditCard.EziDebitCustomerID = customerId
-      creditCardUpdateData = await api.addCustomerCC(creditCard)
+      const EziDebitCustomerID = customerResponse.Data.CustomerRef as string
+      const creditCardFixture = {
+        EziDebitCustomerID,
+        CreditCardNumber: fixtures.creditCard.CreditCardNumber,
+        CreditCardExpiryMonth: fixtures.creditCard.CreditCardExpiryMonth,
+        CreditCardExpiryYear: fixtures.creditCard.CreditCardExpiryYear,
+        NameOnCreditCard: fixtures.creditCard.NameOnCreditCard,
+        Reactivate: 'YES',
+        YourSystemReference: '',
+        Username: customer.Username,
+      }
+      creditCardUpdateData = await api.addCustomerCC(creditCardFixture)
       // console.dir(creditCardUpdateData, { depth: 0 })
       creditCardUpdateResult = creditCardUpdateData.Data[0] as string
     }
 
     expect(creditCardUpdateResult).toBe('S')
-  }) */
+  })
 
-  /* test('it adds a credit card and direct debit payment to a customer account', async () => {
-    const customer = new CustomerDTO(fixtures.customer)
+  test('it registers a customer account', async () => {
+    // const customer = new CustomerDTO(fixtures.customer)
+    const { customer } = fixtures
+    customer.YourSystemReference = randomId(32)
+    const result: APIResponse = await api.addCustomer(customer)
+    expect(result.Data.CustomerRef).toBeDefined()
+  })
+
+  test('it adds a credit card and direct payment to a customer account', async () => {
+    const { customer } = fixtures
+    customer.YourSystemReference = randomId(32)
     const customerResponse: APIResponse = await api.addCustomer(customer)
 
-    const creditCardFixture = fixtures.creditCard
-    const creditCard = new CreditCardDTO({
-      CreditCardNumber: creditCardFixture.CreditCardNumber,
-      CreditCardExpiryMonth: creditCardFixture.CreditCardExpiryMonth,
-      CreditCardExpiryYear: creditCardFixture.CreditCardExpiryYear,
-      NameOnCreditCard: creditCardFixture.NameOnCreditCard,
-      Reactivate: 'YES',
-      Username: customer.Username,
-    })
+    // console.dir(customerResult, { depth: 0 })
+    // console.dir(customerData, { depth: 0 })
+
     let creditCardUpdateData: APIResponse
     let creditCardUpdateResult = ''
-
-    const payment = new PaymentDTO(fixtures.payment)
     let paymentUpdateData: APIResponse
     let paymentUpdateResult = ''
 
     if (customerResponse.Data.CustomerRef !== undefined) {
-      const customerId  = customerResponse.Data.CustomerRef as string
-      creditCard.EziDebitCustomerID = customerId
-      creditCardUpdateData = await api.addCustomerCC(creditCard)
+      const EziDebitCustomerID = customerResponse.Data.CustomerRef as string
+      const creditCardFixture = {
+        EziDebitCustomerID,
+        CreditCardNumber: fixtures.creditCard.CreditCardNumber,
+        CreditCardExpiryMonth: fixtures.creditCard.CreditCardExpiryMonth,
+        CreditCardExpiryYear: fixtures.creditCard.CreditCardExpiryYear,
+        NameOnCreditCard: fixtures.creditCard.NameOnCreditCard,
+        Reactivate: 'YES',
+        YourSystemReference: '',
+        Username: customer.Username,
+      }
+      creditCardUpdateData = await api.addCustomerCC(creditCardFixture)
       // console.dir(creditCardUpdateData, { depth: 0 })
       creditCardUpdateResult = creditCardUpdateData.Data[0] as string
       if (creditCardUpdateResult === 'S') {
-        payment.EziDebitCustomerID = customerId
+        const payment = {
+          EziDebitCustomerID,
+          ...fixtures.payment,
+        }
         paymentUpdateData = await api.placeDirectCharge(payment)
         paymentUpdateResult = paymentUpdateData.Data[0] as string
       }
     }
 
     expect(paymentUpdateResult).toBe('S')
-  }) */
+  })
 
   test('it adds a credit card and a payment schedule to a customer account', async () => {
-    const customer = new CustomerDTO(fixtures.customer)
+    const { customer } = fixtures
+    customer.YourSystemReference = randomId(32)
     const customerResponse: APIResponse = await api.addCustomer(customer)
 
-    const creditCardFixture = fixtures.creditCard
-    const creditCard = new CreditCardDTO({
-      CreditCardNumber: creditCardFixture.CreditCardNumber,
-      CreditCardExpiryMonth: creditCardFixture.CreditCardExpiryMonth,
-      CreditCardExpiryYear: creditCardFixture.CreditCardExpiryYear,
-      NameOnCreditCard: creditCardFixture.NameOnCreditCard,
-      Reactivate: 'YES',
-      Username: customer.Username,
-    })
+    // console.dir(customerResult, { depth: 0 })
+    // console.dir(customerData, { depth: 0 })
+
     let creditCardUpdateData: APIResponse
     let creditCardUpdateResult = ''
 
-    const paymentSchedule = new PaymentScheduleDTO(fixtures.paymentSchedule)
     let paymentScheduleUpdateData: APIResponse
     let paymentScheduleUpdateResult = ''
 
     if (customerResponse.Data.CustomerRef !== undefined) {
-      const customerId  = customerResponse.Data.CustomerRef as string
-      creditCard.EziDebitCustomerID = customerId
-      creditCardUpdateData = await api.addCustomerCC(creditCard)
+      const EziDebitCustomerID = customerResponse.Data.CustomerRef as string
+      const creditCardFixture = {
+        EziDebitCustomerID,
+        CreditCardNumber: fixtures.creditCard.CreditCardNumber,
+        CreditCardExpiryMonth: fixtures.creditCard.CreditCardExpiryMonth,
+        CreditCardExpiryYear: fixtures.creditCard.CreditCardExpiryYear,
+        NameOnCreditCard: fixtures.creditCard.NameOnCreditCard,
+        Reactivate: 'YES',
+        YourSystemReference: '',
+        Username: customer.Username,
+      }
+      creditCardUpdateData = await api.addCustomerCC(creditCardFixture)
       // console.dir(creditCardUpdateData, { depth: 0 })
       creditCardUpdateResult = creditCardUpdateData.Data[0] as string
       if (creditCardUpdateResult === 'S') {
-        paymentSchedule.EziDebitCustomerID = customerId
+        const paymentSchedule = {
+          EziDebitCustomerID,
+          ...fixtures.paymentSchedule,
+        }
         paymentScheduleUpdateData = await api.schedulePayment(paymentSchedule)
         paymentScheduleUpdateResult = paymentScheduleUpdateData.Data[0] as string
       }

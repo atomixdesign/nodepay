@@ -3,7 +3,7 @@ import { IsOptional, IsNumberString, MaxLength, IsNumber, IsNotEmpty, IsIn } fro
 import { Errors, ErrorType } from '@atomixdesign/nodepay/validation/errors';
 
 export class PaymentScheduleDTO {
-  constructor(public paymentSchedule: IPaymentSchedule) {
+  constructor(paymentSchedule: IPaymentSchedule) {
     if (paymentSchedule.YourSystemReference === undefined)
       this.EziDebitCustomerID = paymentSchedule.EziDebitCustomerID
     if (paymentSchedule.EziDebitCustomerID === undefined)

@@ -2,11 +2,11 @@ import { PaymentFrequency, DayOfWeek } from './payment-frequency'
 
 export interface IBasePayment {
   PaymentAmountInCents: number
-  PaymentReference?: string
+  PaymentReference: string
 }
 
 export interface ICustomerName {
-  CustomerName?: string
+  CustomerName: string
 }
 
 export interface IPaymentSchedule {
@@ -17,13 +17,13 @@ export interface IPaymentSchedule {
   LimitToNumberOfPayments: number
   LimitToTotalAmountInCents: number
   KeepManualPayments: string
-  EziDebitCustomerID?: string
-  YourSystemReference?: string
-  DayOfWeek?: DayOfWeek
-  FirstWeekOfMonth?: string
-  SecondWeekOfMonth?: string
-  ThirdWeekOfMonth?: string
-  FourthWeekOfMonth?: string
+  EziDebitCustomerID: string
+  YourSystemReference: string
+  DayOfWeek: DayOfWeek
+  FirstWeekOfMonth: string
+  SecondWeekOfMonth: string
+  ThirdWeekOfMonth: string
+  FourthWeekOfMonth: string
   Username?: string
 }
 
