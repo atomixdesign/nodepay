@@ -5,7 +5,7 @@ import {
 import { Config } from '../config'
 import { SoapClientFactory } from '@atomixdesign/nodepay/network/soap-client-factory'
 import { OnceOffChargeDTO } from '../dtos/once-off-charge'
-import { APIResponse } from './api-response'
+import { APIResponse, IEzidebitResponse } from './api-response'
 import { CustomerDTO, CreditCardDTO, PaymentDTO, PaymentScheduleDTO } from '../dtos'
 
 @Service('ezidebit.api')
@@ -32,6 +32,17 @@ export class API {
     }
   }
 
+  private formatResponse(payload: IEzidebitResponse): APIResponse{
+    const dataHash = typeof payload.Data === 'string' ? payload.Data : payload.Data.toString()
+
+    return {
+      status: payload.ErrorMessage !== undefined ? payload.Error : 200,
+      statusText: payload.ErrorMessage !== undefined ? payload.ErrorMessage : dataHash,
+      internalErrorCode: payload.Error,
+      data: payload.Data,
+    }
+  }
+
   async describe(pci = true): Promise<unknown> {
     await this.ensureClient()
     return pci ? this.soapClient!.describe() : this.nonPCISoapClient!.describe()
@@ -49,7 +60,7 @@ export class API {
       return Promise.reject(error)
     }
 
-    return result[0].AddCustomerResult
+    return this.formatResponse(result[0].AddCustomerResult)
   }
 
   async addCustomerCC(
@@ -68,7 +79,7 @@ export class API {
       return Promise.reject(error)
     }
 
-    return result[0].EditCustomerCreditCardResult
+    return this.formatResponse(result[0].EditCustomerCreditCardResult)
   }
 
   async placeCharge(charge: OnceOffChargeDTO): Promise<APIResponse> {
@@ -83,7 +94,7 @@ export class API {
       return Promise.reject(error)
     }
 
-    return result[0].ProcessRealtimeCreditCardPaymentResult
+    return this.formatResponse(result[0].ProcessRealtimeCreditCardPaymentResult)
   }
 
   async placeDirectCharge(
@@ -100,7 +111,7 @@ export class API {
       return Promise.reject(error)
     }
 
-    return result[0].AddPaymentResult
+    return this.formatResponse(result[0].AddPaymentResult)
   }
 
   async schedulePayment(schedule: PaymentScheduleDTO): Promise<APIResponse> {
@@ -117,6 +128,6 @@ export class API {
       return Promise.reject(error)
     }
 
-    return result[0].CreateScheduleResult
+    return this.formatResponse(result[0].CreateScheduleResult)
   }
 }

@@ -127,11 +127,9 @@ export class API {
     })
 
     return {
-      response: {
-        status: response.status,
-        statusText: response.statusText,
-      },
-      ...response.data
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
     }
   }
 
@@ -143,11 +141,9 @@ export class API {
     })
 
     return {
-      response: {
-        status: response.status,
-        statusText: response.statusText,
-      },
-      ...response.data
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
     }
   }
 
@@ -159,11 +155,9 @@ export class API {
     })
 
     return {
-      response: {
-        status: response.status,
-        statusText: response.statusText,
-      },
-      ...response.data
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
     }
   }
 }

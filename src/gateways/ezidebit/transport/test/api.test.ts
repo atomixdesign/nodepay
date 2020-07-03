@@ -93,20 +93,20 @@ describe('test ezidebit api transport', () => {
     // const onceOffCharge = new OnceOffChargeDTO(fixtures.creditCard)
     // console.dir(onceOffCharge, { depth: 0 })
     const result: APIResponse = await api.placeCharge(fixtures.creditCard)
-    expect(result.Data.PaymentResultText).toBe('APPROVED')
+    expect(result.data.PaymentResultText).toBe('APPROVED')
   })
 
   test('it reports an error when a once-off charge is declined', async () => {
-    /* const onceOffCharge = new OnceOffChargeDTO(
-      {
-        ...fixtures.creditCard,
-        ...{ PaymentAmountInCents: 1012 }
-      }
-    ) */
+    //  const onceOffCharge = new OnceOffChargeDTO(
+    //  {
+    //    ...fixtures.creditCard,
+    //    ...{ PaymentAmountInCents: 1012 }
+    //  }
+    // )
     const badChargeFixture = fixtures.creditCard
     badChargeFixture.PaymentAmountInCents = 1012
     const result: APIResponse = await api.placeCharge(badChargeFixture)
-    expect(result.ErrorMessage).toBe('Declined')
+    expect(result.statusText).toBe('Declined')
   })
 
   test('it registers a customer account', async () => {
@@ -114,7 +114,7 @@ describe('test ezidebit api transport', () => {
     const { customer } = fixtures
     customer.YourSystemReference = randomId(32)
     const result: APIResponse = await api.addCustomer(customer)
-    expect(result.Data.CustomerRef).toBeDefined()
+    expect(result.data.CustomerRef).toBeDefined()
   })
 
   test('it adds a credit card to a customer account', async () => {
@@ -122,14 +122,11 @@ describe('test ezidebit api transport', () => {
     customer.YourSystemReference = randomId(32)
     const customerResponse: APIResponse = await api.addCustomer(customer)
 
-    // console.dir(customerResult, { depth: 0 })
-    // console.dir(customerData, { depth: 0 })
-
     let creditCardUpdateData: APIResponse
     let creditCardUpdateResult = ''
 
-    if (customerResponse.Data.CustomerRef !== undefined) {
-      const EziDebitCustomerID = customerResponse.Data.CustomerRef as string
+    if (customerResponse.data.CustomerRef !== undefined) {
+      const EziDebitCustomerID = customerResponse.data.CustomerRef as string
       const creditCardFixture = {
         EziDebitCustomerID,
         CreditCardNumber: fixtures.creditCard.CreditCardNumber,
@@ -142,7 +139,7 @@ describe('test ezidebit api transport', () => {
       }
       creditCardUpdateData = await api.addCustomerCC(creditCardFixture)
       // console.dir(creditCardUpdateData, { depth: 0 })
-      creditCardUpdateResult = creditCardUpdateData.Data[0] as string
+      creditCardUpdateResult = creditCardUpdateData.data[0] as string
     }
 
     expect(creditCardUpdateResult).toBe('S')
@@ -153,7 +150,7 @@ describe('test ezidebit api transport', () => {
     const { customer } = fixtures
     customer.YourSystemReference = randomId(32)
     const result: APIResponse = await api.addCustomer(customer)
-    expect(result.Data.CustomerRef).toBeDefined()
+    expect(result.data.CustomerRef).toBeDefined()
   })
 
   test('it adds a credit card and direct payment to a customer account', async () => {
@@ -161,16 +158,13 @@ describe('test ezidebit api transport', () => {
     customer.YourSystemReference = randomId(32)
     const customerResponse: APIResponse = await api.addCustomer(customer)
 
-    // console.dir(customerResult, { depth: 0 })
-    // console.dir(customerData, { depth: 0 })
-
     let creditCardUpdateData: APIResponse
     let creditCardUpdateResult = ''
     let paymentUpdateData: APIResponse
     let paymentUpdateResult = ''
 
-    if (customerResponse.Data.CustomerRef !== undefined) {
-      const EziDebitCustomerID = customerResponse.Data.CustomerRef as string
+    if (customerResponse.data.CustomerRef !== undefined) {
+      const EziDebitCustomerID = customerResponse.data.CustomerRef as string
       const creditCardFixture = {
         EziDebitCustomerID,
         CreditCardNumber: fixtures.creditCard.CreditCardNumber,
@@ -182,15 +176,14 @@ describe('test ezidebit api transport', () => {
         Username: customer.Username,
       }
       creditCardUpdateData = await api.addCustomerCC(creditCardFixture)
-      // console.dir(creditCardUpdateData, { depth: 0 })
-      creditCardUpdateResult = creditCardUpdateData.Data[0] as string
+      creditCardUpdateResult = creditCardUpdateData.data[0] as string
       if (creditCardUpdateResult === 'S') {
         const payment = {
           EziDebitCustomerID,
           ...fixtures.payment,
         }
         paymentUpdateData = await api.placeDirectCharge(payment)
-        paymentUpdateResult = paymentUpdateData.Data[0] as string
+        paymentUpdateResult = paymentUpdateData.data[0] as string
       }
     }
 
@@ -202,17 +195,14 @@ describe('test ezidebit api transport', () => {
     customer.YourSystemReference = randomId(32)
     const customerResponse: APIResponse = await api.addCustomer(customer)
 
-    // console.dir(customerResult, { depth: 0 })
-    // console.dir(customerData, { depth: 0 })
-
     let creditCardUpdateData: APIResponse
     let creditCardUpdateResult = ''
 
     let paymentScheduleUpdateData: APIResponse
     let paymentScheduleUpdateResult = ''
 
-    if (customerResponse.Data.CustomerRef !== undefined) {
-      const EziDebitCustomerID = customerResponse.Data.CustomerRef as string
+    if (customerResponse.data.CustomerRef !== undefined) {
+      const EziDebitCustomerID = customerResponse.data.CustomerRef as string
       const creditCardFixture = {
         EziDebitCustomerID,
         CreditCardNumber: fixtures.creditCard.CreditCardNumber,
@@ -224,15 +214,14 @@ describe('test ezidebit api transport', () => {
         Username: customer.Username,
       }
       creditCardUpdateData = await api.addCustomerCC(creditCardFixture)
-      // console.dir(creditCardUpdateData, { depth: 0 })
-      creditCardUpdateResult = creditCardUpdateData.Data[0] as string
+      creditCardUpdateResult = creditCardUpdateData.data[0] as string
       if (creditCardUpdateResult === 'S') {
         const paymentSchedule = {
           EziDebitCustomerID,
           ...fixtures.paymentSchedule,
         }
         paymentScheduleUpdateData = await api.schedulePayment(paymentSchedule)
-        paymentScheduleUpdateResult = paymentScheduleUpdateData.Data[0] as string
+        paymentScheduleUpdateResult = paymentScheduleUpdateData.data[0] as string
       }
     }
 

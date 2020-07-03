@@ -13,6 +13,7 @@ export class Ezidebit extends BaseGateway<Config> implements DirectDebit, OnceOf
       digitalKey: '',
       publicKey: '',
       apiRoot: '',
+      nonPCIApiRoot: '',
     }
   }
 
