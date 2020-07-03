@@ -2,7 +2,7 @@ import { PaymentFrequency, DayOfWeek } from './payment-frequency'
 
 export interface IBasePayment {
   PaymentAmountInCents: number
-  PaymentReference: string
+  PaymentReference?: string
 }
 
 export interface ICustomerName {

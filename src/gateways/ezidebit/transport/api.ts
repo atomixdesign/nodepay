@@ -6,7 +6,7 @@ import { Config } from '../config'
 import { SoapClientFactory } from '@atomixdesign/nodepay/network/soap-client-factory'
 import { OnceOffChargeDTO } from '../dtos/once-off-charge'
 import { APIResponse } from './api-response'
-import { CustomerDTO, CreditCardDTO } from '../dtos'
+import { CustomerDTO, CreditCardDTO, PaymentDTO } from '../dtos'
 
 @Service('ezidebit.api')
 export class API {
@@ -32,24 +32,9 @@ export class API {
     }
   }
 
-  async describe(): Promise<unknown> {
+  async describe(pci = true): Promise<unknown> {
     await this.ensureClient()
-    return this.soapClient!.describe()
-  }
-
-  async placeCharge(charge: OnceOffChargeDTO): Promise<APIResponse> {
-    await this.ensureClient()
-    let result
-    try {
-      result = await this.soapClient!.ProcessRealtimeCreditCardPaymentAsync({
-        ...{ DigitalKey: this.config.digitalKey },
-        ...charge,
-      })
-    } catch (error) {
-      return Promise.reject(error)
-    }
-
-    return result[0].ProcessRealtimeCreditCardPaymentResult
+    return pci ? this.soapClient!.describe() : this.nonPCISoapClient!.describe()
   }
 
   async addCustomer(customer: CustomerDTO): Promise<APIResponse> {
@@ -68,7 +53,6 @@ export class API {
   }
 
   async addCustomerCC(
-    customerReference: string,
     creditCard: CreditCardDTO,
   ): Promise<APIResponse> {
     await this.ensureClient()
@@ -76,7 +60,6 @@ export class API {
     try {
       result = await this.soapClient!.EditCustomerCreditCardAsync({
         ...{
-          EziDebitCustomerID: customerReference,
           DigitalKey: this.config.digitalKey,
         },
         ...creditCard,
@@ -88,5 +71,37 @@ export class API {
     return result[0].EditCustomerCreditCardResult
   }
 
+  async placeCharge(charge: OnceOffChargeDTO): Promise<APIResponse> {
+    await this.ensureClient()
+    let result
+    try {
+      result = await this.soapClient!.ProcessRealtimeCreditCardPaymentAsync({
+        ...{ DigitalKey: this.config.digitalKey },
+        ...charge,
+      })
+    } catch (error) {
+      return Promise.reject(error)
+    }
 
+    return result[0].ProcessRealtimeCreditCardPaymentResult
+  }
+
+  async placeDirectCharge(
+    payment: PaymentDTO,
+  ): Promise<APIResponse> {
+    await this.ensureClient()
+    let result
+    try {
+      result = await this.nonPCISoapClient!.AddPaymentAsync({
+        ...{
+          DigitalKey: this.config.digitalKey,
+        },
+        ...payment,
+      })
+    } catch (error) {
+      return Promise.reject(error)
+    }
+
+    return result[0].AddPaymentResult
+  }
 }

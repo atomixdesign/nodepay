@@ -4,13 +4,19 @@ import { IBasePayment } from './payment'
 import { IBaseCreditCard } from './credit-card'
 
 export interface IDebit extends IBasePayment {
-  PaymentAmountInCents: number
-  PaymentReference: string
   DebitDate: string
 }
 
-export interface IBaseDebit extends IBaseAccount, IDebit {}
+export interface IBaseDebit extends IBaseAccount, IDebit {
+  PaymentReference: string
+}
 
 export interface ICreditCardDebit extends IBaseDebit, IBaseCreditCard {}
 
 export interface IBankAccountDebit extends IBaseDebit, IBankAccount {}
+
+export interface IDirectDebitPayment extends IDebit {
+  EziDebitCustomerID?: string
+  YourSystemReference?: string
+  Username?: string
+}

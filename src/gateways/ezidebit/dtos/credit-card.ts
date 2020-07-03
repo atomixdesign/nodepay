@@ -4,14 +4,26 @@ import { Errors, ErrorType } from '@atomixdesign/nodepay/validation/errors'
 
 export class CreditCardDTO {
   constructor(creditCard: INewCreditCard) {
+    if (creditCard.YourSystemReference === undefined)
+      this.EziDebitCustomerID = creditCard.EziDebitCustomerID
     this.CreditCardNumber = creditCard.CreditCardNumber
     this.CreditCardExpiryMonth = creditCard.CreditCardExpiryMonth
     this.CreditCardExpiryYear = creditCard.CreditCardExpiryYear
     this.NameOnCreditCard = creditCard.NameOnCreditCard
     this.Reactivate = creditCard.Reactivate
-    this.YourSystemReference = creditCard.YourSystemReference
+    if (creditCard.EziDebitCustomerID === undefined)
+      this.YourSystemReference = creditCard.YourSystemReference
     this.Username = creditCard.Username
   }
+  // * EziDebitCustomerID
+  @IsOptional()
+  @IsNumberString(undefined, {
+    message: Errors.getErrorMessage(ErrorType.NotANumber, 'EziDebitCustomerID')
+  })
+  @MaxLength(50, {
+    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'EziDebitCustomerID')
+  })
+  EziDebitCustomerID: string | undefined;
 
   // * CreditCardNumber
   @IsNotEmpty({
