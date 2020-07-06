@@ -1,0 +1,15 @@
+{
+  "name": "_NAMESPACE__API",
+  "version": "1.0.0",
+  "description": "API for _NAMESPACE__API Payment Gateway",
+  "main": "index.js",
+  "dependencies": {
+    "unirest": "^0.4.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Premier Technologies Pty Ltd",
+  "license": "MIT"
+}
