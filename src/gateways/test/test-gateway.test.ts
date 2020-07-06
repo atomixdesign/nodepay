@@ -12,10 +12,14 @@ describe('test gateway', () => {
     expect(gateway.name).toBe('Test payment gateway')
   })
 
-  test('it can be charged', () => {
-    expect(gateway.charge()).toBe('once-off')
-    expect(gateway.chargeRecurring()).toBe('recurring')
-    expect(gateway.directDebit()).toBe('direct-debit')
+  test('it can be charged', async () => {
+    const charge = await gateway.charge()
+    const chargeRecurring = await gateway.chargeRecurring()
+    const directDebit = await gateway.directDebit()
+
+    expect(charge.result).toBe('once-off')
+    expect(chargeRecurring.result).toBe('recurring')
+    expect(directDebit.result).toBe('direct-debit')
   })
 
   test('it can be configured', () => {

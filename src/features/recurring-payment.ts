@@ -1,3 +1,3 @@
 export interface RecurringPayment {
-  chargeRecurring(): string
+  chargeRecurring(...args: unknown[]): Promise<unknown>
 }
