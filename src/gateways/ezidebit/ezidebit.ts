@@ -1,5 +1,4 @@
 import { Container } from 'typedi'
-import moment from 'moment'
 import { validateOrReject } from 'class-validator'
 import { BaseGateway } from '../base-gateway'
 import { DirectDebit, OnceOffPayment, RecurringPayment } from '@atomixdesign/nodepay/features'
@@ -71,7 +70,7 @@ export class Ezidebit extends BaseGateway<Config> implements DirectDebit, OnceOf
     ownCustomerNumber = '',
     frequency: PaymentFrequency,
     startDate: string,
-    dayOfWeek: DayOfWeek,
+    dayOfWeek = DayOfWeek.MON,
     dayOfMonth = 0,
     regularPrincipalAmount: number,
     maxNumberPayments: number,
@@ -82,7 +81,7 @@ export class Ezidebit extends BaseGateway<Config> implements DirectDebit, OnceOf
     const scheduleObject = {
       EziDebitCustomerID: gatewayCustomerNumber,
       YourSystemReference: ownCustomerNumber,
-      ScheduleStartDate: moment(startDate).format('yyyy-MM-dd'),
+      ScheduleStartDate: startDate,
       SchedulePeriodType: frequency,
       DayOfWeek: dayOfWeek,
       DayOfMonth: dayOfMonth,
@@ -119,7 +118,7 @@ export class Ezidebit extends BaseGateway<Config> implements DirectDebit, OnceOf
     const paymentObject = {
       EziDebitCustomerID: gatewayCustomerNumber,
       YourSystemReference: ownCustomerNumber,
-      DebitDate: debitDate, // TODO: render debit date fluid via moment
+      DebitDate: debitDate,
       PaymentAmountInCents: principalAmount * 100,
       PaymentReference: orderNumber,
       Username: userName,

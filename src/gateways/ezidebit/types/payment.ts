@@ -24,7 +24,7 @@ export interface IPaymentSchedule {
   SecondWeekOfMonth: string
   ThirdWeekOfMonth: string
   FourthWeekOfMonth: string
-  Username?: string
+  Username: string
 }
 
 

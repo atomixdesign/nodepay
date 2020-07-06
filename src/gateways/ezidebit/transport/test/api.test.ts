@@ -91,18 +91,11 @@ describe('test ezidebit api transport', () => {
   test('it places a once-off charge using credit card', async () => {
     // TODO: somehow enforce property order on DTOs, see Map
     // const onceOffCharge = new OnceOffChargeDTO(fixtures.creditCard)
-    // console.dir(onceOffCharge, { depth: 0 })
     const result: APIResponse = await api.placeCharge(fixtures.simpleCharge)
     expect(result.data.PaymentResultText).toBe('APPROVED')
   })
 
   test('it reports an error when a once-off charge is declined', async () => {
-    //  const onceOffCharge = new OnceOffChargeDTO(
-    //  {
-    //    ...fixtures.creditCard,
-    //    ...{ PaymentAmountInCents: 1012 }
-    //  }
-    // )
     const badChargeFixture = fixtures.simpleCharge
     badChargeFixture.PaymentAmountInCents = 1012
     const result: APIResponse = await api.placeCharge(badChargeFixture)
@@ -110,7 +103,6 @@ describe('test ezidebit api transport', () => {
   })
 
   test('it registers a customer account', async () => {
-    // const customer = new CustomerDTO(fixtures.customer)
     const { customer } = fixtures
     customer.YourSystemReference = randomId(32)
     const result: APIResponse = await api.addCustomer(customer)
@@ -138,19 +130,10 @@ describe('test ezidebit api transport', () => {
         Username: customer.Username,
       }
       creditCardUpdateData = await api.addCustomerCC(creditCardFixture)
-      // console.dir(creditCardUpdateData, { depth: 0 })
       creditCardUpdateResult = creditCardUpdateData.data[0] as string
     }
 
     expect(creditCardUpdateResult).toBe('S')
-  })
-
-  test('it registers a customer account', async () => {
-    // const customer = new CustomerDTO(fixtures.customer)
-    const { customer } = fixtures
-    customer.YourSystemReference = randomId(32)
-    const result: APIResponse = await api.addCustomer(customer)
-    expect(result.data.CustomerRef).toBeDefined()
   })
 
   test('it adds a credit card and direct payment to a customer account', async () => {

@@ -10,5 +10,9 @@ export enum PaymentFrequency {
 }
 
 export enum DayOfWeek {
-  MON, TUE, WED, THU, FRI
+  MON = 'MON',
+  TUE = 'TUE',
+  WED = 'WED',
+  THU = 'THU',
+  FRI = 'FRI',
 }

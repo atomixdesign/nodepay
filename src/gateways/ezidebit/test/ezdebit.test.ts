@@ -2,7 +2,6 @@ import { Container } from 'typedi'
 import { Ezidebit } from '../ezidebit'
 import { testAPI, APIResponse } from '../transport'
 import { PaymentFrequency, DayOfWeek } from '../types'
-// import moment from 'moment'
 
 const fixtures = {
   simpleCharge: {
@@ -24,16 +23,17 @@ const fixtures = {
     Username: 'jdoe',
   },
   paymentSchedule: {
-    YourSystemReference: '',
+    EziDebitCustomerID: '',
+    YourSystemReference: '123456789',
     ScheduleStartDate: '2022-01-01',
     SchedulePeriodType: PaymentFrequency.Monthly,
-    DayOfWeek: '',
+    DayOfWeek: DayOfWeek.MON,
     DayOfMonth: 0,
     FirstWeekOfMonth: '',
     SecondWeekOfMonth: '',
     ThirdWeekOfMonth: '',
     FourthWeekOfMonth: '',
-    PaymentAmountInCents: 2500,
+    PaymentAmount: 25,
     LimitToNumberOfPayments: 0,
     LimitToTotalAmountInCents: 12500,
     KeepManualPayments: 'NO',
@@ -124,32 +124,45 @@ describe('test ezidebit gateway', () => {
   })
 
 
-  /* test('it can schedule a charge', async () => {
-    const fixture = fixtures.paymentSchedule
+  test('it can schedule a charge', async () => {
+    const { paymentSchedule } = fixtures
 
-    const charge: APIResponse = await gateway.chargeRecurring(
-      /* fixture.customerNumber,
-      fixture.frequency,
-      fixture.nextPaymentDate,
-      fixture.regularPrincipalAmount,
+    const response: APIResponse = await gateway.chargeRecurring(
+      paymentSchedule.EziDebitCustomerID,
+      paymentSchedule.YourSystemReference,
+      paymentSchedule.SchedulePeriodType,
+      paymentSchedule.ScheduleStartDate,
+      paymentSchedule.DayOfWeek,
+      paymentSchedule.DayOfMonth,
+      paymentSchedule.PaymentAmount,
+      0,
+      15000,
+      'NO',
+      'jdoe',
     )
 
-    expect(charge.data.resultText).toBe('OK')
-  }) */
+    expect(response?.data.resultText).toBe('OK')
+  })
 
-  /*
   test('it reports errors if the schedule is incorrect', async () => {
-    const fixture = fixtures.paymentScheduleBad
+    const { paymentSchedule } = fixtures
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const charge: APIResponse = await gateway.chargeRecurring(
-      fixture.customerNumber,
-      fixture.frequency,
-      fixture.nextPaymentDate,
-      fixture.regularPrincipalAmount,
+    const response: APIResponse = await gateway.chargeRecurring(
+      '123456789',
+      paymentSchedule.YourSystemReference,
+      paymentSchedule.SchedulePeriodType,
+      '0-0-0000',
+      paymentSchedule.DayOfWeek,
+      -1,
+      -10,
+      0,
+      15000,
+      'MAYBE',
+      '',
     ).catch(error => {
       expect(typeof error).toBe('object')
       return error
     })
-  }) */
+  })
 })

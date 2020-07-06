@@ -59,42 +59,42 @@ export class PaymentScheduleDTO {
   @IsIn(['MON', 'TUE', 'WED', 'THU', 'FRI'], {
     message: Errors.getErrorMessage(ErrorType.NotInAllowedSet, 'DayOfWeek')
   })
-  DayOfWeek: DayOfWeek | undefined;
+  DayOfWeek: DayOfWeek;
 
   // * DayOfMonth
   @IsOptional()
   @IsNumber(undefined, {
     message: Errors.getErrorMessage(ErrorType.NotANumber, 'DayOfMonth')
   })
-  DayOfMonth: number | undefined;
+  DayOfMonth: number;
 
   // * FirstWeekOfMonth
   @IsOptional()
-  @IsIn(['YES', 'NO'], {
+  @IsIn(['YES', 'NO', ''], {
     message: Errors.getErrorMessage(ErrorType.NotInAllowedSet, 'FirstWeekOfMonth')
   })
-  FirstWeekOfMonth: string | undefined;
+  FirstWeekOfMonth: string;
 
   // * SecondWeekOfMonth
   @IsOptional()
-  @IsIn(['YES', 'NO'], {
+  @IsIn(['YES', 'NO', ''], {
     message: Errors.getErrorMessage(ErrorType.NotInAllowedSet, 'SecondWeekOfMonth')
   })
-  SecondWeekOfMonth: string | undefined;
+  SecondWeekOfMonth: string;
 
   // * ThirdWeekOfMonth
   @IsOptional()
-  @IsIn(['YES', 'NO'], {
+  @IsIn(['YES', 'NO', ''], {
     message: Errors.getErrorMessage(ErrorType.NotInAllowedSet, 'ThirdWeekOfMonth')
   })
-  ThirdWeekOfMonth: string | undefined;
+  ThirdWeekOfMonth: string;
 
   // * FourthWeekOfMonth
   @IsOptional()
-  @IsIn(['YES', 'NO'], {
+  @IsIn(['YES', 'NO', ''], {
     message: Errors.getErrorMessage(ErrorType.NotInAllowedSet, 'FourthWeekOfMonth')
   })
-  FourthWeekOfMonth: string | undefined;
+  FourthWeekOfMonth: string;
 
   // * KeepManualPayments
   @IsIn(['YES', 'NO'], {
