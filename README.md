@@ -30,7 +30,7 @@ Nodepay also has full support for **TypeScript** and includes and exposes all it
 
 In order to use nodepay, you *must* ensure that any such action within your own application also meets the requirements of PCI DSS, and where applicable, you must obtain written permission, and provide proof of your compliance to the gateway provider.
 
-**However** most merchant gateways also provide escape hatches in the form of client-side infrastructure. For example, Payway offer a solution called [**Trusted Frame**](https://www.payway.com.au/docs/rest.html#tutorials) that enables you to handle credit cards without ever transporting credit card information.
+**However** most merchant gateways also provide escape hatches in the form of client-side infrastructure. For example, Payway offers a solution called [**Trusted Frame**](https://www.payway.com.au/docs/rest.html#tutorials) that enables you to handle credit cards without ever transporting credit card information.
 
 You can find more information about PCI DSS from:
 https://www.pcisecuritystandards.org/
