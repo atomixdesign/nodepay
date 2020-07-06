@@ -6,7 +6,7 @@ import { PaymentFrequency, DayOfWeek } from '../../types'
 import crypto from 'crypto'
 
 const fixtures = {
-  creditCard: {
+  simpleCharge: {
     CreditCardNumber: '5123456789012346',
     CreditCardExpiryMonth: '05',
     CreditCardExpiryYear: '2021',
@@ -92,7 +92,7 @@ describe('test ezidebit api transport', () => {
     // TODO: somehow enforce property order on DTOs, see Map
     // const onceOffCharge = new OnceOffChargeDTO(fixtures.creditCard)
     // console.dir(onceOffCharge, { depth: 0 })
-    const result: APIResponse = await api.placeCharge(fixtures.creditCard)
+    const result: APIResponse = await api.placeCharge(fixtures.simpleCharge)
     expect(result.data.PaymentResultText).toBe('APPROVED')
   })
 
@@ -103,7 +103,7 @@ describe('test ezidebit api transport', () => {
     //    ...{ PaymentAmountInCents: 1012 }
     //  }
     // )
-    const badChargeFixture = fixtures.creditCard
+    const badChargeFixture = fixtures.simpleCharge
     badChargeFixture.PaymentAmountInCents = 1012
     const result: APIResponse = await api.placeCharge(badChargeFixture)
     expect(result.statusText).toBe('Declined')
@@ -129,10 +129,10 @@ describe('test ezidebit api transport', () => {
       const EziDebitCustomerID = customerResponse.data.CustomerRef as string
       const creditCardFixture = {
         EziDebitCustomerID,
-        CreditCardNumber: fixtures.creditCard.CreditCardNumber,
-        CreditCardExpiryMonth: fixtures.creditCard.CreditCardExpiryMonth,
-        CreditCardExpiryYear: fixtures.creditCard.CreditCardExpiryYear,
-        NameOnCreditCard: fixtures.creditCard.NameOnCreditCard,
+        CreditCardNumber: fixtures.simpleCharge.CreditCardNumber,
+        CreditCardExpiryMonth: fixtures.simpleCharge.CreditCardExpiryMonth,
+        CreditCardExpiryYear: fixtures.simpleCharge.CreditCardExpiryYear,
+        NameOnCreditCard: fixtures.simpleCharge.NameOnCreditCard,
         Reactivate: 'YES',
         YourSystemReference: '',
         Username: customer.Username,
@@ -167,10 +167,10 @@ describe('test ezidebit api transport', () => {
       const EziDebitCustomerID = customerResponse.data.CustomerRef as string
       const creditCardFixture = {
         EziDebitCustomerID,
-        CreditCardNumber: fixtures.creditCard.CreditCardNumber,
-        CreditCardExpiryMonth: fixtures.creditCard.CreditCardExpiryMonth,
-        CreditCardExpiryYear: fixtures.creditCard.CreditCardExpiryYear,
-        NameOnCreditCard: fixtures.creditCard.NameOnCreditCard,
+        CreditCardNumber: fixtures.simpleCharge.CreditCardNumber,
+        CreditCardExpiryMonth: fixtures.simpleCharge.CreditCardExpiryMonth,
+        CreditCardExpiryYear: fixtures.simpleCharge.CreditCardExpiryYear,
+        NameOnCreditCard: fixtures.simpleCharge.NameOnCreditCard,
         Reactivate: 'YES',
         YourSystemReference: '',
         Username: customer.Username,
@@ -205,10 +205,10 @@ describe('test ezidebit api transport', () => {
       const EziDebitCustomerID = customerResponse.data.CustomerRef as string
       const creditCardFixture = {
         EziDebitCustomerID,
-        CreditCardNumber: fixtures.creditCard.CreditCardNumber,
-        CreditCardExpiryMonth: fixtures.creditCard.CreditCardExpiryMonth,
-        CreditCardExpiryYear: fixtures.creditCard.CreditCardExpiryYear,
-        NameOnCreditCard: fixtures.creditCard.NameOnCreditCard,
+        CreditCardNumber: fixtures.simpleCharge.CreditCardNumber,
+        CreditCardExpiryMonth: fixtures.simpleCharge.CreditCardExpiryMonth,
+        CreditCardExpiryYear: fixtures.simpleCharge.CreditCardExpiryYear,
+        NameOnCreditCard: fixtures.simpleCharge.NameOnCreditCard,
         Reactivate: 'YES',
         YourSystemReference: '',
         Username: customer.Username,

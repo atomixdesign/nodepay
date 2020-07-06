@@ -3,14 +3,14 @@ import { AxiosResponse } from 'axios'
 import moment from 'moment'
 import { API as PayWayTransport } from '../api'
 import { APIResponse } from '../api-response'
+import { PaymentFrequency } from '../../types'
 import {
   BankAccountDTO,
   ChargeDTO,
   CreditCardDTO,
   CustomerDTO,
   PaymentScheduleDTO,
-} from '../../dtos'
-import { PaymentFrequency } from '../../payment-frequency'
+} from '../dtos'
 
 const validCodes = [
   200,

@@ -3,7 +3,7 @@ export enum PaymentFrequency {
   Fortnightly = 'F',
   Monthly = 'M',
   FourWeekly = '4',
-  WeekdayInMonth = 'N',
+  // WeekdayInMonth = 'N',
   Quarterly = 'quarterly',
   SixMonthly = 'six-monthly',
   Yearly = 'yearly'

@@ -5,7 +5,7 @@ import {
 import {
   ErrorType,
   Errors,
-} from '../../../validation/errors'
+} from '@atomixdesign/nodepay/validation/errors'
 
 export class BankAccountDTO {
   constructor(

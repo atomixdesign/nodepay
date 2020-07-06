@@ -7,9 +7,9 @@ import {
 import {
   ErrorType,
   Errors,
-} from '../../../validation/errors'
+} from '@atomixdesign/nodepay/validation/errors'
 
-import { PaymentFrequency } from '../payment-frequency'
+import { PaymentFrequency } from '../../types/payment-frequency'
 
 export class PaymentScheduleDTO {
   constructor(

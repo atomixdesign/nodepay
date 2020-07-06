@@ -1,34 +1,45 @@
 import { Container } from 'typedi'
 import { Ezidebit } from '../ezidebit'
 import { testAPI, APIResponse } from '../transport'
+import { PaymentFrequency, DayOfWeek } from '../types'
 // import moment from 'moment'
 
-/* const fixtures = {
+const fixtures = {
   simpleCharge: {
-    singleUseTokenId: '123456789',
-    customerNumber: 'onceoffCustomer',
-    principalAmount: 10.87,
+    CreditCardNumber: '5123456789012346',
+    CreditCardExpiryMonth: '05',
+    CreditCardExpiryYear: '2021',
+    CreditCardCCV: '847',
+    NameOnCreditCard: 'John Doe',
+    PaymentAmount: 10,
+    CustomerName: 'John Doe',
+    PaymentReference: '123456789',
   },
-  simpleChargeBad: {
-    customerNumber: '',
-    principalAmount: -1,
-    orderNumber: '12345678910111213141516',
-    customerIpAddress: '',
-    merchantId: '',
+  payment: {
+    EziDebitCustomerID: '',
+    YourSystemReference: '123456789',
+    DebitDate: '2022-01-01',
+    PaymentAmount: 20,
+    PaymentReference: '1234',
+    Username: 'jdoe',
   },
   paymentSchedule: {
-    customerNumber: 'paymentSchedule',
-    frequency: PaymentFrequency.Weekly,
-    nextPaymentDate: moment().add(2, 'days').format('D MMM YYYY'),
-    regularPrincipalAmount: 17.89,
+    YourSystemReference: '',
+    ScheduleStartDate: '2022-01-01',
+    SchedulePeriodType: PaymentFrequency.Monthly,
+    DayOfWeek: '',
+    DayOfMonth: 0,
+    FirstWeekOfMonth: '',
+    SecondWeekOfMonth: '',
+    ThirdWeekOfMonth: '',
+    FourthWeekOfMonth: '',
+    PaymentAmountInCents: 2500,
+    LimitToNumberOfPayments: 0,
+    LimitToTotalAmountInCents: 12500,
+    KeepManualPayments: 'NO',
+    Username: 'jdoe',
   },
-  paymentScheduleBad: {
-    customerNumber: '',
-    frequency: PaymentFrequency.Weekly,
-    nextPaymentDate: '',
-    regularPrincipalAmount: -1,
-  },
-} */
+}
 
 describe('test ezidebit gateway', () => {
   let gateway: Ezidebit
@@ -50,29 +61,33 @@ describe('test ezidebit gateway', () => {
     expect(gateway.name).toBe('Ezidebit')
   })
 
-  /* test('it can be charged', async () => {
-    const fixture = fixtures.simpleCharge
-
+  test('it can be charged', async () => {
+    const { simpleCharge } = fixtures
     const charge: APIResponse = await gateway.charge(
-      fixture.singleUseTokenId,
-      fixture.customerNumber,
-      fixture.principalAmount,
+      simpleCharge.CreditCardNumber,
+      simpleCharge.CreditCardExpiryMonth,
+      simpleCharge.CreditCardExpiryYear,
+      simpleCharge.CreditCardCCV,
+      simpleCharge.NameOnCreditCard,
+      simpleCharge.PaymentAmount, // In whole currency
+      simpleCharge.CustomerName,
+      simpleCharge.PaymentReference,
     )
 
-    expect(charge.response?.status).toBe(200)
+    expect(charge.data.resultText).toBe('OK')
   })
 
   test('it reports errors if the charge format is not correct', async () => {
-    const fixture = fixtures.simpleChargeBad
-
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const charge: APIResponse = await gateway.charge(
+      'fakecc',
+      'alpha',
+      'beta',
+      'gamma',
       '',
-      fixture.customerNumber,
-      fixture.principalAmount,
-      fixture.orderNumber,
-      fixture.customerIpAddress,
-      fixture.merchantId,
+      -1,
+      '',
+      '',
     ).catch(error => {
       expect(typeof error).toBe('object')
       return error
@@ -80,45 +95,49 @@ describe('test ezidebit gateway', () => {
   })
 
   test('it can be charged via direct debit', async () => {
-    const fixture = fixtures.simpleCharge
-
+    const { payment } = fixtures
     const charge: APIResponse = await gateway.directDebit(
-      fixture.customerNumber,
-      fixture.principalAmount,
+      payment.EziDebitCustomerID,
+      payment.YourSystemReference,
+      payment.DebitDate,
+      payment.PaymentAmount,  // In whole currency
+      payment.PaymentReference,
+      payment.Username,
     )
 
-    expect(charge.response?.status).toBe(200)
+    expect(charge.data.resultText).toBe('OK')
   })
 
   test('it reports errors if the charge format is not correct in direct debit', async () => {
-    const fixture = fixtures.simpleChargeBad
-
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const charge: APIResponse = await gateway.directDebit(
-      fixture.customerNumber,
-      fixture.principalAmount,
-      fixture.orderNumber,
-      fixture.customerIpAddress,
-      fixture.merchantId,
+      '',
+      '',
+      'purple',
+      -1,  // In whole currency
+      '',
+      '',
     ).catch(error => {
       expect(typeof error).toBe('object')
       return error
     })
   })
 
-  test('it can schedule a charge', async () => {
+
+  /* test('it can schedule a charge', async () => {
     const fixture = fixtures.paymentSchedule
 
     const charge: APIResponse = await gateway.chargeRecurring(
-      fixture.customerNumber,
+      /* fixture.customerNumber,
       fixture.frequency,
       fixture.nextPaymentDate,
       fixture.regularPrincipalAmount,
     )
 
-    expect(charge.response?.status).toBe(200)
-  })
+    expect(charge.data.resultText).toBe('OK')
+  }) */
 
+  /*
   test('it reports errors if the schedule is incorrect', async () => {
     const fixture = fixtures.paymentScheduleBad
 
