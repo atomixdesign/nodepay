@@ -10,7 +10,7 @@ import {
 import {
   ErrorType,
   Errors,
-} from '../transport/errors'
+} from '@atomixdesign/nodepay/validation/errors'
 
 export class ChargeDTO {
   constructor(
@@ -61,7 +61,7 @@ export class ChargeDTO {
 
   // * principalAmount
   @IsNumber(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NumberRequired, 'principalAmount')
+    message: Errors.getErrorMessage(ErrorType.NotANumber, 'principalAmount')
   })
   principalAmount: number;
 

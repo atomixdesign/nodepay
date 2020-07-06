@@ -1,12 +1,10 @@
-import { APIResponse } from '../response'
-import { ChargeDTO, PaymentScheduleDTO } from '../dtos'
+import { APIResponse } from './api-response'
+import { ChargeDTO, PaymentScheduleDTO } from './dtos'
 
 export const MockResponse = {
-  response: {
-    status: 200,
-    statusText: 'OK',
-  },
-  value: 'randomTest'
+  status: 200,
+  statusText: 'OK',
+  data: 'randomTest'
 }
 
 export class testAPI {

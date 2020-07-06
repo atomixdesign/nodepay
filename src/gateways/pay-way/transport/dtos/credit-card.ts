@@ -8,7 +8,7 @@ import {
 import {
   ErrorType,
   Errors,
-} from '../transport/errors'
+} from '@atomixdesign/nodepay/validation/errors'
 
 export class CreditCardDTO {
   constructor(
@@ -57,7 +57,7 @@ export class CreditCardDTO {
     message: Errors.getErrorMessage(ErrorType.LengthOutOfBounds, 'cvn')
   })
   @IsNumberString(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NumberRequired, 'cvn')
+    message: Errors.getErrorMessage(ErrorType.NotANumber, 'cvn')
   })
   cvn: string;
 
@@ -66,7 +66,7 @@ export class CreditCardDTO {
     message: Errors.getErrorMessage(ErrorType.LengthOutOfBounds, 'expiryDateMonth')
   })
   @IsNumberString(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NumberRequired, 'expiryDateMonth')
+    message: Errors.getErrorMessage(ErrorType.NotANumber, 'expiryDateMonth')
   })
   expiryDateMonth: string;
 
@@ -75,7 +75,7 @@ export class CreditCardDTO {
     message: Errors.getErrorMessage(ErrorType.LengthOutOfBounds, 'expiryDateYear')
   })
   @IsNumberString(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NumberRequired, 'expiryDateYear')
+    message: Errors.getErrorMessage(ErrorType.NotANumber, 'expiryDateYear')
   })
   expiryDateYear: string;
 }

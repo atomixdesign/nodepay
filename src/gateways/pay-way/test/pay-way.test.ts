@@ -1,8 +1,7 @@
 import { Container } from 'typedi'
 import { PayWay } from '../pay-way'
-import { testAPI } from '../transport/test-api'
-import { APIResponse } from '../response'
-import { PaymentFrequency } from '../payment-frequency'
+import { testAPI, APIResponse } from '../transport'
+import { PaymentFrequency } from '../types/payment-frequency'
 import moment from 'moment'
 
 const fixtures = {
@@ -55,13 +54,13 @@ describe('test payway gateway', () => {
   test('it can be charged', async () => {
     const fixture = fixtures.simpleCharge
 
-    const charge: APIResponse = await gateway.charge(
+    const response: APIResponse = await gateway.charge(
       fixture.singleUseTokenId,
       fixture.customerNumber,
       fixture.principalAmount,
     )
 
-    expect(charge.response?.status).toBe(200)
+    expect(response?.status).toBe(200)
   })
 
   test('it reports errors if the charge format is not correct', async () => {
@@ -84,12 +83,12 @@ describe('test payway gateway', () => {
   test('it can be charged via direct debit', async () => {
     const fixture = fixtures.simpleCharge
 
-    const charge: APIResponse = await gateway.directDebit(
+    const response: APIResponse = await gateway.directDebit(
       fixture.customerNumber,
       fixture.principalAmount,
     )
 
-    expect(charge.response?.status).toBe(200)
+    expect(response?.status).toBe(200)
   })
 
   test('it reports errors if the charge format is not correct in direct debit', async () => {
@@ -111,14 +110,14 @@ describe('test payway gateway', () => {
   test('it can schedule a charge', async () => {
     const fixture = fixtures.paymentSchedule
 
-    const charge: APIResponse = await gateway.chargeRecurring(
+    const response: APIResponse = await gateway.chargeRecurring(
       fixture.customerNumber,
       fixture.frequency,
       fixture.nextPaymentDate,
       fixture.regularPrincipalAmount,
     )
 
-    expect(charge.response?.status).toBe(200)
+    expect(response?.status).toBe(200)
   })
 
   test('it reports errors if the schedule is incorrect', async () => {

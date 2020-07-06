@@ -43,12 +43,15 @@
   "dependencies": {
     "@types/qs": "^6.9.3",
     "@types/uuid": "^8.0.0",
+    "@types/xml2js": "^0.4.5",
     "axios": "^0.19.2",
     "class-validator": "^0.12.2",
     "moment": "^2.27.0",
     "qs": "^6.9.4",
     "reflect-metadata": "^0.1.13",
+    "soap": "^0.31.0",
     "typedi": "^0.8.0",
-    "uuid": "^8.2.0"
+    "uuid": "^8.2.0",
+    "xml2js": "^0.4.23"
   }
 }

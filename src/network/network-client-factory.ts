@@ -1,3 +1,4 @@
 export interface INetworkFactory<T extends unknown> {
-  create(): T
+  create?(): T
+  createAsync?(): Promise<T>
 }

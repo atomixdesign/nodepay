@@ -2,16 +2,15 @@ import { Container } from 'typedi'
 import { AxiosResponse } from 'axios'
 import moment from 'moment'
 import { API as PayWayTransport } from '../api'
-// import { HttpClientFactory } from '@atomixdesign/nodepay/network/http-client-factory'
+import { APIResponse } from '../api-response'
+import { PaymentFrequency } from '../../types'
 import {
   BankAccountDTO,
   ChargeDTO,
   CreditCardDTO,
   CustomerDTO,
   PaymentScheduleDTO,
-} from '../../dtos'
-import { PaymentFrequency } from '../../payment-frequency'
-import { APIResponse } from '../../response'
+} from '../dtos'
 
 const validCodes = [
   200,
@@ -106,10 +105,10 @@ describe('test payway api transport', () => {
     const creditCard = new CreditCardDTO(fixtures.creditCard)
     const ccResponse: AxiosResponse = await api.getCCtoken(creditCard)
     const onceOffCharge = new ChargeDTO(fixtures.onceOffCharge)
-    const payload: APIResponse = await api.placeCharge(ccResponse?.data.singleUseTokenId, onceOffCharge)
+    const response: APIResponse = await api.placeCharge(ccResponse?.data.singleUseTokenId, onceOffCharge)
 
-    expect(validCodes).toContain(payload.response?.status)
-  }, 60000)
+    expect(validCodes).toContain(response.status)
+  })
 
   test('it adds a customer using a credit card', async () => {
     const creditCard = new CreditCardDTO(fixtures.creditCard)
@@ -121,7 +120,7 @@ describe('test payway api transport', () => {
     })
     const response: AxiosResponse = await api.addCustomer(customer)
     expect(validCodes).toContain(response.status)
-  }, 60000)
+  })
 
   test('it adds a customer using a bank account', async () => {
     const bankAccount = new BankAccountDTO(fixtures.bankAccount1)
@@ -134,7 +133,7 @@ describe('test payway api transport', () => {
     })
     const response: AxiosResponse = await api.addCustomer(customer)
     expect(validCodes).toContain(response.status)
-  }, 60000)
+  })
 
   test('it places a direct debit charge using bank account', async () => {
     const bankAccount = new BankAccountDTO(fixtures.bankAccount1)
@@ -147,9 +146,9 @@ describe('test payway api transport', () => {
     })
     await api.addCustomer(customer)
     const directDebitCharge = new ChargeDTO(fixtures.directDebitCharge)
-    const payload: APIResponse = await api.placeDirectCharge(directDebitCharge)
-    expect(validCodes).toContain(payload.response?.status)
-  }, 60000)
+    const response: APIResponse = await api.placeDirectCharge(directDebitCharge)
+    expect(validCodes).toContain(response.status)
+  })
 
   test('it places a recurring charge using bank account', async () => {
     const bankAccount = new BankAccountDTO(fixtures.bankAccount1)
@@ -163,8 +162,8 @@ describe('test payway api transport', () => {
     })
     await api.addCustomer(customer)
     const paymentSchedule = new PaymentScheduleDTO(fixtures.schedule)
-    const payload: APIResponse = await api.schedulePayment(customerNumber, paymentSchedule)
-    expect(validCodes).toContain(payload.response?.status)
-  }, 60000)
+    const response: APIResponse = await api.schedulePayment(customerNumber, paymentSchedule)
+    expect(validCodes).toContain(response.status)
+  })
 
 })

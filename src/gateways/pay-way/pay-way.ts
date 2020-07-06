@@ -2,14 +2,12 @@ import { Container } from 'typedi'
 import { validateOrReject } from 'class-validator'
 import { BaseGateway } from '../base-gateway'
 import { DirectDebit, OnceOffPayment, RecurringPayment } from '@atomixdesign/nodepay/features'
-import { Config } from './config'
-import { API } from './transport/api'
+import { Config, PaymentFrequency } from './types'
+import { API, APIResponse } from './transport'
 import {
   ChargeDTO,
   PaymentScheduleDTO,
-} from './dtos'
-import { PaymentFrequency } from './payment-frequency'
-import { APIResponse } from './response'
+} from './transport/dtos'
 
 export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffPayment, RecurringPayment {
   private api: API
@@ -44,7 +42,7 @@ export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffP
     orderNumber?: string | undefined,
     customerIpAddress?: string | undefined,
     merchantId?: string | undefined,
-    bankAccountId?: string | undefined,
+    // bankAccountId?: string | undefined,
   ): Promise<APIResponse> {
     const chargeObject = new ChargeDTO({
       customerNumber,
@@ -52,7 +50,7 @@ export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffP
       orderNumber,
       customerIpAddress,
       merchantId,
-      bankAccountId,
+      // bankAccountId,
     })
 
     let payload: APIResponse
@@ -101,7 +99,7 @@ export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffP
     orderNumber?: string | undefined,
     customerIpAddress?: string | undefined,
     merchantId?: string | undefined,
-    bankAccountId?: string | undefined,
+    // bankAccountId?: string | undefined,
   ): Promise<APIResponse> {
     const chargeObject = new ChargeDTO({
       customerNumber,
@@ -109,7 +107,7 @@ export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffP
       orderNumber,
       customerIpAddress,
       merchantId,
-      bankAccountId,
+      // bankAccountId,
     })
 
     let payload: APIResponse

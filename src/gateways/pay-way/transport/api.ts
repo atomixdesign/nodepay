@@ -3,18 +3,18 @@ import { Service, Inject, Container } from 'typedi'
 import { AxiosInstance, AxiosResponse } from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import qs from 'qs'
-import { Config } from '../config'
+import { Config } from '../types'
 import {
   HttpClientFactory,
 } from '@atomixdesign/nodepay/network'
+import { APIResponse } from './api-response'
 import {
   BankAccountDTO,
   ChargeDTO,
   CreditCardDTO,
   CustomerDTO,
   PaymentScheduleDTO,
-} from '../dtos'
-import { APIResponse } from '../response'
+} from './dtos'
 
 @Service('payway.api')
 export class API {
@@ -127,11 +127,9 @@ export class API {
     })
 
     return {
-      response: {
-        status: response.status,
-        statusText: response.statusText,
-      },
-      ...response.data
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
     }
   }
 
@@ -143,11 +141,9 @@ export class API {
     })
 
     return {
-      response: {
-        status: response.status,
-        statusText: response.statusText,
-      },
-      ...response.data
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
     }
   }
 
@@ -159,11 +155,9 @@ export class API {
     })
 
     return {
-      response: {
-        status: response.status,
-        statusText: response.statusText,
-      },
-      ...response.data
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
     }
   }
 }
