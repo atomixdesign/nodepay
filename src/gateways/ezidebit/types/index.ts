@@ -1,5 +1,6 @@
 export * from './bank-account'
 export * from './charge'
+export * from './config'
 export * from './credit-card'
 export * from './customer'
 export * from './debit'

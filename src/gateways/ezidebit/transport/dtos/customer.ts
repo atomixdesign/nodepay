@@ -11,7 +11,7 @@ import {
   ErrorType,
   Errors,
 } from '@atomixdesign/nodepay/validation/errors'
-import { ICustomer } from '../types'
+import { ICustomer } from '../../types'
 
 export class CustomerDTO {
   constructor(customer: ICustomer) {

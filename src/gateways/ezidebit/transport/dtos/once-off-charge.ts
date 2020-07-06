@@ -11,7 +11,7 @@ import {
   ErrorType,
   Errors,
 } from '@atomixdesign/nodepay/validation/errors'
-import { ICreditCardCharge } from '../types'
+import { ICreditCardCharge } from '../../types'
 
 export class OnceOffChargeDTO {
   constructor(charge: ICreditCardCharge) {

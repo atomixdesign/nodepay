@@ -1,13 +1,11 @@
 import { Container } from 'typedi'
-import { BaseGateway } from '../base-gateway'
-import { DirectDebit, OnceOffPayment, RecurringPayment } from '../../features'
-import { API as Transport } from './transport/api'
-import { Config } from './config'
-import { APIResponse } from './transport'
-import { OnceOffChargeDTO, PaymentDTO, PaymentScheduleDTO } from './dtos'
-import { validateOrReject } from 'class-validator'
-import { PaymentFrequency, DayOfWeek } from './types'
 import moment from 'moment'
+import { validateOrReject } from 'class-validator'
+import { BaseGateway } from '../base-gateway'
+import { DirectDebit, OnceOffPayment, RecurringPayment } from '@atomixdesign/nodepay/features'
+import { Config, PaymentFrequency, DayOfWeek } from './types'
+import { API as Transport, APIResponse } from './transport'
+import { OnceOffChargeDTO, PaymentDTO, PaymentScheduleDTO } from './transport/dtos'
 
 export class Ezidebit extends BaseGateway<Config> implements DirectDebit, OnceOffPayment, RecurringPayment {
   private api: Transport

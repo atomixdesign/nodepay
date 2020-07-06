@@ -1,4 +1,3 @@
-import { IBaseDebit } from '../types'
 import {
   IsNotEmpty,
   IsEmail,
@@ -13,6 +12,7 @@ import {
   ErrorType,
   Errors,
 } from '@atomixdesign/nodepay/validation/errors'
+import { IBaseDebit } from '../../types'
 
 export class BaseDebitDTO {
   constructor(baseDebit: IBaseDebit) {

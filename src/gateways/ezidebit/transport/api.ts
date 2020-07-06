@@ -2,11 +2,15 @@ import { Service, Inject } from 'typedi'
 import {
   Client as SoapClient,
 } from 'soap'
-import { Config } from '../config'
-import { SoapClientFactory } from '@atomixdesign/nodepay/network/soap-client-factory'
-import { OnceOffChargeDTO } from '../dtos/once-off-charge'
+import { Config } from '../types'
+import { SoapClientFactory } from '@atomixdesign/nodepay/network'
 import { APIResponse, formatResponse } from './api-response'
-import { CustomerDTO, CreditCardDTO, PaymentDTO, PaymentScheduleDTO } from '../dtos'
+import {
+  CreditCardDTO,
+  CustomerDTO,
+  OnceOffChargeDTO,
+  PaymentDTO,
+  PaymentScheduleDTO, } from './dtos'
 
 @Service('ezidebit.api')
 export class API {
