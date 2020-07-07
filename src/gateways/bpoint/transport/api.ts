@@ -7,7 +7,9 @@ import { Config } from '../types'
 import {
   HttpClientFactory,
 } from '@atomixdesign/nodepay/network'
+import { ChargeDTO } from './dtos'
 import { APIResponse } from './api-response'
+import { BPOINTAPIError } from './api-error'
 
 @Service('bpoint.api')
 export class API {
@@ -27,7 +29,7 @@ export class API {
         Authorization: authHeader,
         'Content-Type': 'application/json; charset=utf-8',
       }
-    })
+    }, false)
   }
 
   private encodeKey(key: string): string {
@@ -61,20 +63,18 @@ export class API {
     return Promise.resolve(undefined)
   }
 
-  async placeCharge(/* singleUseTokenId: string, charge: ChargeDTO */): Promise<APIResponse | undefined> {
-    /* const response = await this.httpClient!.request({
+  async placeCharge(/* dvToken?: string,*/ charge: ChargeDTO): Promise<APIResponse> {
+    const response = await this.httpClient!.request({
       method: 'post',
-      url: '/transactions',
-      data: qs.stringify({ singleUseTokenId, ...charge }),
+      url: '/txns/',
+      data: { 'TxnReq': charge },
     })
 
-    return {
-      status: response.status,
-      statusText: response.statusText,
-      data: response.data,
-    } */
-    // eslint-disable-next-line unicorn/no-useless-undefined
-    return Promise.resolve(undefined)
+    if (response?.data.APIResponse.ResponseCode as number > 0) {
+      throw new BPOINTAPIError(response.data.APIResponse)
+    }
+
+    return response
   }
 
   async placeDirectCharge(/* charge: ChargeDTO */): Promise<APIResponse | undefined> {

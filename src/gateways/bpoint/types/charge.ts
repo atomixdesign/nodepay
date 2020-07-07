@@ -23,5 +23,5 @@ export interface IBaseCharge {
   Currency: Currency
   SubType: 'single' | 'recurring'
   TestMode: boolean
-  TransactionType: TransactionType
+  Type: TransactionType
 }
