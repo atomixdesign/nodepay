@@ -1,5 +1,5 @@
 import { APIResponse, formatResponse } from './api-response'
-import { OnceOffChargeDTO, PaymentScheduleDTO, PaymentDTO } from '../dtos'
+import { OnceOffChargeDTO, PaymentScheduleDTO, PaymentDTO } from './dtos'
 
 export const MockResponse = {
   Data: { resultText: 'OK' },
