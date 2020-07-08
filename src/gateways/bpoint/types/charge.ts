@@ -16,12 +16,14 @@ export enum TransactionType {
 }
 
 export interface IBaseCharge {
-  Action: ActionType
+  Action?: ActionType
   Amount: number // TODO: consider bigInt. For now, MAX_SAFE_INTEGER appears sufficient, but BPOINT supports more.
   CardDetails: ICreditCard
   Crn1: string
-  Currency: Currency
-  SubType: 'single' | 'recurring'
-  TestMode: boolean
-  Type: TransactionType
+  Currency?: Currency
+  SubType?: 'single' | 'recurring'
+  TestMode?: boolean
+  Type?: TransactionType
+  EmailAddress?: string
+  MerchantReference?: string
 }

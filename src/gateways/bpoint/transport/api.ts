@@ -13,8 +13,6 @@ import { BPOINTAPIError } from './api-error'
 
 @Service('bpoint.api')
 export class API {
-  // private authHeader: string
-
   private httpClient: AxiosInstance
 
   constructor(
@@ -70,8 +68,11 @@ export class API {
       data: { 'TxnReq': charge },
     })
 
-    if (response?.data.APIResponse.ResponseCode as number > 0) {
+    if (Number(response?.data.APIResponse.ResponseCode) !== 0) {
       throw new BPOINTAPIError(response.data.APIResponse)
+    }
+    if (Number(response?.data.TxnResp.ResponseCode) !== 0) {
+      throw new BPOINTAPIError(response.data.TxnResp)
     }
 
     return response

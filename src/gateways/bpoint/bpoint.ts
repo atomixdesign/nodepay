@@ -3,10 +3,11 @@ import { BaseGateway } from '../base-gateway'
 import { DirectDebit, OnceOffPayment, RecurringPayment } from '@atomixdesign/nodepay/features'
 import { Config } from './types'
 import { API, APIResponse } from './transport'
-/* import {
+import {
   ChargeDTO,
-  PaymentScheduleDTO,
-} from './transport/dtos' */
+} from './transport/dtos'
+import cryptoRandomString from 'crypto-random-string'
+import { validateOrReject } from 'class-validator'
 
 export class BPOINT extends BaseGateway<Config> implements DirectDebit, OnceOffPayment, RecurringPayment {
   private api: API
@@ -34,31 +35,79 @@ export class BPOINT extends BaseGateway<Config> implements DirectDebit, OnceOffP
     return 'bpoint'
   }
 
-  async charge(): Promise<APIResponse> {
-    const response = {
-      status: 200,
-      statusText: 'OK',
-      data: {},
+  async charge(
+    creditCardNumber: string,
+    creditCardExpiryMonth: string,
+    creditCardExpiryYear: string,
+    creditCardCCV: string,
+    nameOnCreditCard: string,
+    principalAmount: number,
+    _emailAddress?: string,
+    _merchantReference?: string,
+  ): Promise<APIResponse> {
+    const chargeObject = {
+      Amount: principalAmount,
+      CardDetails: {
+        CardHolderName : nameOnCreditCard,
+        CardNumber : creditCardNumber,
+        Cvn : creditCardCCV,
+        ExpiryDate : `${creditCardExpiryMonth}${creditCardExpiryYear.slice(-2)}`
+      },
+      Crn1: `${_merchantReference}${cryptoRandomString({ length: 10 })}`,
+      EmailAddress: _emailAddress,
+      MerchantReference: _merchantReference,
     }
-    return Promise.resolve(response)
+
+    let payload
+
+    try {
+      const chargeDTO = new ChargeDTO(chargeObject)
+      await validateOrReject(chargeDTO)
+      payload = await this.api.placeCharge(chargeDTO)
+    } catch(error) {
+      return Promise.reject(error)
+    }
+    return Promise.resolve(payload)
   }
 
-  async chargeRecurring(): Promise<APIResponse> {
-    const response = {
-      status: 200,
-      statusText: 'OK',
-      data: {},
+  async chargeRecurring(
+    creditCardNumber: string,
+    creditCardExpiryMonth: string,
+    creditCardExpiryYear: string,
+    creditCardCCV: string,
+    nameOnCreditCard: string,
+    principalAmount: number,
+    _emailAddress?: string,
+    _merchantReference?: string,
+  ): Promise<APIResponse> {
+    const chargeObject = {
+      Amount: principalAmount,
+      CardDetails: {
+        CardHolderName : nameOnCreditCard,
+        CardNumber : creditCardNumber,
+        Cvn : creditCardCCV,
+        ExpiryDate : `${creditCardExpiryMonth}${creditCardExpiryYear.slice(-2)}`
+      },
+      Crn1: `${_merchantReference}${cryptoRandomString({ length: 10 })}`,
+      EmailAddress: _emailAddress,
+      MerchantReference: _merchantReference,
+      SubType: 'recurring' as const,
     }
-    return Promise.resolve(response)
+
+    let payload
+
+    try {
+      const chargeDTO = new ChargeDTO(chargeObject)
+      await validateOrReject(chargeDTO)
+      payload = await this.api.placeCharge(chargeDTO)
+    } catch(error) {
+      return Promise.reject(error)
+    }
+    return Promise.resolve(payload)
   }
 
   async directDebit(): Promise<APIResponse> {
-    const response = {
-      status: 200,
-      statusText: 'OK',
-      data: {},
-    }
-    return Promise.resolve(response)
+    return Promise.reject('Not Implemented')
   }
 
 }
