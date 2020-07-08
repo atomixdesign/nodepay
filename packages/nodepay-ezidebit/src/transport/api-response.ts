@@ -1,4 +1,4 @@
-import { IBaseResponse } from '@atomixdesign/nodepay/network'
+import { IBaseResponse } from '@atomixdesign/nodepay-core/network'
 
 export interface IEzidebitResponse {
   Data: Record<string, unknown>

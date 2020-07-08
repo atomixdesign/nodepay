@@ -1,5 +1,5 @@
 import { IsOptional, IsNumberString, MaxLength, IsNumber, IsNotEmpty, IsIn } from 'class-validator'
-import { Errors, ErrorType } from '@atomixdesign/nodepay/validation/errors'
+import { Errors, ErrorType } from '@atomixdesign/nodepay-core/validation/errors'
 import { IPaymentSchedule, PaymentFrequency, DayOfWeek } from '../../types'
 
 export class PaymentScheduleDTO {

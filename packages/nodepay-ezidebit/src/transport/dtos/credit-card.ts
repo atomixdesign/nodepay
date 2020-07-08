@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsCreditCard, MaxLength, Length, IsNumberString, IsIn } from 'class-validator'
-import { Errors, ErrorType } from '@atomixdesign/nodepay/validation/errors'
+import { Errors, ErrorType } from '@atomixdesign/nodepay-core/validation/errors'
 import { INewCreditCard } from '../../types'
 
 export class CreditCardDTO {

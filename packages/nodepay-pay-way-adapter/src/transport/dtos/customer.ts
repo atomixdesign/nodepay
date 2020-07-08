@@ -8,7 +8,7 @@ import {
 import {
   ErrorType,
   Errors,
-} from '@atomixdesign/nodepay/validation/errors'
+} from '@atomixdesign/nodepay-core/validation/errors'
 
 export class CustomerDTO {
   constructor(

@@ -7,7 +7,7 @@ import {
 import {
   ErrorType,
   Errors,
-} from '@atomixdesign/nodepay/validation/errors'
+} from '@atomixdesign/nodepay-core/validation/errors'
 
 import { PaymentFrequency } from '../../types/payment-frequency'
 

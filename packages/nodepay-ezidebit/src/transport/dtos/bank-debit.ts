@@ -7,7 +7,7 @@ import {
 import {
   ErrorType,
   Errors,
-} from '@atomixdesign/nodepay/validation/errors'
+} from '@atomixdesign/nodepay-core/validation/errors'
 import { IBankAccountDebit } from '../../types'
 
 export class BankDebitDTO extends BaseDebitDTO {

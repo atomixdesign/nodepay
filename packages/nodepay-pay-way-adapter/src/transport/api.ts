@@ -6,7 +6,7 @@ import qs from 'qs'
 import { Config } from '../types'
 import {
   HttpClientFactory,
-} from '@atomixdesign/nodepay/network'
+} from '@atomixdesign/nodepay-core/network'
 import { APIResponse } from './api-response'
 import {
   BankAccountDTO,

@@ -3,7 +3,7 @@ import {
   Client as SoapClient,
 } from 'soap'
 import { Config } from '../types'
-import { SoapClientFactory } from '@atomixdesign/nodepay/network'
+import { SoapClientFactory } from '@atomixdesign/nodepay-core/network'
 import { APIResponse, formatResponse } from './api-response'
 import {
   CreditCardDTO,

@@ -1,5 +1,5 @@
 import { IsOptional, IsNumberString, MaxLength, IsNotEmpty, IsNumber } from 'class-validator'
-import { Errors, ErrorType } from '@atomixdesign/nodepay/validation/errors'
+import { Errors, ErrorType } from '@atomixdesign/nodepay-core/validation/errors'
 import { IDirectDebitPayment } from '../../types'
 
 export class PaymentDTO {
