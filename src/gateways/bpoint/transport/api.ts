@@ -1,6 +1,6 @@
 // handles configurable retry
 import { Service, Inject, Container } from 'typedi'
-import { AxiosInstance, AxiosResponse } from 'axios'
+import { AxiosInstance } from 'axios'
 // import { v4 as uuidv4 } from 'uuid'
 // import qs from 'qs'
 import { Config } from '../types'
@@ -34,33 +34,6 @@ export class API {
     return Buffer.from(key, 'binary').toString('base64')
   }
 
-  async addCustomer(/* customer: CustomerDTO */): Promise<AxiosResponse | undefined> {
-    /* const payload = { ...customer }
-    delete payload.customerNumber
-
-    const response = await this.httpClient!.request({
-      method: 'put',
-      url: `/customers/${customer.customerNumber}`,
-      data: qs.stringify({ ...payload }),
-    })
-
-    return response */
-    // eslint-disable-next-line unicorn/no-useless-undefined
-    return Promise.resolve(undefined)
-  }
-
-  async deleteCustomer(/* customerNumber: string */): Promise<AxiosResponse | undefined> {
-    /* await this.stopCustomerPayments(customerNumber)
-    const response = await this.httpClient!.request({
-      method: 'delete',
-      url: `/customers/${customerNumber}`,
-    })
-
-    return response */
-    // eslint-disable-next-line unicorn/no-useless-undefined
-    return Promise.resolve(undefined)
-  }
-
   async placeCharge(/* dvToken?: string,*/ charge: ChargeDTO): Promise<APIResponse> {
     const response = await this.httpClient!.request({
       method: 'post',
@@ -76,37 +49,5 @@ export class API {
     }
 
     return response
-  }
-
-  async placeDirectCharge(/* charge: ChargeDTO */): Promise<APIResponse | undefined> {
-    /* const response = await this.httpClient!.request({
-      method: 'post',
-      url: '/transactions',
-      data: qs.stringify({ ...charge }),
-    })
-
-    return {
-      status: response.status,
-      statusText: response.statusText,
-      data: response.data,
-    } */
-    // eslint-disable-next-line unicorn/no-useless-undefined
-    return Promise.resolve(undefined)
-  }
-
-  async schedulePayment(/* customerNumber: string, schedule: PaymentScheduleDTO */): Promise<APIResponse | undefined> {
-    /* const response = await this.httpClient!.request({
-      method: 'put',
-      url: `/customers/${customerNumber}/schedule`,
-      data: qs.stringify({ ...schedule }),
-    })
-
-    return {
-      status: response.status,
-      statusText: response.statusText,
-      data: response.data,
-    } */
-    // eslint-disable-next-line unicorn/no-useless-undefined
-    return Promise.resolve(undefined)
   }
 }

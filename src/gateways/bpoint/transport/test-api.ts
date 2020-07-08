@@ -1,5 +1,5 @@
 import { APIResponse } from './api-response'
-// import { ChargeDTO, PaymentScheduleDTO } from './dtos'
+import { ChargeDTO } from './dtos'
 
 export const MockResponse = {
   status: 200,
@@ -10,15 +10,11 @@ export const MockResponse = {
 export class testAPI {
   constructor() {}
 
-  async placeCharge(_singleUseTokenId: string, /* _charge: ChargeDTO */): Promise<APIResponse> {
+  async placeCharge(_charge: ChargeDTO): Promise<APIResponse> {
     return Promise.resolve(MockResponse)
   }
 
-  async placeDirectCharge(/* _charge: ChargeDTO */): Promise<APIResponse> {
-    return Promise.resolve(MockResponse)
-  }
-
-  async schedulePayment(_customerNumber: string, /* _paymentSchedule: PaymentScheduleDTO */): Promise<APIResponse> {
+  async schedulePayment(_paymentSchedule: ChargeDTO): Promise<APIResponse> {
     return Promise.resolve(MockResponse)
   }
 }

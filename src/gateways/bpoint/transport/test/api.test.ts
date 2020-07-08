@@ -62,4 +62,16 @@ describe('test bpoint api transport', () => {
     expect(validCodes).toContain(response.status)
   })
 
+  test('it places a recurring charge using credit card', async () => {
+    const chargeObject = {
+      ...fixtures.simpleCharge,
+      Crn1: cryptoRandomString({ length: 49 }),
+      CardDetails: new CreditCardDTO(fixtures.creditCard),
+      SubType: 'recurring' as const,
+    }
+    const simpleCharge = new ChargeDTO(chargeObject)
+    const response: APIResponse = await api.placeCharge(simpleCharge)
+
+    expect(validCodes).toContain(response.status)
+  })
 })
