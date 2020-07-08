@@ -6,7 +6,7 @@ import { AxiosInstance } from 'axios'
 import { Config } from '../types'
 import {
   HttpClientFactory,
-} from '@atomixdesign/nodepay/network'
+} from '@atomixdesign/nodepay-core/network'
 import { ChargeDTO } from './dtos'
 import { APIResponse } from './api-response'
 import { BPOINTAPIError } from './api-error'

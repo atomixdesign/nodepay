@@ -1,8 +1,8 @@
-node_modules/
-build/
+**/node_modules/
+**/build/
 .idea/
-coverage/
-docs/
+**/coverage/
+**/docs/
 package/
 .env
 

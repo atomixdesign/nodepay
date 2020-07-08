@@ -1,3 +1,4 @@
+/** @internal */
 export type Json =
 | string
 | number
@@ -6,6 +7,7 @@ export type Json =
 | { [key: string]: Json }
 | Json[]
 
+/** @internal */
 export interface IBaseResponse {
   status: number
   statusText: string

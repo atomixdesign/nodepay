@@ -1,7 +1,7 @@
 import { Container } from 'typedi'
 import { validateOrReject } from 'class-validator'
 import { BaseGateway } from '../base-gateway'
-import { DirectDebit, OnceOffPayment, RecurringPayment } from '@atomixdesign/nodepay/features'
+import { DirectDebit, OnceOffPayment, RecurringPayment } from '@atomixdesign/nodepay-core/features'
 import { Config, PaymentFrequency, DayOfWeek } from './types'
 import { API as Transport, APIResponse } from './transport'
 import { OnceOffChargeDTO, PaymentDTO, PaymentScheduleDTO } from './transport/dtos'

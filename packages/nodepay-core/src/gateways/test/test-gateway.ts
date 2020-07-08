@@ -1,11 +1,13 @@
 import { BaseGateway } from '../base-gateway'
 import { DirectDebit, OnceOffPayment, RecurringPayment } from '../../features'
 
+/** @internal */
 export type Config = {
   apiKey: string
   backwards: string
 }
 
+/** @internal */
 export class TestGateway extends BaseGateway<Config> implements DirectDebit, OnceOffPayment, RecurringPayment {
   protected get baseConfig(): Config {
     return {

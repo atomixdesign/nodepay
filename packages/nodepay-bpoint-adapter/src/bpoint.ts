@@ -1,6 +1,6 @@
 import { Container } from 'typedi'
-import { BaseGateway } from '../base-gateway'
-import { DirectDebit, OnceOffPayment, RecurringPayment } from '@atomixdesign/nodepay/features'
+import { BaseGateway } from '@atomixdesign/nodepay-core/gateways'
+import { DirectDebit, OnceOffPayment, RecurringPayment } from '@atomixdesign/nodepay-core/features'
 import { Config } from './types'
 import { API, APIResponse } from './transport'
 import {

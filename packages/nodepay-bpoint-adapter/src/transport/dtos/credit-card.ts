@@ -6,7 +6,7 @@ import {
   Length,
   IsNumberString,
 } from 'class-validator'
-import { Errors, ErrorType } from '@atomixdesign/nodepay/validation/errors'
+import { Errors, ErrorType } from '@atomixdesign/nodepay-core/validation/errors'
 
 export class CreditCardDTO {
   constructor(creditCard: ICreditCard) {

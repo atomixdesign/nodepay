@@ -5,10 +5,13 @@ module.exports = {
     'src/**/*.ts',
     '!src/**/index.ts',
   ],
-  setupFiles: ['dotenv/config', 'reflect-metadata'],
+  setupFiles: [
+    'dotenv/config',
+    'reflect-metadata'
+  ],
   verbose: true,
   moduleNameMapper: {
-    '^@atomixdesign/nodepay(.*)$': '<rootDir>/src/$1'
+    '^@atomixdesign/(nodepay-[a-z]+)/(.*)$': '<rootDir>/../$1/src/$2'
   },
   testTimeout: 60000
 }
