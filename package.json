@@ -5,8 +5,9 @@
     "bootstrap": "lerna bootstrap",
     "build": "lerna run build --no-bail",
     "test": "lerna run test --stream",
-    "reset": "shx rm -R node_modules packages/**/build packages/**/node_modules packages/**/coverage",
-    "cli": "node utils/nodepay-cli"
+    "reset": "shx rm -R node_modules packages/**/build packages/**/node_modules packages/**/coverage packages/**/docs",
+    "cli": "node utils/nodepay-cli",
+    "build:docs": "lerna run build:docs --no-bail"
   },
   "devDependencies": {
     "@types/inquirer": "^6.5.0",
