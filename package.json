@@ -5,7 +5,7 @@
     "bootstrap": "lerna bootstrap",
     "build": "lerna run build --no-bail",
     "test": "lerna run test --stream",
-    "clean": "shx rm -R packages/**/build",
+    "reset": "shx rm -R node_modules packages/**/build packages/**/node_modules packages/**/coverage",
     "cli": "node utils/nodepay-cli"
   },
   "devDependencies": {
