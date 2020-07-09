@@ -5,6 +5,7 @@
 **/docs/
 package/
 .env
+buildcache
 
 tags
 .DS_Store
