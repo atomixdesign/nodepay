@@ -71,8 +71,8 @@ describe('test ezidebit api transport', () => {
       clientId: process.env['EZIDEBIT_CLIENT_ID']!,
       digitalKey: process.env['EZIDEBIT_DIGITAL_KEY']!,
       publicKey: process.env['EZIDEBIT_PUBLIC_KEY']!,
-      apiRoot: process.env['EZIDEBIT_TEST_API_ROOT']!,
-      nonPCIApiRoot: process.env['EZIDEBIT_TEST_API_NONPCI_ROOT']!,
+      apiRoot: process.env['EZIDEBIT_API_ROOT']!,
+      nonPCIApiRoot: process.env['EZIDEBIT_API_NONPCI_ROOT']!,
     })
     api = Container.get(EzidebitTransport)
   })

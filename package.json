@@ -4,7 +4,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "build": "lerna run build --no-bail",
-    "test": "lerna run test --stream --no-bail",
+    "test": "lerna run test --stream",
     "clean": "shx rm -R packages/**/build",
     "cli": "node utils/nodepay-cli"
   },
