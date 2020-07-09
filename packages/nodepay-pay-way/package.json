@@ -1,5 +1,5 @@
 {
-  "name": "@atomixdesign/nodepay-pay-way-adapter",
+  "name": "@atomixdesign/nodepay-pay-way",
   "version": "0.2.0",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -12,7 +12,7 @@
   },
   "scripts": {
     "build": "tsc -b",
-    "start": "ts-node-dev --project tsconfig.build.json --respawn src/index.ts",
+    "start": "ts-node-dev --project tsconfig.json --respawn src/index.ts",
     "test": "jest --coverage",
     "test:watch": "test --watch",
     "lint": "eslint ./src",
