@@ -7,8 +7,8 @@ import { Config } from '../types'
 import {
   HttpClientFactory,
 } from '@atomixdesign/nodepay-core/network'
-import { ChargeDTO } from './dtos'
 import { APIResponse } from './api-response'
+import { ChargeDTO } from './dtos'
 import { BPOINTAPIError } from './api-error'
 
 @Service('bpoint.api')
@@ -40,7 +40,6 @@ export class API {
       url: '/txns/',
       data: { 'TxnReq': charge },
     })
-
     if (Number(response?.data.APIResponse.ResponseCode) !== 0) {
       throw new BPOINTAPIError(response.data.APIResponse)
     }

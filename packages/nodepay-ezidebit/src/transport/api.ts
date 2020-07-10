@@ -10,7 +10,9 @@ import {
   CustomerDTO,
   OnceOffChargeDTO,
   PaymentDTO,
-  PaymentScheduleDTO, } from './dtos'
+  PaymentScheduleDTO,
+} from './dtos'
+import { EzidebitAPIError } from './api-error'
 
 @Service('ezidebit.api')
 export class API {
@@ -43,26 +45,29 @@ export class API {
 
   async addCustomer(customer: CustomerDTO): Promise<APIResponse> {
     await this.ensureClient()
-    let result
+    let response
     try {
-      result = await this.nonPCISoapClient!.AddCustomerAsync({
+      response = await this.nonPCISoapClient!.AddCustomerAsync({
         ...{ DigitalKey: this.config.digitalKey },
         ...customer,
       })
     } catch (error) {
       return Promise.reject(error)
     }
+    if (response[0]?.AddCustomerResult.ErrorMessage !== undefined) {
+      return Promise.reject(new EzidebitAPIError(response[0].AddCustomerResult))
+    }
 
-    return formatResponse(result[0].AddCustomerResult)
+    return formatResponse(response[0]?.AddCustomerResult)
   }
 
   async addCustomerCC(
     creditCard: CreditCardDTO,
   ): Promise<APIResponse> {
     await this.ensureClient()
-    let result
+    let response
     try {
-      result = await this.soapClient!.EditCustomerCreditCardAsync({
+      response = await this.soapClient!.EditCustomerCreditCardAsync({
         ...{
           DigitalKey: this.config.digitalKey,
         },
@@ -71,47 +76,56 @@ export class API {
     } catch (error) {
       return Promise.reject(error)
     }
+    if (response[0]?.EditCustomerCreditCardResult.ErrorMessage !== undefined) {
+      return Promise.reject(new EzidebitAPIError(response[0].EditCustomerCreditCardResult))
+    }
 
-    return formatResponse(result[0].EditCustomerCreditCardResult)
+    return formatResponse(response[0]?.EditCustomerCreditCardResult)
   }
 
   async placeCharge(charge: OnceOffChargeDTO): Promise<APIResponse> {
     await this.ensureClient()
-    let result
+    let response
     try {
-      result = await this.soapClient!.ProcessRealtimeCreditCardPaymentAsync({
+      response = await this.soapClient!.ProcessRealtimeCreditCardPaymentAsync({
         ...{ DigitalKey: this.config.digitalKey },
         ...charge,
       })
     } catch (error) {
       return Promise.reject(error)
     }
+    if (response[0]?.ProcessRealtimeCreditCardPaymentResult.ErrorMessage !== undefined) {
+      return Promise.reject(new EzidebitAPIError(response[0].ProcessRealtimeCreditCardPaymentResult))
+    }
 
-    return formatResponse(result[0].ProcessRealtimeCreditCardPaymentResult)
+    return formatResponse(response[0]?.ProcessRealtimeCreditCardPaymentResult)
   }
 
   async placeDirectCharge(
     payment: PaymentDTO,
   ): Promise<APIResponse> {
     await this.ensureClient()
-    let result
+    let response
     try {
-      result = await this.nonPCISoapClient!.AddPaymentAsync({
+      response = await this.nonPCISoapClient!.AddPaymentAsync({
         ...{ DigitalKey: this.config.digitalKey },
         ...payment,
       })
     } catch (error) {
       return Promise.reject(error)
     }
+    if (response[0]?.AddPaymentResult.ErrorMessage !== undefined) {
+      return Promise.reject(new EzidebitAPIError(response[0].AddPaymentResult))
+    }
 
-    return formatResponse(result[0].AddPaymentResult)
+    return formatResponse(response[0].AddPaymentResult)
   }
 
   async schedulePayment(schedule: PaymentScheduleDTO): Promise<APIResponse> {
     await this.ensureClient()
-    let result
+    let response
     try {
-      result = await this.nonPCISoapClient!.CreateScheduleAsync({
+      response = await this.nonPCISoapClient!.CreateScheduleAsync({
         ...{
           DigitalKey: this.config.digitalKey,
         },
@@ -120,7 +134,10 @@ export class API {
     } catch (error) {
       return Promise.reject(error)
     }
+    if (response[0]?.CreateScheduleResult.ErrorMessage !== undefined) {
+      return Promise.reject(new EzidebitAPIError(response[0]?.CreateScheduleResult))
+    }
 
-    return formatResponse(result[0].CreateScheduleResult)
+    return formatResponse(response[0].CreateScheduleResult)
   }
 }
