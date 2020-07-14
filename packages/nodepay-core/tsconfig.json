@@ -9,6 +9,7 @@
   "include": ["./src/**/*.ts"],
   "exclude": [
     "node_modules",
-    "build"
+    "build",
+    "./src/**/*.test.ts"
   ],
 }

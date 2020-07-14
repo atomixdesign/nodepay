@@ -11,8 +11,8 @@
     "node": "12"
   },
   "scripts": {
-    "build": "tsc -b",
-    "start": "ts-node-dev --project tsconfig.json --respawn src/index.ts",
+    "build": "tsc --p ./tsconfig.build.json",
+    "start": "ts-node-dev --project tsconfig.build.json --respawn src/index.ts",
     "test": "jest --coverage",
     "test:watch": "test --watch",
     "lint": "eslint ./src",

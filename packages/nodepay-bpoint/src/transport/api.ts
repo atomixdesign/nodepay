@@ -7,8 +7,8 @@ import { Config } from '../types'
 import {
   HttpClientFactory,
 } from '@atomixdesign/nodepay-core/network'
-import { ChargeDTO } from './dtos'
 import { APIResponse } from './api-response'
+import { ChargeDTO } from './dtos'
 import { BPOINTAPIError } from './api-error'
 
 @Service('bpoint.api')
@@ -35,17 +35,21 @@ export class API {
   }
 
   async placeCharge(/* dvToken?: string,*/ charge: ChargeDTO): Promise<APIResponse> {
-    const response = await this.httpClient!.request({
-      method: 'post',
-      url: '/txns/',
-      data: { 'TxnReq': charge },
-    })
-
+    let response
+    try {
+      response = await this.httpClient!.request({
+        method: 'post',
+        url: '/txns/',
+        data: { 'TxnReq': charge },
+      })
+    } catch (error) {
+      return Promise.reject(error)
+    }
     if (Number(response?.data.APIResponse.ResponseCode) !== 0) {
-      throw new BPOINTAPIError(response.data.APIResponse)
+      return Promise.reject(new BPOINTAPIError(response.data.APIResponse))
     }
     if (Number(response?.data.TxnResp.ResponseCode) !== 0) {
-      throw new BPOINTAPIError(response.data.TxnResp)
+      return Promise.reject(new BPOINTAPIError(response.data.TxnResp))
     }
 
     return response

@@ -98,8 +98,10 @@ describe('test ezidebit api transport', () => {
   test('it reports an error when a once-off charge is declined', async () => {
     const badChargeFixture = fixtures.simpleCharge
     badChargeFixture.PaymentAmountInCents = 1012
-    const result: APIResponse = await api.placeCharge(badChargeFixture)
-    expect(result.statusText).toBe('Declined')
+    await api.placeCharge(badChargeFixture).catch(error => {
+      expect(error.message).toBe('Declined')
+      return error
+    })
   })
 
   test('it registers a customer account', async () => {

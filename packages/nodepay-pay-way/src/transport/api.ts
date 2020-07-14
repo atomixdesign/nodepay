@@ -61,27 +61,37 @@ export class API {
   }
 
   async getCCtoken(creditCard: CreditCardDTO): Promise<AxiosResponse> {
-    const response = await this.httpClient!.request({
-      method: 'post',
-      url: '/single-use-tokens',
-      data: qs.stringify({ ...creditCard }),
-      headers: {
-        Authorization: this.publicAuthHeader,
-      }
-    })
+    let response
+    try {
+      response = await this.httpClient!.request({
+        method: 'post',
+        url: '/single-use-tokens',
+        data: qs.stringify({ ...creditCard }),
+        headers: {
+          Authorization: this.publicAuthHeader,
+        }
+      })
+    } catch (error) {
+      return Promise.reject(error)
+    }
 
     return response
   }
 
   async getBankAccountToken(bankAccount: BankAccountDTO): Promise<AxiosResponse> {
-    const response = await this.httpClient!.request({
-      method: 'post',
-      url: '/single-use-tokens',
-      data: qs.stringify({ ...bankAccount }),
-      headers: {
-        Authorization: this.publicAuthHeader,
-      }
-    })
+    let response
+    try {
+      response = await this.httpClient!.request({
+        method: 'post',
+        url: '/single-use-tokens',
+        data: qs.stringify({ ...bankAccount }),
+        headers: {
+          Authorization: this.publicAuthHeader,
+        }
+      })
+    } catch (error) {
+      return Promise.reject(error)
+    }
 
     return response
   }
@@ -90,41 +100,61 @@ export class API {
     const payload = { ...customer }
     delete payload.customerNumber
 
-    const response = await this.httpClient!.request({
-      method: 'put',
-      url: `/customers/${customer.customerNumber}`,
-      data: qs.stringify({ ...payload }),
-    })
+    let response
+    try {
+      response = await this.httpClient!.request({
+        method: 'put',
+        url: `/customers/${customer.customerNumber}`,
+        data: qs.stringify({ ...payload }),
+      })
+    } catch (error) {
+      return Promise.reject(error)
+    }
 
     return response
   }
 
   async stopCustomerPayments(customerNumber: string): Promise<AxiosResponse> {
-    const response = await this.httpClient!.request({
-      method: 'patch',
-      url: `/customers/${customerNumber}/payment-setup`,
-      data: qs.stringify({ stopped: true }),
-    })
+    let response
+    try {
+      response = await this.httpClient!.request({
+        method: 'patch',
+        url: `/customers/${customerNumber}/payment-setup`,
+        data: qs.stringify({ stopped: true }),
+      })
+    } catch (error) {
+      return Promise.reject(error)
+    }
 
     return response
   }
 
   async deleteCustomer(customerNumber: string): Promise<AxiosResponse> {
-    await this.stopCustomerPayments(customerNumber)
-    const response = await this.httpClient!.request({
-      method: 'delete',
-      url: `/customers/${customerNumber}`,
-    })
+    let response
+    try {
+      await this.stopCustomerPayments(customerNumber)
+      response = await this.httpClient!.request({
+        method: 'delete',
+        url: `/customers/${customerNumber}`,
+      })
+    } catch (error) {
+      return Promise.reject(error)
+    }
 
     return response
   }
 
   async placeCharge(singleUseTokenId: string, charge: ChargeDTO): Promise<APIResponse> {
-    const response = await this.httpClient!.request({
-      method: 'post',
-      url: '/transactions',
-      data: qs.stringify({ singleUseTokenId, ...charge }),
-    })
+    let response
+    try {
+      response = await this.httpClient!.request({
+        method: 'post',
+        url: '/transactions',
+        data: qs.stringify({ singleUseTokenId, ...charge }),
+      })
+    } catch (error) {
+      return Promise.reject(error)
+    }
 
     return {
       status: response.status,
@@ -134,11 +164,16 @@ export class API {
   }
 
   async placeDirectCharge(charge: ChargeDTO): Promise<APIResponse> {
-    const response = await this.httpClient!.request({
-      method: 'post',
-      url: '/transactions',
-      data: qs.stringify({ ...charge }),
-    })
+    let response
+    try {
+      response = await this.httpClient!.request({
+        method: 'post',
+        url: '/transactions',
+        data: qs.stringify({ ...charge }),
+      })
+    } catch (error) {
+      return Promise.reject(error)
+    }
 
     return {
       status: response.status,
@@ -148,11 +183,16 @@ export class API {
   }
 
   async schedulePayment(customerNumber: string, schedule: PaymentScheduleDTO): Promise<APIResponse> {
-    const response = await this.httpClient!.request({
-      method: 'put',
-      url: `/customers/${customerNumber}/schedule`,
-      data: qs.stringify({ ...schedule }),
-    })
+    let response
+    try {
+      response = await this.httpClient!.request({
+        method: 'put',
+        url: `/customers/${customerNumber}/schedule`,
+        data: qs.stringify({ ...schedule }),
+      })
+    } catch (error) {
+      return Promise.reject(error)
+    }
 
     return {
       status: response.status,
