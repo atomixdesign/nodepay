@@ -6,6 +6,7 @@
 package/
 .env
 buildcache
+tsconfig.tsbuildinfo
 
 tags
 .DS_Store
