@@ -1,31 +1,19 @@
 {
   "name": "@atomixdesign/nodepay",
-  "version": "0.2.0",
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
-  "engines": {
-    "node": "12"
-  },
+  "private": true,
   "scripts": {
-    "build": "tsc --project tsconfig.build.json",
-    "start": "ts-node-dev --project tsconfig.build.json --respawn src/index.ts",
-    "test": "yarn jest --coverage",
-    "test:watch": "yarn test --watch",
-    "lint": "eslint ./src",
-    "version:patch": "npm version patch --git-tag-version -m '🔖 v%s' -s",
-    "version:minor": "npm version minor --git-tag-version -m '🔖 v%s' -s",
-    "version:major": "npm version major --git-tag-version -m '🔖 v%s' -s"
+    "bootstrap": "lerna bootstrap",
+    "build": "lerna run build --no-bail",
+    "test": "lerna run test --stream",
+    "reset": "shx rm -R node_modules packages/**/build packages/**/node_modules packages/**/coverage packages/**/docs",
+    "clean": "shx rm -R packages/**/build packages/**/.tsbuildinfofile",
+    "cli": "node utils/nodepay-cli",
+    "build:docs": "lerna run build:docs --no-bail"
   },
   "devDependencies": {
-    "@types/jest": "^25.2.3",
-    "@types/node": "^14.0.9",
-    "@typescript-eslint/eslint-plugin": "^3.1.0",
-    "@typescript-eslint/parser": "^3.1.0",
-    "dotenv": "^8.2.0",
+    "@types/inquirer": "^6.5.0",
+    "@types/node": "^14.0.19",
+    "@types/yargs": "^15.0.5",
     "eslint": "^7.1.0",
     "eslint-plugin-ava": "^10.3.0",
     "eslint-plugin-eslint-comments": "^3.2.0",
@@ -34,26 +22,16 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-unicorn": "^20.1.0",
-    "jest": "^26.0.1",
-    "ts-jest": "^26.1.0",
-    "ts-node": "^8.10.2",
-    "ts-node-dev": "^1.0.0-pre.44",
-    "typescript": "^3.9.3"
+    "glob": "^7.1.6",
+    "jest": "^26.1.0",
+    "lerna": "^3.22.1",
+    "mkdirp": "^1.0.4",
+    "mustache": "^4.0.1",
+    "shx": "^0.3.2",
+    "typescript": "^3.9.6",
+    "yargs": "^15.4.0"
   },
-  "dependencies": {
-    "@types/qs": "^6.9.3",
-    "@types/uuid": "^8.0.0",
-    "@types/xml2js": "^0.4.5",
-    "axios": "^0.19.2",
-    "class-validator": "^0.12.2",
-    "crypto-random-string": "^3.2.0",
-    "moment": "^2.27.0",
-    "qs": "^6.9.4",
-    "reflect-metadata": "^0.1.13",
-    "soap": "^0.31.0",
-    "ts-custom-error": "^3.1.1",
-    "typedi": "^0.8.0",
-    "uuid": "^8.2.0",
-    "xml2js": "^0.4.23"
-  }
+  "workspaces": [
+    "packages/*"
+  ]
 }

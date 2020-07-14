@@ -1,0 +1,9 @@
+{
+  "mode": "file",
+  "out": "docs",
+  "theme": "default",
+  "excludePrivate": true,
+  "excludeExternals": "node_modules/*",
+  "includeDeclarations": false,
+  "includeVersion": true
+}
