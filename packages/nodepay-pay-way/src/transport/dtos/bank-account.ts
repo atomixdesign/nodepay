@@ -4,7 +4,7 @@ import {
 
 import {
   ErrorType,
-  Errors,
+  ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
 
 export class BankAccountDTO {
@@ -30,19 +30,19 @@ export class BankAccountDTO {
 
   // * bsb
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'bsb')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'bsb')
   })
   bsb: string;
 
   // * accountNumber
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'accountNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'accountNumber')
   })
   accountNumber: string;
 
   // * accountName
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'accountName')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'accountName')
   })
   accountName: string;
 }

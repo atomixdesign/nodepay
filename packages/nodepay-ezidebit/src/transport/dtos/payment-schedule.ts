@@ -1,5 +1,5 @@
 import { IsOptional, IsNumberString, MaxLength, IsNumber, IsNotEmpty, IsIn } from 'class-validator'
-import { Errors, ErrorType } from '@atomixdesign/nodepay-core/validation/errors'
+import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation/errors'
 import { IPaymentSchedule, PaymentFrequency, DayOfWeek } from '../../types'
 
 export class PaymentScheduleDTO {
@@ -25,105 +25,105 @@ export class PaymentScheduleDTO {
   // * EziDebitCustomerID
   @IsOptional()
   @IsNumberString(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotANumber, 'EziDebitCustomerID')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'EziDebitCustomerID')
   })
   @MaxLength(50, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'EziDebitCustomerID')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'EziDebitCustomerID')
   })
   EziDebitCustomerID: string | undefined;
 
   // * YourSystemReference
   @IsOptional()
   @MaxLength(50, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'YourSystemReference')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'YourSystemReference')
   })
   YourSystemReference: string | undefined;
 
   // * ScheduleStartDate
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'ScheduleStartDate')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'ScheduleStartDate')
   })
   @MaxLength(10, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'ScheduleStartDate')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'ScheduleStartDate')
   })
   ScheduleStartDate: string;
 
   // * SchedulePeriodType
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'SchedulePeriodType')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'SchedulePeriodType')
   })
   SchedulePeriodType: PaymentFrequency;
 
   // * DayOfWeek
   @IsOptional()
   @IsIn(['MON', 'TUE', 'WED', 'THU', 'FRI'], {
-    message: Errors.getErrorMessage(ErrorType.NotInAllowedSet, 'DayOfWeek')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotInAllowedSet, 'DayOfWeek')
   })
   DayOfWeek: DayOfWeek;
 
   // * DayOfMonth
   @IsOptional()
   @IsNumber(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotANumber, 'DayOfMonth')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'DayOfMonth')
   })
   DayOfMonth: number;
 
   // * FirstWeekOfMonth
   @IsOptional()
   @IsIn(['YES', 'NO', ''], {
-    message: Errors.getErrorMessage(ErrorType.NotInAllowedSet, 'FirstWeekOfMonth')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotInAllowedSet, 'FirstWeekOfMonth')
   })
   FirstWeekOfMonth: string;
 
   // * SecondWeekOfMonth
   @IsOptional()
   @IsIn(['YES', 'NO', ''], {
-    message: Errors.getErrorMessage(ErrorType.NotInAllowedSet, 'SecondWeekOfMonth')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotInAllowedSet, 'SecondWeekOfMonth')
   })
   SecondWeekOfMonth: string;
 
   // * ThirdWeekOfMonth
   @IsOptional()
   @IsIn(['YES', 'NO', ''], {
-    message: Errors.getErrorMessage(ErrorType.NotInAllowedSet, 'ThirdWeekOfMonth')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotInAllowedSet, 'ThirdWeekOfMonth')
   })
   ThirdWeekOfMonth: string;
 
   // * FourthWeekOfMonth
   @IsOptional()
   @IsIn(['YES', 'NO', ''], {
-    message: Errors.getErrorMessage(ErrorType.NotInAllowedSet, 'FourthWeekOfMonth')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotInAllowedSet, 'FourthWeekOfMonth')
   })
   FourthWeekOfMonth: string;
 
   // * KeepManualPayments
   @IsIn(['YES', 'NO'], {
-    message: Errors.getErrorMessage(ErrorType.NotInAllowedSet, 'KeepManualPayments')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotInAllowedSet, 'KeepManualPayments')
   })
   KeepManualPayments: string;
 
   // * LimitToNumberOfPayments
   @IsNumber(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotANumber, 'LimitToNumberOfPayments')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'LimitToNumberOfPayments')
   })
   LimitToNumberOfPayments: number;
 
   // * LimitToTotalAmountInCents
   @IsNumber(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotANumber, 'LimitToTotalAmountInCents')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'LimitToTotalAmountInCents')
   })
   LimitToTotalAmountInCents: number;
 
   // * PaymentAmountInCents
   @IsNumber(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotANumber, 'PaymentAmountInCents')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'PaymentAmountInCents')
   })
   PaymentAmountInCents: number;
 
   // * Username
   @IsOptional()
   @MaxLength(50, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'Username')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'Username')
   })
   Username: string | undefined;
 

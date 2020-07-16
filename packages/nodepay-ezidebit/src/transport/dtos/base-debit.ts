@@ -10,7 +10,7 @@ import {
 
 import {
   ErrorType,
-  Errors,
+  ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
 import { IBaseDebit } from '../../types'
 
@@ -33,67 +33,67 @@ export class BaseDebitDTO {
 
   // * YourSystemReference
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'YourSystemReference')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'YourSystemReference')
   })
   @MaxLength(50, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'YourSystemReference')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'YourSystemReference')
   })
   YourSystemReference: string;
 
   // * LastName
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'LastName')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'LastName')
   })
   @MaxLength(60, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'LastName')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'LastName')
   })
   LastName: string;
 
   // * PaymentReference
   @MaxLength(50, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'PaymentReference')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'PaymentReference')
   })
   PaymentReference: string;
 
   // * PaymentAmountInCents
   @Min(200, {
-    message: Errors.getErrorMessage(ErrorType.ValueTooLow, 'PaymentAmountInCents')
+    message: ErrorFactory.getErrorMessage(ErrorType.ValueTooLow, 'PaymentAmountInCents')
   })
   @IsNumber(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotANumber, 'PaymentAmountInCents')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'PaymentAmountInCents')
   })
   PaymentAmountInCents: number;
 
   // * DebitDate
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'DebitDate')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'DebitDate')
   })
   DebitDate: string;
 
   // * SmsPaymentReminder
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'SmsPaymentReminder')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'SmsPaymentReminder')
   })
   @IsIn(['YES', 'NO'], {
-    message: Errors.getErrorMessage(ErrorType.NotInAllowedSet, 'SmsPaymentReminder')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotInAllowedSet, 'SmsPaymentReminder')
   })
   SmsPaymentReminder: string;
 
   // * SmsFailedNotification
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'SmsFailedNotification')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'SmsFailedNotification')
   })
   @IsIn(['YES', 'NO'], {
-    message: Errors.getErrorMessage(ErrorType.NotInAllowedSet, 'SmsFailedNotification')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotInAllowedSet, 'SmsFailedNotification')
   })
   SmsFailedNotification: string;
 
   // * SmsExpiredCard
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'SmsExpiredCard')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'SmsExpiredCard')
   })
   @IsIn(['YES', 'NO'], {
-    message: Errors.getErrorMessage(ErrorType.NotInAllowedSet, 'SmsExpiredCard')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotInAllowedSet, 'SmsExpiredCard')
   })
   SmsExpiredCard: string;
 
@@ -102,31 +102,31 @@ export class BaseDebitDTO {
 
   // * YourGeneralReference
   @MaxLength(50, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'YourGeneralReference')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'YourGeneralReference')
   })
   YourGeneralReference = '';
 
   // * FirstName
   @MaxLength(30, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'FirstName')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'FirstName')
   })
   FirstName = '';
 
   // * EmailAddress
   @MaxLength(255, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'EmailAddress')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'EmailAddress')
   })
   @IsEmail(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotAnEmail, 'EmailAddress')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotAnEmail, 'EmailAddress')
   })
   EmailAddress = '';
 
   // * MobilePhoneNumber
   @MaxLength(10, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'MobilePhoneNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'MobilePhoneNumber')
   })
   @IsMobilePhone('en-AU', undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotAMobilePhone, 'MobilePhoneNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotAMobilePhone, 'MobilePhoneNumber')
   })
   MobilePhoneNumber = '';
 }

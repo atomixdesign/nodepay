@@ -7,7 +7,7 @@ import {
 
 import {
   ErrorType,
-  Errors,
+  ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
 
 export class CustomerDTO {
@@ -33,19 +33,19 @@ export class CustomerDTO {
 
   // * customerNumber
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'customerNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'customerNumber')
   })
   @IsAlphanumeric('en-US', {
-    message: Errors.getErrorMessage(ErrorType.AlphanumRequired, 'customerNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.AlphanumRequired, 'customerNumber')
   })
   @MaxLength(20, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'customerNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'customerNumber')
   })
   customerNumber: string;
 
   // * singleUseTokenId
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'singleUseTokenId')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'singleUseTokenId')
   })
   singleUseTokenId: string;
 

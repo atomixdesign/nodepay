@@ -14,7 +14,7 @@ export enum ErrorType {
   NotInAllowedSet = 'Value for $[identifier] was not in the allowed set. Received $value.',
 }
 
-export class Errors { // Error factory
+export class ErrorFactory { // Error factory
   static getErrorMessage(messageForType: ErrorType, id: string): string {
     return messageForType.replace('$[identifier]', id)
   }

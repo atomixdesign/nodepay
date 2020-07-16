@@ -6,7 +6,7 @@ import {
 
 import {
   ErrorType,
-  Errors,
+  ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
 
 import { PaymentFrequency } from '../../types/payment-frequency'
@@ -40,40 +40,40 @@ export class PaymentScheduleDTO {
 
   // * frequency
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'frequency')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'frequency')
   })
   frequency: PaymentFrequency;
 
   // * nextPaymentDate
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'nextPaymentDate')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'nextPaymentDate')
   })
   nextPaymentDate: string;
 
   // * regularPrincipalAmount
   @IsNumber(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotANumber, 'regularPrincipalAmount')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'regularPrincipalAmount')
   })
   regularPrincipalAmount: number;
 
   // * nextPrincipalAmount
   @IsOptional()
   @IsNumber(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotANumber, 'nextPrincipalAmount')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'nextPrincipalAmount')
   })
   nextPrincipalAmount?: number | undefined;
 
   // * numberOfPaymentsRemaining
   @IsOptional()
   @IsNumber(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotANumber, 'numberOfPaymentsRemaining')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'numberOfPaymentsRemaining')
   })
   numberOfPaymentsRemaining?: number | undefined;
 
   // * finalPrincipalAmount
   @IsOptional()
   @IsNumber(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotANumber, 'finalPrincipalAmount')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'finalPrincipalAmount')
   })
   finalPrincipalAmount?: number | undefined;
 }

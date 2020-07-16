@@ -12,7 +12,7 @@ import {
 
 import {
   ErrorType,
-  Errors,
+  ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
 
 export class ChargeDTO {
@@ -33,7 +33,7 @@ export class ChargeDTO {
 
   // * Amount
   @IsNumber(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotANumber, 'Amount')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'Amount')
   })
   Amount: number;
 
@@ -43,10 +43,10 @@ export class ChargeDTO {
 
   // * Crn1
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'Crn1')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'Crn1')
   })
   @MaxLength(50, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'Crn1')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'Crn1')
   })
   Crn1: string;
 
@@ -59,7 +59,7 @@ export class ChargeDTO {
   // * TestMode
   @IsOptional()
   @IsBoolean({
-    message: Errors.getErrorMessage(ErrorType.NotABoolean, 'TestMode')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotABoolean, 'TestMode')
   })
   TestMode: boolean | undefined = false;
 
@@ -69,23 +69,23 @@ export class ChargeDTO {
   // * EmailAddress
   @IsOptional()
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'EmailAddress')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'EmailAddress')
   })
   @IsEmail(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotAnEmail, 'EmailAddress')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotAnEmail, 'EmailAddress')
   })
   @MaxLength(250, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'EmailAddress')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'EmailAddress')
   })
   EmailAddress: string | undefined;
 
   // * MerchantReference
   @IsOptional()
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'MerchantReference')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'MerchantReference')
   })
   @MaxLength(50, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'MerchantReference')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'MerchantReference')
   })
   MerchantReference: string | undefined;
 }

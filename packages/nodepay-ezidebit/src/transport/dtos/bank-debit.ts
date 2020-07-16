@@ -6,7 +6,7 @@ import {
 
 import {
   ErrorType,
-  Errors,
+  ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
 import { IBankAccountDebit } from '../../types'
 
@@ -19,19 +19,19 @@ export class BankDebitDTO extends BaseDebitDTO {
   }
   // * BankAccountName
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'BankAccountName')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'BankAccountName')
   })
   BankAccountName: string;
 
   // * BankAccountBSB
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'BankAccountBSB')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'BankAccountBSB')
   })
   BankAccountBSB: string;
 
   // * BankAccountNumber
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'BankAccountNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'BankAccountNumber')
   })
   BankAccountNumber: string;
 }
