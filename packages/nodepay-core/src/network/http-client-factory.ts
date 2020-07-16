@@ -5,10 +5,10 @@ import axios, {
   AxiosError,
   AxiosResponse,
 } from 'axios'
-import { INetworkFactory } from './network-client-factory'
+import { NetworkClientFactory } from './types/network-client-factory'
 
 @Service('http.client')
-export class HttpClientFactory implements INetworkFactory<AxiosInstance> {
+export class HttpClientFactory extends NetworkClientFactory<AxiosInstance> {
   create(config?: Partial<AxiosRequestConfig>, debug = false): AxiosInstance{
     const httpClient = axios.create(config)
 
