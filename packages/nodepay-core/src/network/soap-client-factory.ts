@@ -4,12 +4,16 @@ import { parseString } from 'xml2js'
 import util from 'util'
 import { NetworkClientAsyncFactory } from './types/network-client-factory'
 
+const DEBUG = false
+
 @Service('soap.client')
 export class SoapClientFactory extends NetworkClientAsyncFactory<Client> {
   private parseResponse(parsingError: Error, result: Record<string, unknown>) {
-    if (parsingError) console.error(parsingError)
-    /* eslint-disable unicorn/no-null */
-    else console.log(util.inspect(result, false, null))
+    if (DEBUG) {
+      if (parsingError) console.error(parsingError)
+      /* eslint-disable unicorn/no-null */
+      else console.log(util.inspect(result, false, null))
+    }
   }
 
   async createAsync(config?: Partial<Record<string, unknown>>): Promise<Client>{
@@ -20,8 +24,8 @@ export class SoapClientFactory extends NetworkClientAsyncFactory<Client> {
         preserveWhitespace: true
       })
       soapClient.on('request', (xml: string) => {
-        console.dirxml(xml)
-        // parseString(xml, this.parseResponse)
+        // console.dirxml(xml)
+        parseString(xml, this.parseResponse)
       })
       soapClient.on('response', (body) => {
         parseString(body, this.parseResponse)
