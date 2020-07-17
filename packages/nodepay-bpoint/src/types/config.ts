@@ -1,4 +1,4 @@
-export type Config = {
+export type IConfig = {
   username: string
   merchantId: string
   password: string

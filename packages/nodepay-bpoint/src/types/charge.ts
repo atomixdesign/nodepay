@@ -1,11 +1,11 @@
-import { ICreditCard } from './credit-card'
-import { Currency } from './currencies'
+import { BPOINTCurrency } from './currencies'
+import { CreditCardDTO } from '../transport/dtos'
 
-export enum ActionType {
+export enum BPOINTActionType {
   payment = 'payment',
 }
 
-export enum TransactionType {
+export enum BPOINTTransactionType {
   callcentre = 'callcentre',
   cardpresent = 'cardpresent',
   ecommerce = 'ecommerce',
@@ -15,15 +15,15 @@ export enum TransactionType {
   telephoneorder = 'telephoneorder',
 }
 
-export interface IBaseCharge {
-  Action?: ActionType
+export interface IBPOINTBaseCharge {
+  Action?: BPOINTActionType
   Amount: number // TODO: Consider bigInt. For now, MAX_SAFE_INTEGER appears sufficient.
-  CardDetails: ICreditCard
+  CardDetails: CreditCardDTO
   Crn1: string
-  Currency?: Currency
+  Currency?: BPOINTCurrency
   SubType?: 'single' | 'recurring'
   TestMode?: boolean
-  Type?: TransactionType
+  Type?: BPOINTTransactionType
   EmailAddress?: string
   MerchantReference?: string
 }

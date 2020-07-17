@@ -1,4 +1,4 @@
-import { ICreditCard } from '../types/credit-card'
+import { ICreditCard } from '../types'
 
 export interface OnceOffPayment {
   charge(

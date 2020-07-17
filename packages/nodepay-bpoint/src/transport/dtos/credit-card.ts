@@ -1,5 +1,3 @@
-import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation'
-import { ICreditCard } from '@atomixdesign/nodepay-core/types'
 import {
   IsNotEmpty,
   IsCreditCard,
@@ -7,6 +5,10 @@ import {
   Length,
   IsNumberString,
 } from 'class-validator'
+
+import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation'
+import { ICreditCard } from '@atomixdesign/nodepay-core/types'
+
 
 export class CreditCardDTO {
   constructor(creditCard: ICreditCard) {

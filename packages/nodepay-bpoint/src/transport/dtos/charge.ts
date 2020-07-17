@@ -1,5 +1,3 @@
-import { IBaseCharge, Currency, TransactionType, ActionType } from '../../types'
-import { CreditCardDTO } from './credit-card'
 import {
   IsNotEmpty,
   MaxLength,
@@ -14,13 +12,21 @@ import {
   ErrorType,
   ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
+import {
+  IBPOINTBaseCharge,
+  BPOINTCurrency,
+  BPOINTTransactionType,
+  BPOINTActionType,
+} from '../../types'
+import { CreditCardDTO } from './credit-card'
+
 
 export class ChargeDTO {
-  constructor(charge: IBaseCharge) {
-    this.Action = ActionType.payment
+  constructor(charge: IBPOINTBaseCharge) {
+    this.Action = BPOINTActionType.payment
     this.Amount = charge.Amount
     this.CardDetails = charge.CardDetails
-    this.Currency = Currency.AUD
+    this.Currency = BPOINTCurrency.AUD
     this.Crn1 = charge.Crn1
     this.SubType = 'single'
     this.TestMode = charge.TestMode
@@ -29,7 +35,7 @@ export class ChargeDTO {
     this.MerchantReference = charge.MerchantReference
   }
   // * Action
-  Action: ActionType;
+  Action: BPOINTActionType;
 
   // * Amount
   @IsNumber(undefined, {
@@ -51,7 +57,7 @@ export class ChargeDTO {
   Crn1: string;
 
   // * Currency
-  Currency: Currency;
+  Currency: BPOINTCurrency;
 
   // * SubType
   SubType: 'single' | 'recurring';
@@ -64,7 +70,7 @@ export class ChargeDTO {
   TestMode: boolean | undefined = false;
 
   // * Type
-  Type: TransactionType | undefined;
+  Type: BPOINTTransactionType | undefined;
 
   // * EmailAddress
   @IsOptional()

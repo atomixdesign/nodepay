@@ -3,24 +3,29 @@ import cryptoRandomString from 'crypto-random-string'
 import { validateOrReject } from 'class-validator'
 import { BaseGateway } from '@atomixdesign/nodepay-core/gateways'
 import {
-  DirectDebit,
   OnceOffPayment,
   RecurringPayment,
+  CustomerDetails,
 } from '@atomixdesign/nodepay-core/features'
 import {
-  ICreditCard,
+  ICreditCard, ICustomer, IBankAccount,
 } from '@atomixdesign/nodepay-core/types'
-import { Config, ActionType, TransactionType } from './types'
-import { API, APIResponse } from './transport'
+import { IConfig, BPOINTActionType, BPOINTTransactionType } from './types'
+import { BPOINTAPI, APIResponse } from './transport'
 import {
   ChargeDTO,
   CreditCardDTO,
+  BankAccountDTO,
+  CustomerDTO,
 } from './transport/dtos'
 
-export class BPOINT extends BaseGateway<Config> implements DirectDebit, OnceOffPayment, RecurringPayment {
-  private api: API
+export class BPOINT extends BaseGateway<IConfig> implements
+  OnceOffPayment,
+  RecurringPayment,
+  CustomerDetails {
+  private api: BPOINTAPI
 
-  protected get baseConfig(): Config {
+  protected get baseConfig(): IConfig {
     return {
       username: '',
       merchantId: '',
@@ -29,7 +34,7 @@ export class BPOINT extends BaseGateway<Config> implements DirectDebit, OnceOffP
     }
   }
 
-  constructor(config?: Partial<Config>) {
+  constructor(config?: Partial<IConfig>) {
     super(config)
     Container.set('bpoint.config', config)
     this.api = Container.get('bpoint.api')
@@ -53,7 +58,7 @@ export class BPOINT extends BaseGateway<Config> implements DirectDebit, OnceOffP
     let payload
 
     const chargeObject = {
-      Action: ActionType.payment,
+      Action: BPOINTActionType.payment,
       Amount: amountInCents, // TODO: Amount is scaled depending on currency. Setup scaling table for currencies.
       CardDetails: new CreditCardDTO(creditCard),
       Crn1: `${metadata?.merchantReference || ''}${cryptoRandomString({ length: 10 })}`,
@@ -61,7 +66,7 @@ export class BPOINT extends BaseGateway<Config> implements DirectDebit, OnceOffP
       MerchantReference: metadata?.merchantReference,
       TestMode: Boolean(metadata?.testMode),
       SubType: subType,
-      type: TransactionType.internet,
+      type: BPOINTTransactionType.internet,
     }
 
     try {
@@ -104,8 +109,34 @@ export class BPOINT extends BaseGateway<Config> implements DirectDebit, OnceOffP
     )
   }
 
+  async addCustomer(
+    customerDetails: ICustomer,
+    creditCard: ICreditCard,
+    bankAccount?: IBankAccount,
+  ): Promise<APIResponse> {
+    console.log(customerDetails, creditCard, bankAccount)
+
+    let payload
+
+    const customerObject = {
+      CardDetails: new CreditCardDTO(creditCard),
+      BankAccountDetails: bankAccount && new BankAccountDTO(bankAccount),
+      Crn1: `${cryptoRandomString({ length: 10 })}`,
+      EmailAddress: customerDetails.emailAddress,
+    }
+
+    try {
+      const customerDTO = new CustomerDTO(customerObject)
+      await validateOrReject(customerDTO)
+      payload = await this.api.addCustomer(customerDTO)
+    } catch(error) {
+      return Promise.reject(error)
+    }
+    return Promise.resolve(payload)
+  }
+
   async directDebit(): Promise<APIResponse> {
-    return Promise.reject('Not Implemented')
+    return Promise.reject('Not implemented')
   }
 
 }
