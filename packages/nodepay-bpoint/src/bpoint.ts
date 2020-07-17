@@ -1,7 +1,7 @@
 import { Container } from 'typedi'
 import cryptoRandomString from 'crypto-random-string'
 import { validateOrReject } from 'class-validator'
-import { BaseGateway } from '@atomixdesign/nodepay-core/gateways'
+import { BaseGateway } from '@atomixdesign/nodepay-core'
 import {
   OnceOffPayment,
   RecurringPayment,
