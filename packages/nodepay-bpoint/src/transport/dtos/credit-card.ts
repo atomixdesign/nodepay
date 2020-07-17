@@ -1,4 +1,5 @@
-import { ICreditCard } from '../../types'
+import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation'
+import { ICreditCard } from '@atomixdesign/nodepay-core/types'
 import {
   IsNotEmpty,
   IsCreditCard,
@@ -6,14 +7,13 @@ import {
   Length,
   IsNumberString,
 } from 'class-validator'
-import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation/errors'
 
 export class CreditCardDTO {
   constructor(creditCard: ICreditCard) {
-    this.CardHolderName = creditCard.CardHolderName
-    this.CardNumber = creditCard.CardNumber
-    this.Cvn = creditCard.Cvn
-    this.ExpiryDate = creditCard.ExpiryDate
+    this.CardHolderName = creditCard.cardHolderName
+    this.CardNumber = creditCard.cardNumber
+    this.Cvn = creditCard.CCV
+    this.ExpiryDate = `${creditCard.expiryDateMonth}${creditCard.expiryDateYear.slice(-2)}`
   }
 
   // * CardHolderName

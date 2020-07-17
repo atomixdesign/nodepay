@@ -11,10 +11,11 @@ import {
 
 const fixtures = {
   creditCard: {
-    CardHolderName: 'John Doe',
-    CardNumber: '5123456789012346',
-    Cvn: '123',
-    ExpiryDate: '0521',
+    cardHolderName: 'John Doe',
+    cardNumber: '5123456789012346',
+    CCV: '123',
+    expiryDateMonth: '05',
+    expiryDateYear: '2021',
   },
   simpleCharge: {
     Action: ActionType.payment,

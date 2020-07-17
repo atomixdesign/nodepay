@@ -1,13 +1,21 @@
 import { Container } from 'typedi'
+import cryptoRandomString from 'crypto-random-string'
+import { validateOrReject } from 'class-validator'
 import { BaseGateway } from '@atomixdesign/nodepay-core/gateways'
-import { DirectDebit, OnceOffPayment, RecurringPayment } from '@atomixdesign/nodepay-core/features'
-import { Config } from './types'
+import {
+  DirectDebit,
+  OnceOffPayment,
+  RecurringPayment,
+} from '@atomixdesign/nodepay-core/features'
+import {
+  ICreditCard,
+} from '@atomixdesign/nodepay-core/types'
+import { Config, ActionType, TransactionType } from './types'
 import { API, APIResponse } from './transport'
 import {
   ChargeDTO,
+  CreditCardDTO,
 } from './transport/dtos'
-import cryptoRandomString from 'crypto-random-string'
-import { validateOrReject } from 'class-validator'
 
 export class BPOINT extends BaseGateway<Config> implements DirectDebit, OnceOffPayment, RecurringPayment {
   private api: API
@@ -35,30 +43,26 @@ export class BPOINT extends BaseGateway<Config> implements DirectDebit, OnceOffP
     return 'bpoint'
   }
 
-  async charge(
-    creditCardNumber: string,
-    creditCardExpiryMonth: string,
-    creditCardExpiryYear: string,
-    creditCardCCV: string,
-    nameOnCreditCard: string,
-    principalAmount: number,
-    _emailAddress?: string,
-    _merchantReference?: string,
+  private async internalCharge(
+    orderNumber: string,
+    amountInCents: number,
+    creditCard: ICreditCard,
+    metadata?: Record<string, any>,
+    subType: 'single' | 'recurring' = 'single'
   ): Promise<APIResponse> {
-    const chargeObject = {
-      Amount: principalAmount,
-      CardDetails: {
-        CardHolderName : nameOnCreditCard,
-        CardNumber : creditCardNumber,
-        Cvn : creditCardCCV,
-        ExpiryDate : `${creditCardExpiryMonth}${creditCardExpiryYear.slice(-2)}`
-      },
-      Crn1: `${_merchantReference}${cryptoRandomString({ length: 10 })}`,
-      EmailAddress: _emailAddress,
-      MerchantReference: _merchantReference,
-    }
-
     let payload
+
+    const chargeObject = {
+      Action: ActionType.payment,
+      Amount: amountInCents, // TODO: Amount is scaled depending on currency. Setup scaling table for currencies.
+      CardDetails: new CreditCardDTO(creditCard),
+      Crn1: `${metadata?.merchantReference || ''}${cryptoRandomString({ length: 10 })}`,
+      EmailAddress: metadata?.emailAddress,
+      MerchantReference: metadata?.merchantReference,
+      TestMode: Boolean(metadata?.testMode),
+      SubType: subType,
+      type: TransactionType.internet,
+    }
 
     try {
       const chargeDTO = new ChargeDTO(chargeObject)
@@ -70,40 +74,34 @@ export class BPOINT extends BaseGateway<Config> implements DirectDebit, OnceOffP
     return Promise.resolve(payload)
   }
 
-  async chargeRecurring(
-    creditCardNumber: string,
-    creditCardExpiryMonth: string,
-    creditCardExpiryYear: string,
-    creditCardCCV: string,
-    nameOnCreditCard: string,
-    principalAmount: number,
-    _emailAddress?: string,
-    _merchantReference?: string,
+  async charge(
+    orderNumber: string,
+    amountInCents: number,
+    creditCard: ICreditCard,
+    metadata?: Record<string, any>
   ): Promise<APIResponse> {
-    const chargeObject = {
-      Amount: principalAmount,
-      CardDetails: {
-        CardHolderName : nameOnCreditCard,
-        CardNumber : creditCardNumber,
-        Cvn : creditCardCCV,
-        ExpiryDate : `${creditCardExpiryMonth}${creditCardExpiryYear.slice(-2)}`
-      },
-      Crn1: `${_merchantReference}${cryptoRandomString({ length: 10 })}`,
-      EmailAddress: _emailAddress,
-      MerchantReference: _merchantReference,
-      SubType: 'recurring' as const,
-    }
+    return this.internalCharge(
+      orderNumber,
+      amountInCents,
+      creditCard,
+      metadata,
+      'single'
+    )
+  }
 
-    let payload
-
-    try {
-      const chargeDTO = new ChargeDTO(chargeObject)
-      await validateOrReject(chargeDTO)
-      payload = await this.api.placeCharge(chargeDTO)
-    } catch(error) {
-      return Promise.reject(error)
-    }
-    return Promise.resolve(payload)
+  async chargeRecurring(
+    orderNumber: string,
+    amountInCents: number,
+    creditCard: ICreditCard,
+    metadata?: Record<string, any>
+  ): Promise<APIResponse> {
+    return this.internalCharge(
+      orderNumber,
+      amountInCents,
+      creditCard,
+      metadata,
+      'recurring'
+    )
   }
 
   async directDebit(): Promise<APIResponse> {

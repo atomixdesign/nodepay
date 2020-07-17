@@ -89,7 +89,7 @@ describe('test ezidebit api transport', () => {
   })
 
   test('it places a once-off charge using credit card', async () => {
-    // TODO: somehow enforce property order on DTOs, see Map
+    // TODO: Enforce property order on DTOs? See Map.
     // const onceOffCharge = new OnceOffChargeDTO(fixtures.creditCard)
     const result: APIResponse = await api.placeCharge(fixtures.simpleCharge)
     expect(result.data.PaymentResultText).toBe('APPROVED')

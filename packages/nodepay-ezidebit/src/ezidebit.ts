@@ -5,6 +5,7 @@ import { DirectDebit, OnceOffPayment, RecurringPayment } from '@atomixdesign/nod
 import { Config, PaymentFrequency, DayOfWeek } from './types'
 import { API as Transport, APIResponse } from './transport'
 import { OnceOffChargeDTO, PaymentDTO, PaymentScheduleDTO } from './transport/dtos'
+import { ICreditCard } from '@atomixdesign/nodepay-core/types'
 
 export class Ezidebit extends BaseGateway<Config> implements DirectDebit, OnceOffPayment, RecurringPayment {
   private api: Transport
@@ -34,23 +35,19 @@ export class Ezidebit extends BaseGateway<Config> implements DirectDebit, OnceOf
   }
 
   async charge(
-    creditCardNumber: string,
-    creditCardExpiryMonth: string,
-    creditCardExpiryYear: string,
-    creditCardCCV: string,
-    nameOnCreditCard: string,
-    principalAmount: number,
-    customerName: string,
     orderNumber: string,
+    amountInCents: number,
+    creditCard: ICreditCard,
+    metadata?: Record<string, any>,
   ): Promise<APIResponse> {
     const chargeObject = {
-      CreditCardNumber: creditCardNumber,
-      CreditCardExpiryMonth: creditCardExpiryMonth,
-      CreditCardExpiryYear: creditCardExpiryYear,
-      CreditCardCCV: creditCardCCV,
-      NameOnCreditCard: nameOnCreditCard,
-      PaymentAmountInCents: principalAmount * 100,
-      CustomerName: customerName,
+      CreditCardNumber: creditCard.cardNumber,
+      CreditCardExpiryMonth: creditCard.expiryDateMonth,
+      CreditCardExpiryYear: creditCard.expiryDateYear,
+      CreditCardCCV: creditCard.CCV,
+      NameOnCreditCard: creditCard.cardHolderName,
+      PaymentAmountInCents: amountInCents,
+      CustomerName: metadata?.customerName,
       PaymentReference: orderNumber,
     }
 

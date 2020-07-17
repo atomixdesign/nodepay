@@ -13,7 +13,7 @@ export class HttpClientFactory extends NetworkClientFactory<AxiosInstance> {
     const httpClient = axios.create(config)
 
     httpClient.interceptors.request.use(function (config: AxiosRequestConfig) {
-      // TODO: allow custom interceptor callbacks
+      // TODO: Allow custom interceptor callbacks.
       if (debug) {
         // console.log(`${config.baseURL}${config.url}`)
         console.dir(config, { depth: 0 })

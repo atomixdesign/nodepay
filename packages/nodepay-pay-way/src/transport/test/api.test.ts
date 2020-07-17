@@ -20,8 +20,8 @@ const validCodes = [
 const fixtures = {
   creditCard: {
     cardNumber: '4564710000000004',
-    cardholderName: 'John Doe',
-    cvn: '847',
+    cardHolderName: 'John Doe',
+    CCV: '847',
     expiryDateMonth: '02',
     expiryDateYear: '29'
   },

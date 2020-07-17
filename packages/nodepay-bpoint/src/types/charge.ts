@@ -17,7 +17,7 @@ export enum TransactionType {
 
 export interface IBaseCharge {
   Action?: ActionType
-  Amount: number // TODO: consider bigInt. For now, MAX_SAFE_INTEGER appears sufficient.
+  Amount: number // TODO: Consider bigInt. For now, MAX_SAFE_INTEGER appears sufficient.
   CardDetails: ICreditCard
   Crn1: string
   Currency?: Currency
