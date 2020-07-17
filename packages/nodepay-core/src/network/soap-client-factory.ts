@@ -4,6 +4,7 @@ import { parseString } from 'xml2js'
 import util from 'util'
 import { NetworkClientAsyncFactory } from './types/network-client-factory'
 
+/** @internal */
 const DEBUG = false
 
 @Service('soap.client')

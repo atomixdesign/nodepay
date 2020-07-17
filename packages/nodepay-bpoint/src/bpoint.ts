@@ -10,8 +10,13 @@ import {
 import {
   ICreditCard, ICustomer, IBankAccount,
 } from '@atomixdesign/nodepay-core/types'
-import { IConfig, BPOINTActionType, BPOINTTransactionType } from './types'
-import { BPOINTAPI, APIResponse } from './transport'
+import {
+  IBPOINTConfig,
+  BPOINTActionType,
+  BPOINTTransactionType,
+  IBPOINTChargeMetadata,
+} from './types'
+import { BPOINTAPI, IBPOINTAPIResponse } from './transport'
 import {
   ChargeDTO,
   CreditCardDTO,
@@ -19,13 +24,13 @@ import {
   CustomerDTO,
 } from './transport/dtos'
 
-export class BPOINT extends BaseGateway<IConfig> implements
+export class BPOINT extends BaseGateway<IBPOINTConfig> implements
   OnceOffPayment,
   RecurringPayment,
   CustomerDetails {
   private api: BPOINTAPI
 
-  protected get baseConfig(): IConfig {
+  protected get baseConfig(): IBPOINTConfig {
     return {
       username: '',
       merchantId: '',
@@ -34,7 +39,7 @@ export class BPOINT extends BaseGateway<IConfig> implements
     }
   }
 
-  constructor(config?: Partial<IConfig>) {
+  constructor(config?: Partial<IBPOINTConfig>) {
     super(config)
     Container.set('bpoint.config', config)
     this.api = Container.get('bpoint.api')
@@ -52,9 +57,9 @@ export class BPOINT extends BaseGateway<IConfig> implements
     orderNumber: string,
     amountInCents: number,
     creditCard: ICreditCard,
-    metadata?: Record<string, any>,
+    metadata?: IBPOINTChargeMetadata,
     subType: 'single' | 'recurring' = 'single'
-  ): Promise<APIResponse> {
+  ): Promise<IBPOINTAPIResponse> {
     let payload
 
     const chargeObject = {
@@ -83,8 +88,8 @@ export class BPOINT extends BaseGateway<IConfig> implements
     orderNumber: string,
     amountInCents: number,
     creditCard: ICreditCard,
-    metadata?: Record<string, any>
-  ): Promise<APIResponse> {
+    metadata?: IBPOINTChargeMetadata,
+  ): Promise<IBPOINTAPIResponse> {
     return this.internalCharge(
       orderNumber,
       amountInCents,
@@ -98,8 +103,8 @@ export class BPOINT extends BaseGateway<IConfig> implements
     orderNumber: string,
     amountInCents: number,
     creditCard: ICreditCard,
-    metadata?: Record<string, any>
-  ): Promise<APIResponse> {
+    metadata?: IBPOINTChargeMetadata,
+  ): Promise<IBPOINTAPIResponse> {
     return this.internalCharge(
       orderNumber,
       amountInCents,
@@ -113,9 +118,7 @@ export class BPOINT extends BaseGateway<IConfig> implements
     customerDetails: ICustomer,
     creditCard: ICreditCard,
     bankAccount?: IBankAccount,
-  ): Promise<APIResponse> {
-    console.log(customerDetails, creditCard, bankAccount)
-
+  ): Promise<IBPOINTAPIResponse> {
     let payload
 
     const customerObject = {
@@ -135,7 +138,7 @@ export class BPOINT extends BaseGateway<IConfig> implements
     return Promise.resolve(payload)
   }
 
-  async directDebit(): Promise<APIResponse> {
+  async directDebit(): Promise<IBPOINTAPIResponse> {
     return Promise.reject('Not implemented')
   }
 

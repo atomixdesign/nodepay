@@ -1,17 +1,17 @@
-import { PaymentFrequency, DayOfWeek } from './payment-frequency'
+import { EzidebitPaymentFrequency, EzidebitDayOfWeek } from './payment-frequency'
 
-export interface IBasePayment {
+export interface IEzidebitBasePayment {
   PaymentAmountInCents: number
   PaymentReference: string
 }
 
-export interface ICustomerName {
+export interface IEzidebitCustomerName {
   CustomerName: string
 }
 
-export interface IPaymentSchedule {
+export interface IEzidebitPaymentSchedule {
   ScheduleStartDate: string
-  SchedulePeriodType: PaymentFrequency
+  SchedulePeriodType: EzidebitPaymentFrequency
   DayOfMonth: number
   PaymentAmountInCents: number
   LimitToNumberOfPayments: number
@@ -19,7 +19,7 @@ export interface IPaymentSchedule {
   KeepManualPayments: string
   EziDebitCustomerID: string
   YourSystemReference: string
-  DayOfWeek: DayOfWeek
+  DayOfWeek: EzidebitDayOfWeek
   FirstWeekOfMonth: string
   SecondWeekOfMonth: string
   ThirdWeekOfMonth: string

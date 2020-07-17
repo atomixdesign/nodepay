@@ -1,9 +1,9 @@
 import { IsOptional, IsNumberString, MaxLength, IsNotEmpty, IsNumber } from 'class-validator'
 import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation/errors'
-import { IDirectDebitPayment } from '../../types'
+import { IEzidebitDirectDebitPayment } from '../../types'
 
 export class PaymentDTO {
-  constructor(payment: IDirectDebitPayment) {
+  constructor(payment: IEzidebitDirectDebitPayment) {
     if (payment.YourSystemReference === undefined)
       this.EziDebitCustomerID = payment.EziDebitCustomerID
     if (payment.EziDebitCustomerID === undefined)

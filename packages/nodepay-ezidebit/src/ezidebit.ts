@@ -2,15 +2,16 @@ import { Container } from 'typedi'
 import { validateOrReject } from 'class-validator'
 import { BaseGateway } from '@atomixdesign/nodepay-core/gateways/base-gateway'
 import { DirectDebit, OnceOffPayment, RecurringPayment } from '@atomixdesign/nodepay-core/features'
-import { Config, PaymentFrequency, DayOfWeek } from './types'
-import { API as Transport, APIResponse } from './transport'
+import { IEzidebitConfig, EzidebitPaymentFrequency, EzidebitDayOfWeek } from './types'
+import { EzidebitAPI as Transport, IEzidebitAPIResponse } from './transport'
 import { OnceOffChargeDTO, PaymentDTO, PaymentScheduleDTO } from './transport/dtos'
 import { ICreditCard } from '@atomixdesign/nodepay-core/types'
+import { IEzidebitDirectDebitMetadata, IEzidebitChargeMetadata } from './types/metadata'
 
-export class Ezidebit extends BaseGateway<Config> implements DirectDebit, OnceOffPayment, RecurringPayment {
+export class Ezidebit extends BaseGateway<IEzidebitConfig> implements DirectDebit, OnceOffPayment, RecurringPayment {
   private api: Transport
 
-  protected get baseConfig(): Config {
+  protected get baseConfig(): IEzidebitConfig {
     return {
       clientId: '',
       digitalKey: '',
@@ -20,7 +21,7 @@ export class Ezidebit extends BaseGateway<Config> implements DirectDebit, OnceOf
     }
   }
 
-  constructor(config?: Partial<Config>) {
+  constructor(config?: Partial<IEzidebitConfig>) {
     super(config)
     Container.set('ezidebit.config', config)
     this.api = Container.get('ezidebit.api')
@@ -38,8 +39,8 @@ export class Ezidebit extends BaseGateway<Config> implements DirectDebit, OnceOf
     orderNumber: string,
     amountInCents: number,
     creditCard: ICreditCard,
-    metadata?: Record<string, any>,
-  ): Promise<APIResponse> {
+    metadata?: IEzidebitChargeMetadata,
+  ): Promise<IEzidebitAPIResponse> {
     const chargeObject = {
       CreditCardNumber: creditCard.cardNumber,
       CreditCardExpiryMonth: creditCard.expiryDateMonth,
@@ -47,7 +48,7 @@ export class Ezidebit extends BaseGateway<Config> implements DirectDebit, OnceOf
       CreditCardCCV: creditCard.CCV,
       NameOnCreditCard: creditCard.cardHolderName,
       PaymentAmountInCents: amountInCents,
-      CustomerName: metadata?.customerName,
+      CustomerName: metadata?.customerName || '',
       PaymentReference: orderNumber,
     }
 
@@ -65,16 +66,16 @@ export class Ezidebit extends BaseGateway<Config> implements DirectDebit, OnceOf
   async chargeRecurring(
     gatewayCustomerNumber = '',
     ownCustomerNumber = '',
-    frequency: PaymentFrequency,
+    frequency: EzidebitPaymentFrequency,
     startDate: string,
-    dayOfWeek = DayOfWeek.MON,
+    dayOfWeek = EzidebitDayOfWeek.MON,
     dayOfMonth = 0,
     regularPrincipalAmount: number,
     maxNumberPayments: number,
     maxTotalAmount: number,
     keepManualPayments = 'YES',
     userName = '',
-  ): Promise<APIResponse> {
+  ): Promise<IEzidebitAPIResponse> {
     const scheduleObject = {
       EziDebitCustomerID: gatewayCustomerNumber,
       YourSystemReference: ownCustomerNumber,
@@ -105,20 +106,22 @@ export class Ezidebit extends BaseGateway<Config> implements DirectDebit, OnceOf
   }
 
   async directDebit(
-    gatewayCustomerNumber = '',
-    ownCustomerNumber = '',
-    debitDate: string,
-    principalAmount: number,
-    orderNumber = '',
-    userName = '',
-  ): Promise<APIResponse> {
+    customerId: string,
+    paymentReference: string,
+    amountInCents: number,
+    metadata: IEzidebitDirectDebitMetadata = {
+      ezidebitCustomerNumber: '',
+      debitDate: '',
+      userName: '',
+    },
+  ): Promise<IEzidebitAPIResponse> {
     const paymentObject = {
-      EziDebitCustomerID: gatewayCustomerNumber,
-      YourSystemReference: ownCustomerNumber,
-      DebitDate: debitDate,
-      PaymentAmountInCents: principalAmount * 100,
-      PaymentReference: orderNumber,
-      Username: userName,
+      EziDebitCustomerID: String(metadata.ezidebitCustomerNumber),
+      YourSystemReference: customerId,
+      DebitDate: String(metadata.debitDate),
+      PaymentAmountInCents: amountInCents,
+      PaymentReference: paymentReference,
+      Username: String(metadata.userName),
     }
 
     let payload

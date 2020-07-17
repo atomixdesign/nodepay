@@ -1,8 +1,8 @@
 import { Container } from 'typedi'
-import { API as EzidebitTransport } from '../api'
-import { APIResponse } from '../api-response'
+import { EzidebitAPI as EzidebitTransport } from '../api'
+import { IEzidebitAPIResponse } from '../api-response'
 // import { CustomerDTO, OnceOffChargeDTO, CreditCardDTO, PaymentDTO, PaymentScheduleDTO } from '../../dtos'
-import { PaymentFrequency, DayOfWeek } from '../../types'
+import { EzidebitPaymentFrequency, EzidebitDayOfWeek } from '../../types'
 import crypto from 'crypto'
 
 const fixtures = {
@@ -44,8 +44,8 @@ const fixtures = {
   paymentSchedule: {
     YourSystemReference: '',
     ScheduleStartDate: '2022-01-01',
-    SchedulePeriodType: PaymentFrequency.Monthly,
-    DayOfWeek: DayOfWeek.MON,
+    SchedulePeriodType: EzidebitPaymentFrequency.Monthly,
+    DayOfWeek: EzidebitDayOfWeek.MON,
     DayOfMonth: 1,
     FirstWeekOfMonth: 'YES',
     SecondWeekOfMonth: 'NO',
@@ -91,7 +91,7 @@ describe('test ezidebit api transport', () => {
   test('it places a once-off charge using credit card', async () => {
     // TODO: Enforce property order on DTOs? See Map.
     // const onceOffCharge = new OnceOffChargeDTO(fixtures.creditCard)
-    const result: APIResponse = await api.placeCharge(fixtures.simpleCharge)
+    const result: IEzidebitAPIResponse = await api.placeCharge(fixtures.simpleCharge)
     expect(result.data.PaymentResultText).toBe('APPROVED')
   })
 
@@ -107,16 +107,16 @@ describe('test ezidebit api transport', () => {
   test('it registers a customer account', async () => {
     const { customer } = fixtures
     customer.YourSystemReference = randomId(32)
-    const result: APIResponse = await api.addCustomer(customer)
+    const result: IEzidebitAPIResponse = await api.addCustomer(customer)
     expect(result.data.CustomerRef).toBeDefined()
   })
 
   test('it adds a credit card to a customer account', async () => {
     const { customer } = fixtures
     customer.YourSystemReference = randomId(32)
-    const customerResponse: APIResponse = await api.addCustomer(customer)
+    const customerResponse: IEzidebitAPIResponse = await api.addCustomer(customer)
 
-    let creditCardUpdateData: APIResponse
+    let creditCardUpdateData: IEzidebitAPIResponse
     let creditCardUpdateResult = ''
 
     if (customerResponse.data.CustomerRef !== undefined) {
@@ -141,11 +141,11 @@ describe('test ezidebit api transport', () => {
   test('it adds a credit card and direct payment to a customer account', async () => {
     const { customer } = fixtures
     customer.YourSystemReference = randomId(32)
-    const customerResponse: APIResponse = await api.addCustomer(customer)
+    const customerResponse: IEzidebitAPIResponse = await api.addCustomer(customer)
 
-    let creditCardUpdateData: APIResponse
+    let creditCardUpdateData: IEzidebitAPIResponse
     let creditCardUpdateResult = ''
-    let paymentUpdateData: APIResponse
+    let paymentUpdateData: IEzidebitAPIResponse
     let paymentUpdateResult = ''
 
     if (customerResponse.data.CustomerRef !== undefined) {
@@ -178,12 +178,12 @@ describe('test ezidebit api transport', () => {
   test('it adds a credit card and a payment schedule to a customer account', async () => {
     const { customer } = fixtures
     customer.YourSystemReference = randomId(32)
-    const customerResponse: APIResponse = await api.addCustomer(customer)
+    const customerResponse: IEzidebitAPIResponse = await api.addCustomer(customer)
 
-    let creditCardUpdateData: APIResponse
+    let creditCardUpdateData: IEzidebitAPIResponse
     let creditCardUpdateResult = ''
 
-    let paymentScheduleUpdateData: APIResponse
+    let paymentScheduleUpdateData: IEzidebitAPIResponse
     let paymentScheduleUpdateResult = ''
 
     if (customerResponse.data.CustomerRef !== undefined) {

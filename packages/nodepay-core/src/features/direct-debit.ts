@@ -1,3 +1,8 @@
 export interface DirectDebit {
-  directDebit(...args: unknown[]): Promise<unknown>
+  directDebit(
+    customerId: string,
+    paymentReference: string,
+    amountInCents: number,
+    metadata: Record<string, any>,
+  ): Promise<unknown>
 }

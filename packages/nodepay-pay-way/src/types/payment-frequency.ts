@@ -1,4 +1,4 @@
-export enum PaymentFrequency {
+export enum PaywayPaymentFrequency {
     Weekly = 'weekly',
     Fortnightly = 'fortnightly',
     Monthly = 'monthly',

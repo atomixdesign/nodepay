@@ -1,4 +1,4 @@
-export interface IBaseAccount {
+export interface IEzidebitBaseAccount {
   YourSystemReference: string
   YourGeneralReference: string
   LastName: string
@@ -11,7 +11,7 @@ export interface IBaseAccount {
   Username: string
 }
 
-export interface ICustomer extends IBaseAccount {
+export interface IEzidebitCustomer extends IEzidebitBaseAccount {
   ContractStartDate: string
   AddressLine1: string
   AddressLine2: string

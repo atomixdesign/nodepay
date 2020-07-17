@@ -8,10 +8,10 @@ import {
   ErrorType,
   ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
-import { IBankAccountDebit } from '../../types'
+import { IEzidebitBankAccountDebit } from '../../types'
 
 export class BankDebitDTO extends BaseDebitDTO {
-  constructor(bankAccountDebit: IBankAccountDebit) {
+  constructor(bankAccountDebit: IEzidebitBankAccountDebit) {
     super(bankAccountDebit)
     this.BankAccountName = bankAccountDebit.BankAccountName
     this.BankAccountBSB = bankAccountDebit.BankAccountBSB

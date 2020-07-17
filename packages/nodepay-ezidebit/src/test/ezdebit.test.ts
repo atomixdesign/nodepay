@@ -1,7 +1,7 @@
 import { Container } from 'typedi'
 import { Ezidebit } from '../ezidebit'
-import { testAPI, APIResponse } from '../transport'
-import { PaymentFrequency, DayOfWeek } from '../types'
+import { testAPI, IEzidebitAPIResponse } from '../transport'
+import { EzidebitPaymentFrequency, EzidebitDayOfWeek } from '../types'
 
 const fixtures = {
   simpleCharge: {
@@ -28,8 +28,8 @@ const fixtures = {
     EziDebitCustomerID: '',
     YourSystemReference: '123456789',
     ScheduleStartDate: '2022-01-01',
-    SchedulePeriodType: PaymentFrequency.Monthly,
-    DayOfWeek: DayOfWeek.MON,
+    SchedulePeriodType: EzidebitPaymentFrequency.Monthly,
+    DayOfWeek: EzidebitDayOfWeek.MON,
     DayOfMonth: 0,
     FirstWeekOfMonth: '',
     SecondWeekOfMonth: '',
@@ -65,7 +65,7 @@ describe('test ezidebit gateway', () => {
 
   test('it can be charged', async () => {
     const { simpleCharge, creditCard } = fixtures
-    const charge: APIResponse = await gateway.charge(
+    const charge: IEzidebitAPIResponse = await gateway.charge(
       simpleCharge.PaymentReference,
       simpleCharge.PaymentAmount, // In whole currency
       creditCard,

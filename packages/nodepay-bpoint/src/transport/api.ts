@@ -1,11 +1,11 @@
 // handles configurable retry
 import { Service, Inject, Container } from 'typedi'
 import { AxiosInstance } from 'axios'
-import { IConfig } from '../types'
+import { IBPOINTConfig } from '../types'
 import {
   HttpClientFactory,
 } from '@atomixdesign/nodepay-core/network'
-import { APIResponse } from './api-response'
+import { IBPOINTAPIResponse } from './api-response'
 import { ChargeDTO, CustomerDTO } from './dtos'
 import { BPOINTAPIError } from './api-error'
 
@@ -16,7 +16,7 @@ export class BPOINTAPI {
   constructor(
     @Inject('http.client') httpClientFactory: HttpClientFactory
   ) {
-    const config: IConfig = Container.get('bpoint.config')
+    const config: IBPOINTConfig = Container.get('bpoint.config')
     const authHeader = this.encodeKey(`${config.username}|${config.merchantId}:${config.password}`)
 
     this.httpClient = httpClientFactory.create({
@@ -32,7 +32,7 @@ export class BPOINTAPI {
     return Buffer.from(key, 'binary').toString('base64')
   }
 
-  async placeCharge(/* dvToken?: string,*/ charge: ChargeDTO): Promise<APIResponse> {
+  async placeCharge(/* dvToken?: string,*/ charge: ChargeDTO): Promise<IBPOINTAPIResponse> {
     let response
     try {
       response = await this.httpClient!.request({
@@ -58,7 +58,7 @@ export class BPOINTAPI {
     }
   }
 
-  async addCustomer(customer: CustomerDTO): Promise<APIResponse> {
+  async addCustomer(customer: CustomerDTO): Promise<IBPOINTAPIResponse> {
     let response
     try {
       response = await this.httpClient!.request({

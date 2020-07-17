@@ -6,12 +6,12 @@ export interface IEzidebitResponse {
   ErrorMessage: string
 }
 
-export interface APIResponse extends IBaseResponse{
+export interface IEzidebitAPIResponse extends IBaseResponse{
   data: Record<string, unknown>
   statusText: string
 }
 
-export const formatResponse = function(payload: IEzidebitResponse): APIResponse{
+export const formatResponse = function(payload: IEzidebitResponse): IEzidebitAPIResponse{
   const dataHash = typeof payload.Data === 'string' ? payload.Data : payload.Data.toString()
 
   return {

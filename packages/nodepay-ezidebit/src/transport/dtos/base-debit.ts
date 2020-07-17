@@ -12,10 +12,10 @@ import {
   ErrorType,
   ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
-import { IBaseDebit } from '../../types'
+import { IEzidebitBaseDebit } from '../../types'
 
 export class BaseDebitDTO {
-  constructor(baseDebit: IBaseDebit) {
+  constructor(baseDebit: IEzidebitBaseDebit) {
     this.YourSystemReference = baseDebit.YourSystemReference
     this.LastName = baseDebit.LastName
     this.PaymentReference = baseDebit.PaymentReference

@@ -12,10 +12,10 @@ import {
   ErrorType,
   ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
-import { ICreditCardDebit } from '../../types'
+import { IEzidebitCreditCardDebit } from '../../types'
 
 export class CardDebitDTO extends BaseDebitDTO {
-  constructor(cardDebit: ICreditCardDebit) {
+  constructor(cardDebit: IEzidebitCreditCardDebit) {
     super(cardDebit)
     this.NameOnCreditCard = cardDebit.NameOnCreditCard
     this.CreditCardNumber = cardDebit.CreditCardNumber

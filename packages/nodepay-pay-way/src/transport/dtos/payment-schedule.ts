@@ -9,7 +9,7 @@ import {
   ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
 
-import { PaymentFrequency } from '../../types/payment-frequency'
+import { PaywayPaymentFrequency } from '../../types/payment-frequency'
 
 export class PaymentScheduleDTO {
   constructor(
@@ -22,7 +22,7 @@ export class PaymentScheduleDTO {
       finalPrincipalAmount
     } :
     {
-      frequency: PaymentFrequency
+      frequency: PaywayPaymentFrequency
       nextPaymentDate: string
       regularPrincipalAmount: number
       nextPrincipalAmount?: number
@@ -42,7 +42,7 @@ export class PaymentScheduleDTO {
   @IsNotEmpty({
     message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'frequency')
   })
-  frequency: PaymentFrequency;
+  frequency: PaywayPaymentFrequency;
 
   // * nextPaymentDate
   @IsNotEmpty({

@@ -1,4 +1,4 @@
-import { ICreditCard } from './credit-card'
-import { IBasePayment, ICustomerName } from './payment'
+import { IEzidebitCreditCard } from './credit-card'
+import { IEzidebitBasePayment, IEzidebitCustomerName } from './payment'
 
-export interface ICreditCardCharge extends ICreditCard, IBasePayment, ICustomerName {}
+export interface IEzidebitCreditCardCharge extends IEzidebitCreditCard, IEzidebitBasePayment, IEzidebitCustomerName {}

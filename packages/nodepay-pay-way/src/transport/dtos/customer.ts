@@ -9,26 +9,14 @@ import {
   ErrorType,
   ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
+import { IPaywayCustomer } from 'nodepay-pay-way/src/types'
 
 export class CustomerDTO {
-  constructor(
-    {
-      customerNumber,
-      singleUseTokenId,
-      merchantId,
-      bankAccountId,
-    }:
-      {
-        customerNumber: string
-        singleUseTokenId: string
-        merchantId?: string
-        bankAccountId?: string
-      }
-  ) {
-    this.customerNumber = customerNumber
-    this.singleUseTokenId = singleUseTokenId
-    this.merchantId = merchantId
-    this.bankAccountId = bankAccountId
+  constructor(customer: IPaywayCustomer) {
+    this.customerNumber = customer.customerNumber
+    this.singleUseTokenId = customer.singleUseTokenId
+    this.merchantId = customer.merchantId
+    this.bankAccountId = customer.bankAccountId
   }
 
   // * customerNumber

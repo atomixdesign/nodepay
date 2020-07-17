@@ -3,7 +3,7 @@ import { Container } from 'typedi'
 // import moment from 'moment'
 import cryptoRandomString from 'crypto-random-string'
 import { BPOINTAPI as BpointTransport } from '../api'
-import { APIResponse } from '../api-response'
+import { IBPOINTAPIResponse } from '../api-response'
 import { BPOINTActionType, BPOINTCurrency, BPOINTTransactionType, } from '../../types'
 import {
   ChargeDTO, CreditCardDTO, CustomerDTO,
@@ -58,7 +58,7 @@ describe('test bpoint api transport', () => {
       CardDetails: new CreditCardDTO(fixtures.creditCard),
     }
     const simpleCharge = new ChargeDTO(chargeObject)
-    const response: APIResponse = await api.placeCharge(simpleCharge)
+    const response: IBPOINTAPIResponse = await api.placeCharge(simpleCharge)
 
     expect(validCodes).toContain(response.status)
   })
@@ -71,7 +71,7 @@ describe('test bpoint api transport', () => {
       SubType: 'recurring' as const,
     }
     const simpleCharge = new ChargeDTO(chargeObject)
-    const response: APIResponse = await api.placeCharge(simpleCharge)
+    const response: IBPOINTAPIResponse = await api.placeCharge(simpleCharge)
 
     expect(validCodes).toContain(response.status)
   })
@@ -83,7 +83,7 @@ describe('test bpoint api transport', () => {
       Crn1: cryptoRandomString({ length: 49 }),
     }
     const customer = new CustomerDTO(customerObject)
-    const response: APIResponse = await api.addCustomer(customer)
+    const response: IBPOINTAPIResponse = await api.addCustomer(customer)
 
     expect(validCodes).toContain(response.status)
   })

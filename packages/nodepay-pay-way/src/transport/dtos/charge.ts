@@ -11,34 +11,18 @@ import {
   ErrorType,
   ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
+import { IPaywayBaseCharge } from 'nodepay-pay-way/src/types'
 
 export class ChargeDTO {
-  constructor(
-    {
-      customerNumber,
-      principalAmount,
-      orderNumber,
-      customerIpAddress,
-      merchantId,
-      bankAccountId
-    } :
-    {
-      customerNumber: string
-      principalAmount: number
-      orderNumber?: string
-      customerIpAddress?: string
-      merchantId?: string
-      bankAccountId?: string
-    }
-  ) {
-    this.customerNumber = customerNumber
+  constructor(charge: IPaywayBaseCharge) {
+    this.customerNumber = charge.customerNumber
     this.transactionType = 'payment'
-    this.principalAmount = principalAmount
+    this.principalAmount = charge.principalAmount
     this.currency = 'aud'
-    this.orderNumber = orderNumber
-    this.customerIpAddress = customerIpAddress
-    this.merchantId = merchantId
-    this.bankAccountId = bankAccountId
+    this.orderNumber = charge.orderNumber
+    this.customerIpAddress = charge.customerIpAddress
+    this.merchantId = charge.merchantId
+    this.bankAccountId = charge.bankAccountId
   }
 
   // * customerNumber

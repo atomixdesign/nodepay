@@ -11,10 +11,10 @@ import {
   ErrorType,
   ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
-import { ICreditCardCharge } from '../../types'
+import { IEzidebitCreditCardCharge } from '../../types'
 
 export class OnceOffChargeDTO {
-  constructor(charge: ICreditCardCharge) {
+  constructor(charge: IEzidebitCreditCardCharge) {
     this.CreditCardNumber = charge.CreditCardNumber
     this.CreditCardExpiryMonth = charge.CreditCardExpiryMonth
     this.CreditCardExpiryYear = charge.CreditCardExpiryYear

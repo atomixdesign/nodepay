@@ -1,19 +1,19 @@
-import { IBankAccount } from './bank-account'
-import { IBaseAccount } from './customer'
-import { IBasePayment } from './payment'
-import { IBaseCreditCard } from './credit-card'
+import { IEzidebitBankAccount } from './bank-account'
+import { IEzidebitBaseAccount } from './customer'
+import { IEzidebitBasePayment } from './payment'
+import { IEzidebitBaseCreditCard } from './credit-card'
 
-export interface IDebit extends IBasePayment {
+export interface IEzidebitDebit extends IEzidebitBasePayment {
   DebitDate: string
 }
 
-export interface IBaseDebit extends IBaseAccount, IDebit {}
+export interface IEzidebitBaseDebit extends IEzidebitBaseAccount, IEzidebitDebit {}
 
-export interface ICreditCardDebit extends IBaseDebit, IBaseCreditCard {}
+export interface IEzidebitCreditCardDebit extends IEzidebitBaseDebit, IEzidebitBaseCreditCard {}
 
-export interface IBankAccountDebit extends IBaseDebit, IBankAccount {}
+export interface IEzidebitBankAccountDebit extends IEzidebitBaseDebit, IEzidebitBankAccount {}
 
-export interface IDirectDebitPayment extends IDebit {
+export interface IEzidebitDirectDebitPayment extends IEzidebitDebit {
   EziDebitCustomerID: string
   YourSystemReference: string
   Username: string

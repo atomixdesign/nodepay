@@ -3,11 +3,11 @@ import { Service, Inject, Container } from 'typedi'
 import { AxiosInstance, AxiosResponse } from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import qs from 'qs'
-import { Config } from '../types'
+import { IPaywayConfig } from '../types'
 import {
   HttpClientFactory,
 } from '@atomixdesign/nodepay-core/network'
-import { APIResponse } from './api-response'
+import { IPaywayAPIResponse } from './api-response'
 import {
   BankAccountDTO,
   ChargeDTO,
@@ -17,7 +17,7 @@ import {
 } from './dtos'
 
 @Service('payway.api')
-export class API {
+export class PaywayAPI {
   private idempotencyKey: string
   private secretAuthHeader: string
   private publicAuthHeader: string
@@ -27,7 +27,7 @@ export class API {
   constructor(
     @Inject('http.client') httpClientFactory: HttpClientFactory
   ) {
-    const config: Config = Container.get('payway.config')
+    const config: IPaywayConfig = Container.get('payway.config')
     this.idempotencyKey = uuidv4()
     this.secretAuthHeader = `Basic ${this.encodeKey(config.secretKey)}`
     this.publicAuthHeader = `Basic ${this.encodeKey(config.publishableKey)}`
@@ -48,7 +48,7 @@ export class API {
 
   // Verify key expiry/validity
   async verifyKey(): Promise<AxiosResponse> {
-    const config: Config = Container.get('payway.config')
+    const config: IPaywayConfig = Container.get('payway.config')
     const response = await this.httpClient!.request({
       url: '/api-keys/latest',
     })
@@ -144,7 +144,7 @@ export class API {
     return response
   }
 
-  async placeCharge(singleUseTokenId: string, charge: ChargeDTO): Promise<APIResponse> {
+  async placeCharge(singleUseTokenId: string, charge: ChargeDTO): Promise<IPaywayAPIResponse> {
     let response
     try {
       response = await this.httpClient!.request({
@@ -160,10 +160,11 @@ export class API {
       status: response.status,
       statusText: response.statusText,
       data: response.data,
+      originalResponse: response,
     }
   }
 
-  async placeDirectCharge(charge: ChargeDTO): Promise<APIResponse> {
+  async placeDirectCharge(charge: ChargeDTO): Promise<IPaywayAPIResponse> {
     let response
     try {
       response = await this.httpClient!.request({
@@ -179,10 +180,11 @@ export class API {
       status: response.status,
       statusText: response.statusText,
       data: response.data,
+      originalResponse: response,
     }
   }
 
-  async schedulePayment(customerNumber: string, schedule: PaymentScheduleDTO): Promise<APIResponse> {
+  async schedulePayment(customerNumber: string, schedule: PaymentScheduleDTO): Promise<IPaywayAPIResponse> {
     let response
     try {
       response = await this.httpClient!.request({
@@ -198,6 +200,7 @@ export class API {
       status: response.status,
       statusText: response.statusText,
       data: response.data,
+      originalResponse: response,
     }
   }
 }

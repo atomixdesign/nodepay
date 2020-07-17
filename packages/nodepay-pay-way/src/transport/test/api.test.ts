@@ -1,9 +1,9 @@
 import { Container } from 'typedi'
 import { AxiosResponse } from 'axios'
 import moment from 'moment'
-import { API as PayWayTransport } from '../api'
-import { APIResponse } from '../api-response'
-import { PaymentFrequency } from '../../types'
+import { PaywayAPI as PayWayTransport } from '../api'
+import { IPaywayAPIResponse } from '../api-response'
+import { PaywayPaymentFrequency } from '../../types'
 import {
   BankAccountDTO,
   ChargeDTO,
@@ -26,7 +26,7 @@ const fixtures = {
     expiryDateYear: '29'
   },
   bankAccount1: {
-    bsb: '650-000',
+    BSBNumber: '650-000',
     accountNumber: '999994',
     accountName: 'John Doe',
   },
@@ -56,7 +56,7 @@ const fixtures = {
     bankAccountId: '0000000A'
   },
   schedule: {
-    frequency: PaymentFrequency.Weekly,
+    frequency: PaywayPaymentFrequency.Weekly,
     nextPaymentDate: moment().add(2, 'days').format('D MMM YYYY'),
     regularPrincipalAmount: 17.89,
   },
@@ -105,7 +105,7 @@ describe('test payway api transport', () => {
     const creditCard = new CreditCardDTO(fixtures.creditCard)
     const ccResponse: AxiosResponse = await api.getCCtoken(creditCard)
     const onceOffCharge = new ChargeDTO(fixtures.onceOffCharge)
-    const response: APIResponse = await api.placeCharge(ccResponse?.data.singleUseTokenId, onceOffCharge)
+    const response: IPaywayAPIResponse = await api.placeCharge(ccResponse?.data.singleUseTokenId, onceOffCharge)
 
     expect(validCodes).toContain(response.status)
   })
@@ -146,7 +146,7 @@ describe('test payway api transport', () => {
     })
     await api.addCustomer(customer)
     const directDebitCharge = new ChargeDTO(fixtures.directDebitCharge)
-    const response: APIResponse = await api.placeDirectCharge(directDebitCharge)
+    const response: IPaywayAPIResponse = await api.placeDirectCharge(directDebitCharge)
     expect(validCodes).toContain(response.status)
   })
 
@@ -162,7 +162,7 @@ describe('test payway api transport', () => {
     })
     await api.addCustomer(customer)
     const paymentSchedule = new PaymentScheduleDTO(fixtures.schedule)
-    const response: APIResponse = await api.schedulePayment(customerNumber, paymentSchedule)
+    const response: IPaywayAPIResponse = await api.schedulePayment(customerNumber, paymentSchedule)
     expect(validCodes).toContain(response.status)
   })
 

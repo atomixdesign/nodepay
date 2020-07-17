@@ -1,7 +1,7 @@
 import { Container } from 'typedi'
-import { PayWay } from '../pay-way'
-import { testAPI, APIResponse } from '../transport'
-import { PaymentFrequency } from '../types/payment-frequency'
+import { Payway } from '../pay-way'
+import { testAPI, IPaywayAPIResponse } from '../transport'
+import { PaywayPaymentFrequency } from '../types/payment-frequency'
 import moment from 'moment'
 
 const fixtures = {
@@ -27,27 +27,27 @@ const fixtures = {
   },
   paymentSchedule: {
     customerNumber: 'paymentSchedule',
-    frequency: PaymentFrequency.Weekly,
+    frequency: PaywayPaymentFrequency.Weekly,
     nextPaymentDate: moment().add(2, 'days').format('D MMM YYYY'),
     regularPrincipalAmount: 17.89,
   },
   paymentScheduleBad: {
     customerNumber: '',
-    frequency: PaymentFrequency.Weekly,
+    frequency: PaywayPaymentFrequency.Weekly,
     nextPaymentDate: '',
     regularPrincipalAmount: -1,
   },
 }
 
 describe('test payway gateway', () => {
-  let gateway: PayWay
+  let gateway: Payway
 
   beforeAll(() => {
     Container.set('payway.api', new testAPI())
   })
 
   beforeEach(() => {
-    gateway = new PayWay()
+    gateway = new Payway()
   })
 
   afterAll(() => {
@@ -62,7 +62,7 @@ describe('test payway gateway', () => {
   test('it can be charged', async () => {
     const fixture = fixtures.simpleCharge
 
-    const response: APIResponse = await gateway.charge(
+    const response: IPaywayAPIResponse = await gateway.charge(
       fixture.singleUseTokenId,
       fixture.principalAmount,
       fixtures.creditCard,

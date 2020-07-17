@@ -11,10 +11,10 @@ import {
   ErrorType,
   ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
-import { ICustomer } from '../../types'
+import { IEzidebitCustomer } from '../../types'
 
 export class CustomerDTO {
-  constructor(customer: ICustomer) {
+  constructor(customer: IEzidebitCustomer) {
     this.YourSystemReference = customer.YourSystemReference
     this.YourGeneralReference = customer.YourGeneralReference
     this.LastName = customer.LastName

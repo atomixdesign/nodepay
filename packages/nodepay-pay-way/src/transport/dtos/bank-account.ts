@@ -6,23 +6,14 @@ import {
   ErrorType,
   ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
+import { IBankAccount } from '@atomixdesign/nodepay-core/src/types'
 
 export class BankAccountDTO {
-  constructor(
-    {
-      bsb,
-      accountNumber,
-      accountName,
-    }:
-      {
-        bsb: string
-        accountNumber: string
-        accountName: string
-      }) {
+  constructor(bankAccount: IBankAccount) {
     this.paymentMethod = 'bankAccount'
-    this.bsb = bsb
-    this.accountNumber = accountNumber
-    this.accountName = accountName
+    this.bsb = bankAccount.BSBNumber
+    this.accountNumber = bankAccount.accountNumber
+    this.accountName = bankAccount.accountName
   }
 
   // * paymentMethod

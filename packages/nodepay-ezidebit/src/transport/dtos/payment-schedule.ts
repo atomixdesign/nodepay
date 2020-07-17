@@ -1,9 +1,9 @@
 import { IsOptional, IsNumberString, MaxLength, IsNumber, IsNotEmpty, IsIn } from 'class-validator'
 import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation/errors'
-import { IPaymentSchedule, PaymentFrequency, DayOfWeek } from '../../types'
+import { IEzidebitPaymentSchedule, EzidebitPaymentFrequency, EzidebitDayOfWeek } from '../../types'
 
 export class PaymentScheduleDTO {
-  constructor(paymentSchedule: IPaymentSchedule) {
+  constructor(paymentSchedule: IEzidebitPaymentSchedule) {
     if (paymentSchedule.YourSystemReference === undefined)
       this.EziDebitCustomerID = paymentSchedule.EziDebitCustomerID
     if (paymentSchedule.EziDebitCustomerID === undefined)
@@ -52,14 +52,14 @@ export class PaymentScheduleDTO {
   @IsNotEmpty({
     message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'SchedulePeriodType')
   })
-  SchedulePeriodType: PaymentFrequency;
+  SchedulePeriodType: EzidebitPaymentFrequency;
 
   // * DayOfWeek
   @IsOptional()
   @IsIn(['MON', 'TUE', 'WED', 'THU', 'FRI'], {
     message: ErrorFactory.getErrorMessage(ErrorType.NotInAllowedSet, 'DayOfWeek')
   })
-  DayOfWeek: DayOfWeek;
+  DayOfWeek: EzidebitDayOfWeek;
 
   // * DayOfMonth
   @IsOptional()
