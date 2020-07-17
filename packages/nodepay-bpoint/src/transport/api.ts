@@ -50,7 +50,12 @@ export class BPOINTAPI {
       return Promise.reject(new BPOINTAPIError(response.data.TxnResp))
     }
 
-    return response
+    return {
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
+      originalResponse: response,
+    }
   }
 
   async addCustomer(customer: CustomerDTO): Promise<APIResponse> {
@@ -68,6 +73,11 @@ export class BPOINTAPI {
       return Promise.reject(new BPOINTAPIError(response.data.APIResponse))
     }
 
-    return response
+    return {
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
+      originalResponse: response,
+    }
   }
 }

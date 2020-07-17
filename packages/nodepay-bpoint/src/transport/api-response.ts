@@ -4,4 +4,5 @@ export interface APIResponse extends IBaseResponse {
   status: number
   statusText: string
   data: Json
+  originalResponse: any
 }

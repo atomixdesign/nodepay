@@ -4,7 +4,8 @@ import { ChargeDTO } from './dtos'
 export const MockResponse = {
   status: 200,
   statusText: 'OK',
-  data: 'randomTest'
+  data: 'randomTest',
+  originalResponse: {},
 }
 
 export class testAPI {
