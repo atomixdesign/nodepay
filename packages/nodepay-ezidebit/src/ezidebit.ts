@@ -2,7 +2,14 @@ import { Container } from 'typedi'
 import { validateOrReject } from 'class-validator'
 import { BaseGateway } from '@atomixdesign/nodepay-core'
 import { DirectDebit, OnceOffPayment, RecurringPayment } from '@atomixdesign/nodepay-core/features'
-import { IEzidebitConfig, EzidebitPaymentFrequency, EzidebitDayOfWeek, IEzidebitCharge, IEzidebitDirectDebit } from './types'
+import {
+  IEzidebitConfig,
+  // EzidebitPaymentFrequency,
+  EzidebitDayOfWeek,
+  IEzidebitCharge,
+  IEzidebitPaymentSchedule,
+  IEzidebitDirectDebit,
+} from './types'
 import { EzidebitAPI as Transport, IEzidebitAPIResponse } from './transport'
 import { OnceOffChargeDTO, PaymentDTO, PaymentScheduleDTO } from './transport/dtos'
 
@@ -59,34 +66,24 @@ export class Ezidebit extends BaseGateway<IEzidebitConfig> implements DirectDebi
   }
 
   async chargeRecurring(
-    gatewayCustomerNumber = '',
-    ownCustomerNumber = '',
-    frequency: EzidebitPaymentFrequency,
-    startDate: string,
-    dayOfWeek = EzidebitDayOfWeek.MON,
-    dayOfMonth = 0,
-    regularPrincipalAmount: number,
-    maxNumberPayments: number,
-    maxTotalAmount: number,
-    keepManualPayments = 'YES',
-    userName = '',
+    paymentSchedule: IEzidebitPaymentSchedule
   ): Promise<IEzidebitAPIResponse> {
     const scheduleObject = {
-      EziDebitCustomerID: gatewayCustomerNumber,
-      YourSystemReference: ownCustomerNumber,
-      ScheduleStartDate: startDate,
-      SchedulePeriodType: frequency,
-      DayOfWeek: dayOfWeek,
-      DayOfMonth: dayOfMonth,
-      FirstWeekOfMonth: '',
-      SecondWeekOfMonth: '',
-      ThirdWeekOfMonth: '',
-      FourthWeekOfMonth: '',
-      PaymentAmountInCents: regularPrincipalAmount * 100,
-      LimitToNumberOfPayments: maxNumberPayments,
-      LimitToTotalAmountInCents: maxTotalAmount * 100,
-      KeepManualPayments: keepManualPayments,
-      Username: userName,
+      EziDebitCustomerID: paymentSchedule.ezidebitCustomerId ?? '',
+      YourSystemReference: paymentSchedule.customerId,
+      ScheduleStartDate: paymentSchedule.startDate,
+      SchedulePeriodType: paymentSchedule.frequency,
+      DayOfWeek: paymentSchedule.dayOfWeek ?? EzidebitDayOfWeek.MON,
+      DayOfMonth: paymentSchedule.dayOfMonth,
+      FirstWeekOfMonth: paymentSchedule.firstWeekOfMonth ?? '',
+      SecondWeekOfMonth: paymentSchedule.secondWeekOfMonth ?? '',
+      ThirdWeekOfMonth: paymentSchedule.thirdWeekOfMonth ?? '',
+      FourthWeekOfMonth: paymentSchedule.fourthWeekOfMonth ?? '',
+      PaymentAmountInCents: paymentSchedule.amountInCents,
+      LimitToNumberOfPayments: paymentSchedule.maxNumberPayments,
+      LimitToTotalAmountInCents: paymentSchedule.maxTotalAmount,
+      KeepManualPayments: paymentSchedule.keepManualPayments ?? 'YES',
+      Username: paymentSchedule.username ?? '',
     }
 
     let payload
@@ -104,7 +101,7 @@ export class Ezidebit extends BaseGateway<IEzidebitConfig> implements DirectDebi
     directDebit: IEzidebitDirectDebit,
   ): Promise<IEzidebitAPIResponse> {
     const paymentObject = {
-      EziDebitCustomerID: directDebit.ezidebitCustomerNumber ?? '',
+      EziDebitCustomerID: directDebit.ezidebitCustomerId ?? '',
       YourSystemReference: directDebit.customerId,
       DebitDate: directDebit.debitDate ?? '',
       PaymentAmountInCents: directDebit.amountInCents,

@@ -16,23 +16,23 @@ const fixtures = {
     orderNumber: 'onceOffOrder',
     amountInCents: 1087,
     singleUseTokenId: '123456789',
-    customerNumber: 'onceoffCustomer',
+    customerId: 'onceoffCustomer',
   },
   simpleChargeBad: {
-    customerNumber: '',
+    customerId: '',
     amountInCents: -1,
     orderNumber: '12345678910111213141516',
     customerIpAddress: '',
     merchantId: '',
   },
   paymentSchedule: {
-    customerNumber: 'paymentSchedule',
+    customerId: 'paymentSchedule',
     frequency: PaywayPaymentFrequency.Weekly,
     startDate: moment().add(2, 'days').format('D MMM YYYY'),
     amountInCents: 1789,
   },
   paymentScheduleBad: {
-    customerNumber: '',
+    customerId: '',
     frequency: PaywayPaymentFrequency.Weekly,
     startDate: '',
     amountInCents: -1,
@@ -86,7 +86,7 @@ describe('test payway gateway', () => {
     const { simpleCharge } = fixtures
 
     const response: IPaywayAPIResponse = await gateway.directDebit({
-      customerId: simpleCharge.customerNumber,
+      customerId: simpleCharge.customerId,
       paymentReference: simpleCharge.orderNumber,
       amountInCents: simpleCharge.amountInCents,
     })
@@ -99,7 +99,7 @@ describe('test payway gateway', () => {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const charge: IPaywayAPIResponse = await gateway.directDebit({
-      customerId: simpleChargeBad.customerNumber,
+      customerId: simpleChargeBad.customerId,
       paymentReference: simpleChargeBad.orderNumber,
       amountInCents: simpleChargeBad.amountInCents,
     }).catch(error => {
@@ -130,7 +130,7 @@ describe('test payway gateway', () => {
 
   test('it can create a customer', async () => {
     const response: IPaywayAPIResponse = await gateway.addCustomer({
-      customerNumber: '123456789',
+      customerId: '123456789',
       singleUseTokenId: 'fakeTokenId',
     })
     expect(response?.status).toBe(200)

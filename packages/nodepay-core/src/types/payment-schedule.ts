@@ -1,5 +1,5 @@
 export interface IPaymentSchedule {
-  customerNumber: string
+  customerId: string
   startDate: string
   frequency: any
   amountInCents: number

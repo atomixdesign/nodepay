@@ -9,7 +9,7 @@ export interface IEzidebitInternalDebit extends IEzidebitBasePayment {
 }
 
 export interface IEzidebitDirectDebit extends IDirectDebit {
-  ezidebitCustomerNumber?: string
+  ezidebitCustomerId?: string
   debitDate?: string
   username?: string
 }

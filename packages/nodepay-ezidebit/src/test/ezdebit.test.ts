@@ -29,7 +29,7 @@ const fixtures = {
     CCV: '-1',
   },
   directDebit: {
-    eziDebitCustomerNumber: '',
+    eziDebitCustomerId: '',
     customerId: '123456789',
     debitDate: '2022-01-01',
     amountInCents: 20,
@@ -37,21 +37,17 @@ const fixtures = {
     username: 'jdoe',
   },
   paymentSchedule: {
-    EziDebitCustomerID: '',
-    YourSystemReference: '123456789',
-    ScheduleStartDate: '2022-01-01',
-    SchedulePeriodType: EzidebitPaymentFrequency.Monthly,
-    DayOfWeek: EzidebitDayOfWeek.MON,
-    DayOfMonth: 0,
-    FirstWeekOfMonth: '',
-    SecondWeekOfMonth: '',
-    ThirdWeekOfMonth: '',
-    FourthWeekOfMonth: '',
-    PaymentAmount: 25,
-    LimitToNumberOfPayments: 0,
-    LimitToTotalAmountInCents: 12500,
-    KeepManualPayments: 'NO',
-    Username: 'jdoe',
+    ezidebitCustomerId: '',
+    customerId: '123456789',
+    startDate: '2022-01-01',
+    frequency: EzidebitPaymentFrequency.Monthly,
+    dayOfWeek: EzidebitDayOfWeek.MON,
+    dayOfMonth: 0,
+    amountInCents: 2500,
+    maxNumberPayments: 0,
+    maxTotalAmount: 12500,
+    keepManualPayments: 'NO' as const,
+    username: 'jdoe',
   },
 }
 
@@ -123,46 +119,24 @@ describe('test ezidebit gateway', () => {
     })
   })
 
-  /*
   test('it can schedule a charge', async () => {
     const { paymentSchedule } = fixtures
-
-    const response: APIResponse = await gateway.chargeRecurring(
-      paymentSchedule.EziDebitCustomerID,
-      paymentSchedule.YourSystemReference,
-      paymentSchedule.SchedulePeriodType,
-      paymentSchedule.ScheduleStartDate,
-      paymentSchedule.DayOfWeek,
-      paymentSchedule.DayOfMonth,
-      paymentSchedule.PaymentAmount,
-      0,
-      15000,
-      'NO',
-      'jdoe',
+    const response: IEzidebitAPIResponse = await gateway.chargeRecurring(
+      paymentSchedule,
     )
-
     expect(response?.data.resultText).toBe('OK')
   })
 
   test('it reports errors if the schedule is incorrect', async () => {
     const { paymentSchedule } = fixtures
+    paymentSchedule.amountInCents = -1000
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const response: APIResponse = await gateway.chargeRecurring(
-      '123456789',
-      paymentSchedule.YourSystemReference,
-      paymentSchedule.SchedulePeriodType,
-      '0-0-0000',
-      paymentSchedule.DayOfWeek,
-      -1,
-      -10,
-      0,
-      15000,
-      'MAYBE',
-      '',
+    const response: IEzidebitAPIResponse = await gateway.chargeRecurring(
+      paymentSchedule,
     ).catch(error => {
       expect(typeof error).toBe('object')
       return error
     })
-  }) */
+  })
 })

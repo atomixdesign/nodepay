@@ -113,13 +113,13 @@ export class PaywayAPI {
 
   async addCustomer(customer: CustomerDTO): Promise<IPaywayAPIResponse> {
     const payload = { ...customer }
-    delete payload.customerNumber
+    delete payload.customerId
 
     let response
     try {
       response = await this.httpClient!.request({
         method: 'put',
-        url: `/customers/${customer.customerNumber}`,
+        url: `/customers/${customer.customerId}`,
         data: qs.stringify({ ...payload }),
       })
     } catch (error) {
@@ -134,12 +134,12 @@ export class PaywayAPI {
     }
   }
 
-  async stopCustomerPayments(customerNumber: string): Promise<IPaywayAPIResponse> {
+  async stopCustomerPayments(customerId: string): Promise<IPaywayAPIResponse> {
     let response
     try {
       response = await this.httpClient!.request({
         method: 'patch',
-        url: `/customers/${customerNumber}/payment-setup`,
+        url: `/customers/${customerId}/payment-setup`,
         data: qs.stringify({ stopped: true }),
       })
     } catch (error) {
@@ -154,13 +154,13 @@ export class PaywayAPI {
     }
   }
 
-  async deleteCustomer(customerNumber: string): Promise<IPaywayAPIResponse> {
+  async deleteCustomer(customerId: string): Promise<IPaywayAPIResponse> {
     let response
     try {
-      await this.stopCustomerPayments(customerNumber)
+      await this.stopCustomerPayments(customerId)
       response = await this.httpClient!.request({
         method: 'delete',
-        url: `/customers/${customerNumber}`,
+        url: `/customers/${customerId}`,
       })
     } catch (error) {
       return Promise.reject(error)
@@ -214,12 +214,12 @@ export class PaywayAPI {
     }
   }
 
-  async schedulePayment(customerNumber: string, schedule: PaymentScheduleDTO): Promise<IPaywayAPIResponse> {
+  async schedulePayment(customerId: string, schedule: PaymentScheduleDTO): Promise<IPaywayAPIResponse> {
     let response
     try {
       response = await this.httpClient!.request({
         method: 'put',
-        url: `/customers/${customerNumber}/schedule`,
+        url: `/customers/${customerId}/schedule`,
         data: qs.stringify({ ...schedule }),
       })
     } catch (error) {

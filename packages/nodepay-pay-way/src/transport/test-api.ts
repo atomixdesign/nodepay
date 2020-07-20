@@ -25,7 +25,7 @@ export class testAPI {
     return Promise.resolve(MockResponse)
   }
 
-  async schedulePayment(_customerNumber: string, _paymentSchedule: PaymentScheduleDTO): Promise<IPaywayAPIResponse> {
+  async schedulePayment(_customerId: string, _paymentSchedule: PaymentScheduleDTO): Promise<IPaywayAPIResponse> {
     return Promise.resolve(MockResponse)
   }
 }

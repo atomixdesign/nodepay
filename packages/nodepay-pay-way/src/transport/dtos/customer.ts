@@ -18,7 +18,7 @@ import { IPaywayCustomer } from '../../types'
 
 export class CustomerDTO {
   constructor(customer: IPaywayCustomer) {
-    this.customerNumber = customer.customerNumber
+    this.customerNumber = customer.customerId
     this.singleUseTokenId = customer.singleUseTokenId
     this.merchantId = customer.merchantId
     this.bankAccountId = customer.bankAccountId

@@ -9,7 +9,7 @@ export interface IEzidebitCustomerName {
   CustomerName: string
 }
 
-export interface IEzidebitPaymentSchedule {
+export interface IEzidebitInternalPaymentSchedule {
   ScheduleStartDate: string
   SchedulePeriodType: EzidebitPaymentFrequency
   DayOfMonth: number

@@ -1,5 +1,4 @@
 import { Container } from 'typedi'
-import { AxiosResponse } from 'axios'
 import moment from 'moment'
 import { PaywayAPI as PayWayTransport } from '../api'
 import { IPaywayAPIResponse } from '../api-response'
@@ -34,24 +33,24 @@ const fixtures = {
     bsb: '000-000',
   }, */
   onceOffCharge: {
-    customerNumber: 'onceoffCustomer',
+    customerId: 'onceoffCustomer',
     principalAmount: 10.87,
     orderNumber: '123456789',
     customerIpAddress: '169.254.169.254',
     merchantId: 'TEST',
   },
   directDebitCharge: {
-    customerNumber: 'customerWithBanking',
+    customerId: 'customerWithBanking',
     principalAmount: 22.37,
     orderNumber: '123456789',
     customerIpAddress: '169.254.169.254',
   },
   customerWithCC: {
-    customerNumber: 'customerWithCC',
+    customerId: 'customerWithCC',
     merchantId: 'TEST',
   },
   customerWithBanking: {
-    customerNumber: 'customerWithBanking',
+    customerId: 'customerWithBanking',
     merchantId: 'TEST',
     bankAccountId: '0000000A'
   },
@@ -76,34 +75,34 @@ describe('test payway api transport', () => {
   })
 
   afterAll(async () => {
-    await api.deleteCustomer(fixtures.customerWithCC.customerNumber)
+    await api.deleteCustomer(fixtures.customerWithCC.customerId)
     // TODO: 'Could not delete customer because they have made payments in the past 220 days.'
-    await api.deleteCustomer(fixtures.customerWithBanking.customerNumber)
+    await api.deleteCustomer(fixtures.customerWithBanking.customerId)
     Container.reset()
   })
 
   test('it verifies the key validity', async () => {
-    const response: AxiosResponse = await api.verifyKey()
+    const response: IPaywayAPIResponse = await api.verifyKey()
     expect(validCodes).toContain(response.status)
   })
 
   // See: https://www.payway.com.au/docs/net.html#test-card-numbers
   test('it retrieves a single use token for the credit card', async () => {
     const creditCard = new CreditCardDTO(fixtures.creditCard)
-    const response: AxiosResponse = await api.getCCtoken(creditCard)
+    const response: IPaywayAPIResponse = await api.getCCtoken(creditCard)
     expect(validCodes).toContain(response.status)
   })
 
   // See: https://quickstream.westpac.com.au/docs/general/test-account-numbers/#test-bank-accounts
   test('it retrieves a single use token for the bank account', async () => {
     const bankAccount = new BankAccountDTO(fixtures.bankAccount1)
-    const response: AxiosResponse = await api.getBankAccountToken(bankAccount)
+    const response: IPaywayAPIResponse = await api.getBankAccountToken(bankAccount)
     expect(validCodes).toContain(response.status)
   })
 
   test('it places a once-off charge using credit card', async () => {
     const creditCard = new CreditCardDTO(fixtures.creditCard)
-    const ccResponse: AxiosResponse = await api.getCCtoken(creditCard)
+    const ccResponse: IPaywayAPIResponse = await api.getCCtoken(creditCard)
     const onceOffCharge = new ChargeDTO(fixtures.onceOffCharge)
     const response: IPaywayAPIResponse = await api.placeCharge(ccResponse?.data.singleUseTokenId, onceOffCharge)
 
@@ -112,35 +111,35 @@ describe('test payway api transport', () => {
 
   test('it adds a customer using a credit card', async () => {
     const creditCard = new CreditCardDTO(fixtures.creditCard)
-    const ccResponse: AxiosResponse = await api.getCCtoken(creditCard)
+    const ccResponse: IPaywayAPIResponse = await api.getCCtoken(creditCard)
     const customer = new CustomerDTO({
       singleUseTokenId: ccResponse?.data.singleUseTokenId,
-      customerNumber: fixtures.customerWithCC.customerNumber,
+      customerId: fixtures.customerWithCC.customerId,
       merchantId: fixtures.customerWithCC.merchantId,
     })
-    const response: AxiosResponse = await api.addCustomer(customer)
+    const response: IPaywayAPIResponse = await api.addCustomer(customer)
     expect(validCodes).toContain(response.status)
   })
 
   test('it adds a customer using a bank account', async () => {
     const bankAccount = new BankAccountDTO(fixtures.bankAccount1)
-    const bankingResponse: AxiosResponse = await api.getBankAccountToken(bankAccount)
+    const bankingResponse: IPaywayAPIResponse = await api.getBankAccountToken(bankAccount)
     const customer = new CustomerDTO({
       singleUseTokenId: bankingResponse?.data.singleUseTokenId,
-      customerNumber: fixtures.customerWithBanking.customerNumber,
+      customerId: fixtures.customerWithBanking.customerId,
       merchantId: fixtures.customerWithBanking.merchantId,
       bankAccountId: fixtures.customerWithBanking.bankAccountId,
     })
-    const response: AxiosResponse = await api.addCustomer(customer)
+    const response: IPaywayAPIResponse = await api.addCustomer(customer)
     expect(validCodes).toContain(response.status)
   })
 
   test('it places a direct debit charge using bank account', async () => {
     const bankAccount = new BankAccountDTO(fixtures.bankAccount1)
-    const bankingResponse: AxiosResponse = await api.getBankAccountToken(bankAccount)
+    const bankingResponse: IPaywayAPIResponse = await api.getBankAccountToken(bankAccount)
     const customer = new CustomerDTO({
       singleUseTokenId: bankingResponse?.data.singleUseTokenId,
-      customerNumber: fixtures.customerWithBanking.customerNumber,
+      customerId: fixtures.customerWithBanking.customerId,
       merchantId: fixtures.customerWithBanking.merchantId,
       bankAccountId: fixtures.customerWithBanking.bankAccountId,
     })
@@ -152,17 +151,17 @@ describe('test payway api transport', () => {
 
   test('it places a recurring charge using bank account', async () => {
     const bankAccount = new BankAccountDTO(fixtures.bankAccount1)
-    const bankingResponse: AxiosResponse = await api.getBankAccountToken(bankAccount)
-    const { customerNumber } = fixtures.customerWithBanking
+    const bankingResponse: IPaywayAPIResponse = await api.getBankAccountToken(bankAccount)
+    const { customerId } = fixtures.customerWithBanking
     const customer = new CustomerDTO({
       singleUseTokenId: bankingResponse?.data.singleUseTokenId,
-      customerNumber,
+      customerId,
       merchantId: fixtures.customerWithBanking.merchantId,
       bankAccountId: fixtures.customerWithBanking.bankAccountId,
     })
     await api.addCustomer(customer)
     const paymentSchedule = new PaymentScheduleDTO(fixtures.schedule)
-    const response: IPaywayAPIResponse = await api.schedulePayment(customerNumber, paymentSchedule)
+    const response: IPaywayAPIResponse = await api.schedulePayment(customerId, paymentSchedule)
     expect(validCodes).toContain(response.status)
   })
 

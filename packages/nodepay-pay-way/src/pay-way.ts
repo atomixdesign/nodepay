@@ -74,7 +74,7 @@ export class Payway extends BaseGateway<IPaywayConfig> implements
     onceOffCharge: IPaywayCharge
   ): Promise<IPaywayAPIResponse> {
     const chargeObject = new ChargeDTO({
-      customerNumber: onceOffCharge?.customerNumber ?? '',
+      customerId: onceOffCharge?.customerId ?? '',
       principalAmount: onceOffCharge.amountInCents / 100,
       orderNumber: onceOffCharge.orderNumber,
       customerIpAddress: onceOffCharge?.customerIpAddress,
@@ -115,7 +115,7 @@ export class Payway extends BaseGateway<IPaywayConfig> implements
 
     try {
       await validateOrReject(scheduleObject)
-      payload = await this.api.schedulePayment(paymentSchedule.customerNumber, scheduleObject)
+      payload = await this.api.schedulePayment(paymentSchedule.customerId, scheduleObject)
     } catch(error) {
       return Promise.reject(error)
     }
@@ -126,7 +126,7 @@ export class Payway extends BaseGateway<IPaywayConfig> implements
     directDebit: IPaywayDirectDebit,
   ): Promise<IPaywayAPIResponse> {
     const chargeObject = new ChargeDTO({
-      customerNumber: directDebit.customerId,
+      customerId: directDebit.customerId,
       orderNumber: directDebit.paymentReference,
       principalAmount: directDebit.amountInCents / 100,
       customerIpAddress: directDebit?.customerIpAddress,

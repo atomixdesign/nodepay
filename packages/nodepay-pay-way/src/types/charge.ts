@@ -2,7 +2,7 @@ import { IBaseCharge } from '@atomixdesign/nodepay-core/types'
 
 /** @internal */
 export interface IPaywayInternalCharge {
-  customerNumber: string
+  customerId: string
   orderNumber?: string
   principalAmount: number
   customerIpAddress?: string
@@ -11,7 +11,7 @@ export interface IPaywayInternalCharge {
 }
 
 export interface IPaywayCharge extends IBaseCharge {
-  customerNumber?: string
+  customerId?: string
   customerIpAddress?: string
   merchantId?: string
   singleUseTokenId?: string

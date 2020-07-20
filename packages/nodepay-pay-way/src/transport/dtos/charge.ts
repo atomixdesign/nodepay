@@ -15,7 +15,7 @@ import { IPaywayInternalCharge } from '../../types'
 
 export class ChargeDTO {
   constructor(charge: IPaywayInternalCharge) {
-    this.customerNumber = charge.customerNumber
+    this.customerNumber = charge.customerId
     this.transactionType = 'payment'
     this.principalAmount = charge.principalAmount
     this.currency = 'aud'
