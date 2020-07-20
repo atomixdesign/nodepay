@@ -13,6 +13,7 @@ export interface IEzidebitBaseAccount {
   Username?: string
 }
 
+/** @internal */
 export interface IEzidebitInternalCustomer extends IEzidebitBaseAccount {
   ContractStartDate: string
   AddressLine1?: string

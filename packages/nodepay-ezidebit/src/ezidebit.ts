@@ -9,7 +9,6 @@ import {
 } from '@atomixdesign/nodepay-core/features'
 import {
   IEzidebitConfig,
-  // EzidebitPaymentFrequency,
   EzidebitDayOfWeek,
   IEzidebitCharge,
   IEzidebitPaymentSchedule,
@@ -19,7 +18,6 @@ import {
 } from './types'
 import { EzidebitAPI as Transport, IEzidebitAPIResponse } from './transport'
 import { OnceOffChargeDTO, PaymentDTO, PaymentScheduleDTO, CustomerDTO } from './transport/dtos'
-import { ICustomerDetails } from '@atomixdesign/nodepay-core/src/types'
 
 export class Ezidebit extends BaseGateway<IEzidebitConfig> implements
   DirectDebit,
