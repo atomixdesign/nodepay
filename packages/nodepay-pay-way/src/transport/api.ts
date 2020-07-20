@@ -1,6 +1,6 @@
 // handles configurable retry
 import { Service, Inject, Container } from 'typedi'
-import { AxiosInstance, AxiosResponse } from 'axios'
+import { AxiosInstance } from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import qs from 'qs'
 import { IPaywayConfig } from '../types'
@@ -47,7 +47,7 @@ export class PaywayAPI {
   }
 
   // Verify key expiry/validity
-  async verifyKey(): Promise<AxiosResponse> {
+  async verifyKey(): Promise<IPaywayAPIResponse> {
     const config: IPaywayConfig = Container.get('payway.config')
     const response = await this.httpClient!.request({
       url: '/api-keys/latest',
@@ -57,10 +57,15 @@ export class PaywayAPI {
         console.error('Payway API key is about to expire. Please log in to your Payway admin and generate a new api key.')
       }
     }
-    return response
+    return {
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
+      originalResponse: response,
+    }
   }
 
-  async getCCtoken(creditCard: CreditCardDTO): Promise<AxiosResponse> {
+  async getCCtoken(creditCard: CreditCardDTO): Promise<IPaywayAPIResponse> {
     let response
     try {
       response = await this.httpClient!.request({
@@ -75,10 +80,15 @@ export class PaywayAPI {
       return Promise.reject(error)
     }
 
-    return response
+    return {
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
+      originalResponse: response,
+    }
   }
 
-  async getBankAccountToken(bankAccount: BankAccountDTO): Promise<AxiosResponse> {
+  async getBankAccountToken(bankAccount: BankAccountDTO): Promise<IPaywayAPIResponse> {
     let response
     try {
       response = await this.httpClient!.request({
@@ -93,10 +103,15 @@ export class PaywayAPI {
       return Promise.reject(error)
     }
 
-    return response
+    return {
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
+      originalResponse: response,
+    }
   }
 
-  async addCustomer(customer: CustomerDTO): Promise<AxiosResponse> {
+  async addCustomer(customer: CustomerDTO): Promise<IPaywayAPIResponse> {
     const payload = { ...customer }
     delete payload.customerNumber
 
@@ -111,10 +126,15 @@ export class PaywayAPI {
       return Promise.reject(error)
     }
 
-    return response
+    return {
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
+      originalResponse: response,
+    }
   }
 
-  async stopCustomerPayments(customerNumber: string): Promise<AxiosResponse> {
+  async stopCustomerPayments(customerNumber: string): Promise<IPaywayAPIResponse> {
     let response
     try {
       response = await this.httpClient!.request({
@@ -126,10 +146,15 @@ export class PaywayAPI {
       return Promise.reject(error)
     }
 
-    return response
+    return {
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
+      originalResponse: response,
+    }
   }
 
-  async deleteCustomer(customerNumber: string): Promise<AxiosResponse> {
+  async deleteCustomer(customerNumber: string): Promise<IPaywayAPIResponse> {
     let response
     try {
       await this.stopCustomerPayments(customerNumber)
@@ -141,7 +166,12 @@ export class PaywayAPI {
       return Promise.reject(error)
     }
 
-    return response
+    return {
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
+      originalResponse: response,
+    }
   }
 
   async placeCharge(singleUseTokenId: string, charge: ChargeDTO): Promise<IPaywayAPIResponse> {

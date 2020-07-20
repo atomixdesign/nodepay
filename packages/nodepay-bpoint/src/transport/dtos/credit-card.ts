@@ -9,7 +9,6 @@ import {
 import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation'
 import { ICreditCard } from '@atomixdesign/nodepay-core/types'
 
-
 export class CreditCardDTO {
   constructor(creditCard: ICreditCard) {
     this.CardHolderName = creditCard.cardHolderName

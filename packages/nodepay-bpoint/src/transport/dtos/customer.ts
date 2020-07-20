@@ -6,12 +6,12 @@ import {
   ErrorType,
   ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
-import { IBPOINTCustomer } from '../../types'
+import { IBPOINTInternalCustomer } from '../../types'
 import { CreditCardDTO } from './credit-card'
 import { BankAccountDTO } from './bank-account'
 
 export class CustomerDTO {
-  constructor(customer: IBPOINTCustomer) {
+  constructor(customer: IBPOINTInternalCustomer) {
     this.CardDetails = customer.CardDetails
     this.BankAccountDetails = customer.BankAccountDetails
     this.Crn1 = customer.Crn1

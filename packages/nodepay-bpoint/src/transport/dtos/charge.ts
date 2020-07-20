@@ -13,16 +13,15 @@ import {
   ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
 import {
-  IBPOINTBaseCharge,
+  IBPOINTInternalCharge,
   BPOINTCurrency,
   BPOINTTransactionType,
   BPOINTActionType,
 } from '../../types'
 import { CreditCardDTO } from './credit-card'
 
-
 export class ChargeDTO {
-  constructor(charge: IBPOINTBaseCharge) {
+  constructor(charge: IBPOINTInternalCharge) {
     this.Action = BPOINTActionType.payment
     this.Amount = charge.Amount
     this.CardDetails = charge.CardDetails

@@ -6,7 +6,7 @@ import {
   ErrorType,
   ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
-import { IBankAccount } from '@atomixdesign/nodepay-core/src/types'
+import { IBankAccount } from '@atomixdesign/nodepay-core/types'
 
 export class BankAccountDTO {
   constructor(bankAccount: IBankAccount) {

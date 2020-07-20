@@ -1,16 +1,10 @@
 import { Container } from 'typedi'
+import moment from 'moment'
 import { Payway } from '../pay-way'
 import { testAPI, IPaywayAPIResponse } from '../transport'
-import { PaywayPaymentFrequency } from '../types/payment-frequency'
-import moment from 'moment'
+import { PaywayPaymentFrequency, IPaywayCharge } from '../types'
 
 const fixtures = {
-  simpleCharge: {
-    orderNumber: 'onceOffOrder',
-    principalAmount: 10.87,
-    singleUseTokenId: '123456789',
-    customerNumber: 'onceoffCustomer',
-  },
   creditCard: {
     cardNumber: '5163200000000008',
     expiryDateMonth: '08',
@@ -18,9 +12,15 @@ const fixtures = {
     CCV: '070',
     cardHolderName: 'John Doe',
   },
+  simpleCharge: {
+    orderNumber: 'onceOffOrder',
+    amountInCents: 1087,
+    singleUseTokenId: '123456789',
+    customerNumber: 'onceoffCustomer',
+  },
   simpleChargeBad: {
     customerNumber: '',
-    principalAmount: -1,
+    amountInCents: -1,
     orderNumber: '12345678910111213141516',
     customerIpAddress: '',
     merchantId: '',
@@ -28,14 +28,14 @@ const fixtures = {
   paymentSchedule: {
     customerNumber: 'paymentSchedule',
     frequency: PaywayPaymentFrequency.Weekly,
-    nextPaymentDate: moment().add(2, 'days').format('D MMM YYYY'),
-    regularPrincipalAmount: 17.89,
+    startDate: moment().add(2, 'days').format('D MMM YYYY'),
+    amountInCents: 1789,
   },
   paymentScheduleBad: {
     customerNumber: '',
     frequency: PaywayPaymentFrequency.Weekly,
-    nextPaymentDate: '',
-    regularPrincipalAmount: -1,
+    startDate: '',
+    amountInCents: -1,
   },
 }
 
@@ -60,89 +60,79 @@ describe('test payway gateway', () => {
   })
 
   test('it can be charged', async () => {
-    const fixture = fixtures.simpleCharge
-
-    const response: IPaywayAPIResponse = await gateway.charge(
-      fixture.singleUseTokenId,
-      fixture.principalAmount,
-      fixtures.creditCard,
-      {
-        customerNumber: fixture.customerNumber,
-      }
-    )
-
+    const onceOffCharge: IPaywayCharge = {
+      ...fixtures.simpleCharge,
+      creditCard: fixtures.creditCard,
+    }
+    const response: IPaywayAPIResponse = await gateway.charge(onceOffCharge)
     expect(response?.status).toBe(200)
   })
 
-  /* test('it reports errors if the charge format is not correct', async () => {
-    const fixture = fixtures.simpleChargeBad
+  test('it reports errors if the charge format is not correct', async () => {
+    const onceOffChargeBad: IPaywayCharge = {
+      ...fixtures.simpleCharge,
+      creditCard: fixtures.creditCard,
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const charge: APIResponse = await gateway.charge(
-      '',
-      fixture.customerNumber,
-      fixture.principalAmount,
-      fixture.orderNumber,
-      fixture.customerIpAddress,
-      fixture.merchantId,
-    ).catch(error => {
+    const charge: IPaywayAPIResponse = await gateway.charge(onceOffChargeBad).catch(error => {
       expect(typeof error).toBe('object')
       return error
     })
   })
 
-  test('it can be charged via direct debit', async () => {
-    const fixture = fixtures.simpleCharge
 
-    const response: APIResponse = await gateway.directDebit(
-      fixture.customerNumber,
-      fixture.principalAmount,
-    )
+  test('it can be charged via direct debit', async () => {
+    const { simpleCharge } = fixtures
+
+    const response: IPaywayAPIResponse = await gateway.directDebit({
+      customerId: simpleCharge.customerNumber,
+      paymentReference: simpleCharge.orderNumber,
+      amountInCents: simpleCharge.amountInCents,
+    })
 
     expect(response?.status).toBe(200)
   })
 
   test('it reports errors if the charge format is not correct in direct debit', async () => {
-    const fixture = fixtures.simpleChargeBad
+    const { simpleChargeBad } = fixtures
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const charge: APIResponse = await gateway.directDebit(
-      fixture.customerNumber,
-      fixture.principalAmount,
-      fixture.orderNumber,
-      fixture.customerIpAddress,
-      fixture.merchantId,
-    ).catch(error => {
+    const charge: IPaywayAPIResponse = await gateway.directDebit({
+      customerId: simpleChargeBad.customerNumber,
+      paymentReference: simpleChargeBad.orderNumber,
+      amountInCents: simpleChargeBad.amountInCents,
+    }).catch(error => {
       expect(typeof error).toBe('object')
       return error
     })
   })
 
   test('it can schedule a charge', async () => {
-    const fixture = fixtures.paymentSchedule
-
-    const response: APIResponse = await gateway.chargeRecurring(
-      fixture.customerNumber,
-      fixture.frequency,
-      fixture.nextPaymentDate,
-      fixture.regularPrincipalAmount,
+    const { paymentSchedule } = fixtures
+    const response: IPaywayAPIResponse = await gateway.chargeRecurring(
+      paymentSchedule
     )
-
     expect(response?.status).toBe(200)
   })
 
   test('it reports errors if the schedule is incorrect', async () => {
-    const fixture = fixtures.paymentScheduleBad
+    const { paymentScheduleBad } = fixtures
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const charge: APIResponse = await gateway.chargeRecurring(
-      fixture.customerNumber,
-      fixture.frequency,
-      fixture.nextPaymentDate,
-      fixture.regularPrincipalAmount,
+    const charge: IPaywayAPIResponse = await gateway.chargeRecurring(
+      paymentScheduleBad
     ).catch(error => {
       expect(typeof error).toBe('object')
       return error
     })
-  }) */
+  })
+
+  test('it can create a customer', async () => {
+    const response: IPaywayAPIResponse = await gateway.addCustomer({
+      customerNumber: '123456789',
+      singleUseTokenId: 'fakeTokenId',
+    })
+    expect(response?.status).toBe(200)
+  })
 })

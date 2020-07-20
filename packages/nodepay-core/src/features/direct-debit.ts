@@ -1,8 +1,7 @@
+import { IDirectDebit } from '../types'
+
 export interface DirectDebit {
   directDebit(
-    customerId: string,
-    paymentReference: string,
-    amountInCents: number,
-    metadata: Record<string, any>,
+    directDebitCharge: IDirectDebit
   ): Promise<unknown>
 }

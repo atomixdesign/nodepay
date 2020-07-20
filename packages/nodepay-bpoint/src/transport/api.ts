@@ -1,10 +1,10 @@
 // handles configurable retry
 import { Service, Inject, Container } from 'typedi'
 import { AxiosInstance } from 'axios'
-import { IBPOINTConfig } from '../types'
 import {
   HttpClientFactory,
 } from '@atomixdesign/nodepay-core/network'
+import { IBPOINTConfig } from '../types'
 import { IBPOINTAPIResponse } from './api-response'
 import { ChargeDTO, CustomerDTO } from './dtos'
 import { BPOINTAPIError } from './api-error'

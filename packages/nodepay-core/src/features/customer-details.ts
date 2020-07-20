@@ -1,8 +1,12 @@
-import { ICustomer, ICreditCard, IBankAccount } from '../types'
+import {
+  ICustomerDetails,
+  ICreditCard,
+  IBankAccount,
+} from '../types'
 
 export interface CustomerDetails {
   addCustomer(
-    customerDetails: ICustomer,
+    customerDetails: ICustomerDetails,
     creditCard?: ICreditCard,
     bankAccount?: IBankAccount,
   ): Promise<unknown>

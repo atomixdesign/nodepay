@@ -1,12 +1,10 @@
 import { Container } from 'typedi'
 import { validateOrReject } from 'class-validator'
-import { BaseGateway } from '@atomixdesign/nodepay-core/gateways/base-gateway'
+import { BaseGateway } from '@atomixdesign/nodepay-core'
 import { DirectDebit, OnceOffPayment, RecurringPayment } from '@atomixdesign/nodepay-core/features'
-import { IEzidebitConfig, EzidebitPaymentFrequency, EzidebitDayOfWeek } from './types'
+import { IEzidebitConfig, EzidebitPaymentFrequency, EzidebitDayOfWeek, IEzidebitCharge, IEzidebitDirectDebit } from './types'
 import { EzidebitAPI as Transport, IEzidebitAPIResponse } from './transport'
 import { OnceOffChargeDTO, PaymentDTO, PaymentScheduleDTO } from './transport/dtos'
-import { ICreditCard } from '@atomixdesign/nodepay-core/types'
-import { IEzidebitDirectDebitMetadata, IEzidebitChargeMetadata } from './types/metadata'
 
 export class Ezidebit extends BaseGateway<IEzidebitConfig> implements DirectDebit, OnceOffPayment, RecurringPayment {
   private api: Transport
@@ -36,20 +34,17 @@ export class Ezidebit extends BaseGateway<IEzidebitConfig> implements DirectDebi
   }
 
   async charge(
-    orderNumber: string,
-    amountInCents: number,
-    creditCard: ICreditCard,
-    metadata?: IEzidebitChargeMetadata,
+    onceOffCharge: IEzidebitCharge,
   ): Promise<IEzidebitAPIResponse> {
     const chargeObject = {
-      CreditCardNumber: creditCard.cardNumber,
-      CreditCardExpiryMonth: creditCard.expiryDateMonth,
-      CreditCardExpiryYear: creditCard.expiryDateYear,
-      CreditCardCCV: creditCard.CCV,
-      NameOnCreditCard: creditCard.cardHolderName,
-      PaymentAmountInCents: amountInCents,
-      CustomerName: metadata?.customerName || '',
-      PaymentReference: orderNumber,
+      CreditCardNumber: onceOffCharge.creditCard.cardNumber,
+      CreditCardExpiryMonth: onceOffCharge.creditCard.expiryDateMonth,
+      CreditCardExpiryYear: onceOffCharge.creditCard.expiryDateYear,
+      CreditCardCCV: onceOffCharge.creditCard.CCV,
+      NameOnCreditCard: onceOffCharge.creditCard.cardHolderName,
+      PaymentAmountInCents: onceOffCharge.amountInCents,
+      CustomerName: onceOffCharge.customerName ?? '',
+      PaymentReference: onceOffCharge.orderNumber,
     }
 
     let payload
@@ -106,22 +101,15 @@ export class Ezidebit extends BaseGateway<IEzidebitConfig> implements DirectDebi
   }
 
   async directDebit(
-    customerId: string,
-    paymentReference: string,
-    amountInCents: number,
-    metadata: IEzidebitDirectDebitMetadata = {
-      ezidebitCustomerNumber: '',
-      debitDate: '',
-      userName: '',
-    },
+    directDebit: IEzidebitDirectDebit,
   ): Promise<IEzidebitAPIResponse> {
     const paymentObject = {
-      EziDebitCustomerID: String(metadata.ezidebitCustomerNumber),
-      YourSystemReference: customerId,
-      DebitDate: String(metadata.debitDate),
-      PaymentAmountInCents: amountInCents,
-      PaymentReference: paymentReference,
-      Username: String(metadata.userName),
+      EziDebitCustomerID: directDebit.ezidebitCustomerNumber ?? '',
+      YourSystemReference: directDebit.customerId,
+      DebitDate: directDebit.debitDate ?? '',
+      PaymentAmountInCents: directDebit.amountInCents,
+      PaymentReference: directDebit.paymentReference,
+      Username: directDebit.username ?? '',
     }
 
     let payload

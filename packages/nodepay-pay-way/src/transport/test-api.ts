@@ -1,5 +1,5 @@
 import { IPaywayAPIResponse } from './api-response'
-import { ChargeDTO, PaymentScheduleDTO } from './dtos'
+import { CustomerDTO, ChargeDTO, PaymentScheduleDTO } from './dtos'
 
 /** @internal */
 export const MockResponse = {
@@ -12,6 +12,10 @@ export const MockResponse = {
 /** @internal */
 export class testAPI {
   constructor() {}
+
+  async addCustomer(_customer: CustomerDTO): Promise<IPaywayAPIResponse> {
+    return Promise.resolve(MockResponse)
+  }
 
   async placeCharge(_singleUseTokenId: string, _charge: ChargeDTO): Promise<IPaywayAPIResponse> {
     return Promise.resolve(MockResponse)

@@ -1,13 +1,18 @@
 import { Container } from 'typedi'
 import { Ezidebit } from '../ezidebit'
 import { testAPI, IEzidebitAPIResponse } from '../transport'
-import { EzidebitPaymentFrequency, EzidebitDayOfWeek } from '../types'
+import { EzidebitPaymentFrequency, EzidebitDayOfWeek, IEzidebitCharge } from '../types'
 
 const fixtures = {
   simpleCharge: {
-    PaymentAmount: 10,
-    CustomerName: 'John Doe',
-    PaymentReference: '123456789',
+    amountInCents: 1000,
+    customerName: 'John Doe',
+    orderNumber: '123456789',
+  },
+  simpleChargeBad: {
+    amountInCents: -1000,
+    customerName: '',
+    orderNumber: 'fakeOrderNumber',
   },
   creditCard: {
     cardHolderName: 'John Doe',
@@ -16,13 +21,20 @@ const fixtures = {
     expiryDateYear: '2021',
     CCV: '847',
   },
-  payment: {
-    EziDebitCustomerID: '',
-    YourSystemReference: '123456789',
-    DebitDate: '2022-01-01',
-    PaymentAmount: 20,
-    PaymentReference: '1234',
-    Username: 'jdoe',
+  creditCardBad: {
+    cardHolderName: 'John Doe',
+    cardNumber: '5123456789012346',
+    expiryDateMonth: '05',
+    expiryDateYear: '1978',
+    CCV: '-1',
+  },
+  directDebit: {
+    eziDebitCustomerNumber: '',
+    customerId: '123456789',
+    debitDate: '2022-01-01',
+    amountInCents: 20,
+    paymentReference: '1234',
+    username: 'jdoe',
   },
   paymentSchedule: {
     EziDebitCustomerID: '',
@@ -64,66 +76,54 @@ describe('test ezidebit gateway', () => {
   })
 
   test('it can be charged', async () => {
-    const { simpleCharge, creditCard } = fixtures
+    const onceOffCharge: IEzidebitCharge = {
+      ...fixtures.simpleCharge,
+      creditCard: fixtures.creditCard,
+    }
     const charge: IEzidebitAPIResponse = await gateway.charge(
-      simpleCharge.PaymentReference,
-      simpleCharge.PaymentAmount, // In whole currency
-      creditCard,
-      {
-        customerName: simpleCharge.CustomerName,
-      },
+      onceOffCharge
     )
 
     expect(charge.data.resultText).toBe('OK')
   })
 
-  /* test('it reports errors if the charge format is not correct', async () => {
+  test('it reports errors if the charge format is not correct', async () => {
+    const onceOffChargeBad: IEzidebitCharge = {
+      ...fixtures.simpleChargeBad,
+      creditCard: fixtures.creditCardBad,
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const charge: APIResponse = await gateway.charge(
-      'fakecc',
-      'alpha',
-      'beta',
-      'gamma',
-      '',
-      -1,
-      '',
-      '',
+    const charge: IEzidebitAPIResponse = await gateway.charge(
+      onceOffChargeBad
     ).catch(error => {
       expect(typeof error).toBe('object')
       return error
     })
   })
 
-  test('it can be charged via direct debit', async () => {
-    const { payment } = fixtures
-    const charge: APIResponse = await gateway.directDebit(
-      payment.EziDebitCustomerID,
-      payment.YourSystemReference,
-      payment.DebitDate,
-      payment.PaymentAmount,  // In whole currency
-      payment.PaymentReference,
-      payment.Username,
-    )
 
+  test('it can be charged via direct debit', async () => {
+    const { directDebit } = fixtures
+    const charge: IEzidebitAPIResponse = await gateway.directDebit(
+      directDebit,
+    )
     expect(charge.data.resultText).toBe('OK')
   })
 
   test('it reports errors if the charge format is not correct in direct debit', async () => {
+    const { directDebit } = fixtures
+    directDebit.amountInCents = -1000
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const charge: APIResponse = await gateway.directDebit(
-      '',
-      '',
-      'purple',
-      -1,  // In whole currency
-      '',
-      '',
+    const charge: IEzidebitAPIResponse = await gateway.directDebit(
+      directDebit,
     ).catch(error => {
       expect(typeof error).toBe('object')
       return error
     })
   })
 
-
+  /*
   test('it can schedule a charge', async () => {
     const { paymentSchedule } = fixtures
 

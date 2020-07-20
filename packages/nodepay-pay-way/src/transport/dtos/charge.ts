@@ -11,10 +11,10 @@ import {
   ErrorType,
   ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
-import { IPaywayBaseCharge } from 'nodepay-pay-way/src/types'
+import { IPaywayInternalCharge } from '../../types'
 
 export class ChargeDTO {
-  constructor(charge: IPaywayBaseCharge) {
+  constructor(charge: IPaywayInternalCharge) {
     this.customerNumber = charge.customerNumber
     this.transactionType = 'payment'
     this.principalAmount = charge.principalAmount

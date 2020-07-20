@@ -1,10 +1,8 @@
 import { Container } from 'typedi'
-// import { AxiosResponse } from 'axios'
-// import moment from 'moment'
 import cryptoRandomString from 'crypto-random-string'
 import { BPOINTAPI as BpointTransport } from '../api'
-import { IBPOINTAPIResponse } from '../api-response'
 import { BPOINTActionType, BPOINTCurrency, BPOINTTransactionType, } from '../../types'
+import { IBPOINTAPIResponse } from '../api-response'
 import {
   ChargeDTO, CreditCardDTO, CustomerDTO,
 } from '../dtos'

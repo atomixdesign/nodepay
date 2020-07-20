@@ -1,6 +1,6 @@
 import { Container } from 'typedi'
-import cryptoRandomString from 'crypto-random-string'
 import { validateOrReject } from 'class-validator'
+import cryptoRandomString from 'crypto-random-string'
 import { BaseGateway } from '@atomixdesign/nodepay-core'
 import {
   OnceOffPayment,
@@ -8,13 +8,14 @@ import {
   CustomerDetails,
 } from '@atomixdesign/nodepay-core/features'
 import {
-  ICreditCard, ICustomer, IBankAccount,
+  ICreditCard, IBankAccount,
 } from '@atomixdesign/nodepay-core/types'
 import {
   IBPOINTConfig,
+  IBPOINTCustomer,
+  IBPOINTCharge,
   BPOINTActionType,
   BPOINTTransactionType,
-  IBPOINTChargeMetadata,
 } from './types'
 import { BPOINTAPI, IBPOINTAPIResponse } from './transport'
 import {
@@ -54,22 +55,19 @@ export class BPOINT extends BaseGateway<IBPOINTConfig> implements
   }
 
   private async internalCharge(
-    orderNumber: string,
-    amountInCents: number,
-    creditCard: ICreditCard,
-    metadata?: IBPOINTChargeMetadata,
+    charge: IBPOINTCharge,
     subType: 'single' | 'recurring' = 'single'
   ): Promise<IBPOINTAPIResponse> {
     let payload
 
     const chargeObject = {
       Action: BPOINTActionType.payment,
-      Amount: amountInCents, // TODO: Amount is scaled depending on currency. Setup scaling table for currencies.
-      CardDetails: new CreditCardDTO(creditCard),
-      Crn1: `${metadata?.merchantReference || ''}${cryptoRandomString({ length: 10 })}`,
-      EmailAddress: metadata?.emailAddress,
-      MerchantReference: metadata?.merchantReference,
-      TestMode: Boolean(metadata?.testMode),
+      Amount: charge.amountInCents, // TODO: Amount is scaled depending on currency. Setup scaling table for currencies.
+      CardDetails: new CreditCardDTO(charge.creditCard),
+      Crn1: `${charge?.merchantReference ?? ''}${cryptoRandomString({ length: 10 })}`,
+      EmailAddress: charge?.emailAddress,
+      MerchantReference: charge?.merchantReference,
+      TestMode: Boolean(charge?.testMode),
       SubType: subType,
       type: BPOINTTransactionType.internet,
     }
@@ -84,38 +82,8 @@ export class BPOINT extends BaseGateway<IBPOINTConfig> implements
     return Promise.resolve(payload)
   }
 
-  async charge(
-    orderNumber: string,
-    amountInCents: number,
-    creditCard: ICreditCard,
-    metadata?: IBPOINTChargeMetadata,
-  ): Promise<IBPOINTAPIResponse> {
-    return this.internalCharge(
-      orderNumber,
-      amountInCents,
-      creditCard,
-      metadata,
-      'single'
-    )
-  }
-
-  async chargeRecurring(
-    orderNumber: string,
-    amountInCents: number,
-    creditCard: ICreditCard,
-    metadata?: IBPOINTChargeMetadata,
-  ): Promise<IBPOINTAPIResponse> {
-    return this.internalCharge(
-      orderNumber,
-      amountInCents,
-      creditCard,
-      metadata,
-      'recurring'
-    )
-  }
-
   async addCustomer(
-    customerDetails: ICustomer,
+    customerDetails: IBPOINTCustomer,
     creditCard: ICreditCard,
     bankAccount?: IBankAccount,
   ): Promise<IBPOINTAPIResponse> {
@@ -136,6 +104,18 @@ export class BPOINT extends BaseGateway<IBPOINTConfig> implements
       return Promise.reject(error)
     }
     return Promise.resolve(payload)
+  }
+
+  async charge(
+    onceOffCharge: IBPOINTCharge
+  ): Promise<IBPOINTAPIResponse> {
+    return this.internalCharge(onceOffCharge, 'single')
+  }
+
+  async chargeRecurring(
+    recurringCharge: IBPOINTCharge
+  ): Promise<IBPOINTAPIResponse> {
+    return this.internalCharge(recurringCharge, 'recurring')
   }
 
   async directDebit(): Promise<IBPOINTAPIResponse> {
