@@ -1,4 +1,5 @@
 import {
+  IsOptional,
   IsNotEmpty,
   IsNumberString,
   MaxLength,
@@ -11,10 +12,10 @@ import {
   ErrorType,
   ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
-import { IEzidebitCustomer } from '../../types'
+import { IEzidebitInternalCustomer } from '../../types'
 
 export class CustomerDTO {
-  constructor(customer: IEzidebitCustomer) {
+  constructor(customer: IEzidebitInternalCustomer) {
     this.YourSystemReference = customer.YourSystemReference
     this.YourGeneralReference = customer.YourGeneralReference
     this.LastName = customer.LastName
@@ -37,19 +38,17 @@ export class CustomerDTO {
   }
 
   // * YourSystemReference
-  @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'YourSystemReference')
-  })
   @MaxLength(50, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'YourSystemReference')
   })
   YourSystemReference: string;
 
   // * YourGeneralReference
+  @IsOptional()
   @MaxLength(50, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'YourGeneralReference')
   })
-  YourGeneralReference = '';
+  YourGeneralReference: string | undefined;
 
   // * LastName
   @IsNotEmpty({
@@ -61,61 +60,69 @@ export class CustomerDTO {
   LastName: string;
 
   // * FirstName
+  @IsOptional()
   @MaxLength(30, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'FirstName')
   })
-  FirstName = '';
+  FirstName: string | undefined;
 
   // * AddressLine1
+  @IsOptional()
   @MaxLength(30, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'AddressLine1')
   })
-  AddressLine1 = '';
+  AddressLine1: string | undefined;
 
   // * AddressLine2
+  @IsOptional()
   @MaxLength(30, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'AddressLine2')
   })
-  AddressLine2 = '';
+  AddressLine2: string | undefined;
 
   // * AddressSuburb
+  @IsOptional()
   @MaxLength(20, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'AddressSuburb')
   })
-  AddressSuburb = '';
+  AddressSuburb: string | undefined;
 
   // * AddressState
+  @IsOptional()
   @MaxLength(3, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'AddressState')
   })
-  AddressState = '';
+  AddressState: string | undefined;
 
   // * AddressPostCode
+  @IsOptional()
   @IsNumberString(undefined, {
     message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'AddressPostCode')
   })
   @MaxLength(4, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'AddressPostCode')
   })
-  AddressPostCode = '';
+  AddressPostCode: string | undefined;
 
   // * EmailAddress
+  @IsOptional()
   @MaxLength(255, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'EmailAddress')
   })
   @IsEmail(undefined, {
     message: ErrorFactory.getErrorMessage(ErrorType.NotAnEmail, 'EmailAddress')
   })
-  EmailAddress = '';
+  EmailAddress: string | undefined;
 
   // * MobilePhoneNumber
+  @IsOptional()
   @MaxLength(10, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'MobilePhoneNumber')
   })
   @IsMobilePhone('en-AU', undefined, {
     message: ErrorFactory.getErrorMessage(ErrorType.NotAMobilePhone, 'MobilePhoneNumber')
   })
-  MobilePhoneNumber = '';
+  MobilePhoneNumber: string | undefined;
 
   // * ContractStartDate
   @IsNotEmpty({
@@ -151,8 +158,9 @@ export class CustomerDTO {
   SmsExpiredCard: string;
 
   // * Username
+  @IsOptional()
   @MaxLength(50, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'Username')
   })
-  Username = '';
+  Username: string | undefined;
 }

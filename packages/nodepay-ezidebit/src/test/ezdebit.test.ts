@@ -139,4 +139,13 @@ describe('test ezidebit gateway', () => {
       return error
     })
   })
+
+  test('it can create a customer', async () => {
+    const response: IEzidebitAPIResponse = await gateway.addCustomer({
+      customerId: '123456789',
+      contractStartDate: '2010-12-22',
+      lastName: 'Doe',
+    })
+    expect(response?.data.resultText).toBe('OK')
+  })
 })

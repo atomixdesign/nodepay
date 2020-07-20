@@ -113,13 +113,13 @@ export class PaywayAPI {
 
   async addCustomer(customer: CustomerDTO): Promise<IPaywayAPIResponse> {
     const payload = { ...customer }
-    delete payload.customerId
+    delete payload.customerNumber
 
     let response
     try {
       response = await this.httpClient!.request({
         method: 'put',
-        url: `/customers/${customer.customerId}`,
+        url: `/customers/${customer.customerNumber}`,
         data: qs.stringify({ ...payload }),
       })
     } catch (error) {

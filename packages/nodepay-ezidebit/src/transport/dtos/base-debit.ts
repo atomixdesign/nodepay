@@ -1,4 +1,5 @@
 import {
+  IsOptional,
   IsNotEmpty,
   IsEmail,
   IsMobilePhone,
@@ -98,35 +99,40 @@ export class BaseDebitDTO {
   SmsExpiredCard: string;
 
   // * Username
-  Username = '';
+  @IsOptional()
+  Username: string | undefined;
 
   // * YourGeneralReference
+  @IsOptional()
   @MaxLength(50, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'YourGeneralReference')
   })
-  YourGeneralReference = '';
+  YourGeneralReference: string | undefined;
 
   // * FirstName
+  @IsOptional()
   @MaxLength(30, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'FirstName')
   })
-  FirstName = '';
+  FirstName: string | undefined;
 
   // * EmailAddress
+  @IsOptional()
   @MaxLength(255, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'EmailAddress')
   })
   @IsEmail(undefined, {
     message: ErrorFactory.getErrorMessage(ErrorType.NotAnEmail, 'EmailAddress')
   })
-  EmailAddress = '';
+  EmailAddress: string | undefined;
 
   // * MobilePhoneNumber
+  @IsOptional()
   @MaxLength(10, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'MobilePhoneNumber')
   })
   @IsMobilePhone('en-AU', undefined, {
     message: ErrorFactory.getErrorMessage(ErrorType.NotAMobilePhone, 'MobilePhoneNumber')
   })
-  MobilePhoneNumber = '';
+  MobilePhoneNumber: string | undefined;
 }

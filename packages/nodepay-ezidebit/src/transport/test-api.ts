@@ -1,5 +1,5 @@
 import { IEzidebitAPIResponse, formatResponse } from './api-response'
-import { OnceOffChargeDTO, PaymentScheduleDTO, PaymentDTO } from './dtos'
+import { CustomerDTO, OnceOffChargeDTO, PaymentScheduleDTO, PaymentDTO } from './dtos'
 
 /** @internal */
 export const MockResponse = {
@@ -11,6 +11,10 @@ export const MockResponse = {
 /** @internal */
 export class testAPI {
   constructor() {}
+
+  async addCustomer(_customer: CustomerDTO): Promise<IEzidebitAPIResponse> {
+    return formatResponse(MockResponse)
+  }
 
   async placeCharge(_charge: OnceOffChargeDTO): Promise<IEzidebitAPIResponse> {
     return formatResponse(MockResponse)
