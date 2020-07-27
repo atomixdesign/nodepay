@@ -10,5 +10,5 @@ export interface IBaseResponse {
   status: number
   statusText: string
   internalErrorCode?: number
-  data?: Json | Record<string, unknown>
+  data: any
 }

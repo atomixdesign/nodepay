@@ -1,4 +1,4 @@
-// import { Container } from 'typedi'
+import { Container } from 'typedi'
 // import { validateOrReject } from 'class-validator'
 import { BaseGateway } from '@atomixdesign/nodepay-core'
 import {
@@ -20,6 +20,12 @@ export class Paystream extends BaseGateway<IPaystreamConfig> implements
       apiKey: '',
       apiRoot: '',
     }
+  }
+
+  constructor(config?: Partial<IPaystreamConfig>) {
+    super(config)
+    Container.set('paystream.config', config)
+    // this.api = Container.get('paystream.api')
   }
 
   get name(): string {

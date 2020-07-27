@@ -1,4 +1,3 @@
-// handles configurable retry
 import { Service, Inject, Container } from 'typedi'
 import { AxiosInstance } from 'axios'
 import {

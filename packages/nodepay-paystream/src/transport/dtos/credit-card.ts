@@ -1,0 +1,51 @@
+import {
+  IsNotEmpty,
+  Length,
+  IsNumberString,
+  IsCreditCard,
+} from 'class-validator'
+
+import {
+  ErrorType,
+  ErrorFactory,
+} from '@atomixdesign/nodepay-core/validation/errors'
+import { ICreditCard } from '@atomixdesign/nodepay-core/types'
+
+export class CreditCardDTO {
+  constructor(creditCard: ICreditCard) {
+    this.card_number = creditCard.cardNumber
+    this.card_holder = creditCard.cardHolderName
+    this.cvv = creditCard.CCV
+    this.card_expiry = `${creditCard.expiryDateMonth}/${creditCard.expiryDateYear}`
+  }
+
+  // * card_number
+  @IsNotEmpty({
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'card_number')
+  })
+  @IsCreditCard({
+    message: ErrorFactory.getErrorMessage(ErrorType.NotACreditCard, 'card_number')
+  })
+  card_number: string;
+
+  // * card_holder
+  @IsNotEmpty({
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'card_holder')
+  })
+  card_holder: string;
+
+  // * cvv
+  @Length(3, 4, {
+    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'cvv')
+  })
+  @IsNumberString(undefined, {
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'cvv')
+  })
+  cvv: string;
+
+  // * card_expiry
+  @Length(7, 7, {
+    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'card_expiry')
+  })
+  card_expiry: string;
+}
