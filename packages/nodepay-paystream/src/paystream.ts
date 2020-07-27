@@ -1,12 +1,25 @@
-import { BaseGateway } from '../base-gateway'
+// import { Container } from 'typedi'
+// import { validateOrReject } from 'class-validator'
+import { BaseGateway } from '@atomixdesign/nodepay-core'
+import {
+  OnceOffPayment,
+  RecurringPayment,
+} from '@atomixdesign/nodepay-core/features'
+import { IPaystreamConfig } from './types'
+import { IBaseCharge, IPaymentSchedule } from '@atomixdesign/nodepay-core/types'
+import { IBaseResponse } from '@atomixdesign/nodepay-core/network'
 
-export type Config = {
-  //
-}
 
-export class Paystream extends BaseGateway<Config> {
-  protected get baseConfig(): Config {
-    return {}
+export class Paystream extends BaseGateway<IPaystreamConfig> implements
+  OnceOffPayment,
+  RecurringPayment
+{
+  protected get baseConfig(): IPaystreamConfig {
+    return {
+      username: '',
+      apiKey: '',
+      apiRoot: '',
+    }
   }
 
   get name(): string {
@@ -15,5 +28,17 @@ export class Paystream extends BaseGateway<Config> {
 
   get shortName(): string {
     return 'paystream'
+  }
+
+  async charge(
+    _onceOffCharge: IBaseCharge //IPaywayCharge
+  ): Promise<IBaseResponse | undefined> { // Promise<IPaywayAPIResponse> {
+    return
+  }
+
+  async chargeRecurring(
+    _paymentSchedule: IPaymentSchedule //IPaywayCharge
+  ): Promise<IBaseResponse | undefined> { // Promise<IPaywayAPIResponse> {
+    return
   }
 }

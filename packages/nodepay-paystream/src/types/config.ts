@@ -1,6 +1,5 @@
 export type IPaystreamConfig = {
-  secretKey: string
-  publishableKey: string
+  username: string
+  apiKey: string
   apiRoot: string
-  responseType: 'json' | 'xml'
 }
