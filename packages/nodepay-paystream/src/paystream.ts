@@ -7,7 +7,7 @@ import {
 } from '@atomixdesign/nodepay-core/features'
 import { IPaystreamConfig } from './types'
 import { IBaseCharge, IPaymentSchedule } from '@atomixdesign/nodepay-core/types'
-import { IBaseResponse } from '@atomixdesign/nodepay-core/network'
+import { IPaystreamAPIResponse } from './transport'
 
 
 export class Paystream extends BaseGateway<IPaystreamConfig> implements
@@ -32,13 +32,13 @@ export class Paystream extends BaseGateway<IPaystreamConfig> implements
 
   async charge(
     _onceOffCharge: IBaseCharge //IPaywayCharge
-  ): Promise<IBaseResponse | undefined> { // Promise<IPaywayAPIResponse> {
+  ): Promise<IPaystreamAPIResponse | undefined> {
     return
   }
 
   async chargeRecurring(
     _paymentSchedule: IPaymentSchedule //IPaywayCharge
-  ): Promise<IBaseResponse | undefined> { // Promise<IPaywayAPIResponse> {
+  ): Promise<IPaystreamAPIResponse | undefined> {
     return
   }
 }
