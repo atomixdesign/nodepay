@@ -1,6 +1,5 @@
 import { Service, Inject, Container } from 'typedi'
 import { AxiosInstance } from 'axios'
-import qs from 'qs'
 import { IPaystreamConfig } from '../types'
 import {
   HttpClientFactory,
@@ -12,7 +11,7 @@ import {
   // PaymentScheduleDTO,
 } from './dtos'
 
-@Service('payway.api')
+@Service('paystream.api')
 export class PaystreamAPI {
 
   private httpClient: AxiosInstance
@@ -20,7 +19,7 @@ export class PaystreamAPI {
   constructor(
     @Inject('http.client') httpClientFactory: HttpClientFactory
   ) {
-    const config: IPaystreamConfig = Container.get('payway.config')
+    const config: IPaystreamConfig = Container.get('paystream.config')
 
     this.httpClient = httpClientFactory.create({
       baseURL: config.apiRoot,
@@ -36,15 +35,15 @@ export class PaystreamAPI {
     try {
       response = await this.httpClient!.request({
         method: 'post',
-        url: '/single-use-tokens',
-        data: qs.stringify({ ...creditCard }),
+        url: '/credit_cards',
+        data: creditCard,
       })
     } catch (error) {
       return Promise.reject(error)
     }
 
     if (!response.data.successful) {
-      return Promise.reject(response.data.error.toString())
+      return Promise.reject(response.data.errors.toString())
     }
 
     return {
@@ -55,20 +54,20 @@ export class PaystreamAPI {
     }
   }
 
-  async placeCharge(charge: ChargeDTO): Promise<IPaystreamAPIResponse | undefined> {
+  async placeCharge(charge: ChargeDTO): Promise<IPaystreamAPIResponse> {
     let response
     try {
       response = await this.httpClient!.request({
         method: 'post',
-        url: '/transactions',
-        data: qs.stringify({ ...charge }),
+        url: '/purchases',
+        data: charge,
       })
     } catch (error) {
       return Promise.reject(error)
     }
 
     if (!response.data.successful) {
-      return Promise.reject(response.data.error.toString())
+      return Promise.reject(response.data.errors.toString())
     }
 
     return {
@@ -77,5 +76,26 @@ export class PaystreamAPI {
       data: response.data.response,
       originalResponse: response,
     }
+  }
+
+  async schedulePayment(/* _schedule: PaymentScheduleDTO */): Promise<IPaystreamAPIResponse | undefined> {
+    /* let response
+    try {
+      response = await this.httpClient!.request({
+        method: 'put',
+        url: `/customers/${customerId}/schedule`,
+        data: qs.stringify({ ...schedule }),
+      })
+    } catch (error) {
+      return Promise.reject(error)
+    }
+
+    return {
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
+      originalResponse: response,
+    } */
+    return
   }
 }

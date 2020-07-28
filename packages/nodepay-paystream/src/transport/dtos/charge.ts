@@ -19,10 +19,10 @@ import { IPaystreamInternalCharge } from '../../types'
 
 export class ChargeDTO {
   constructor(charge: IPaystreamInternalCharge) {
-    this.amount = charge.amountInCents
+    this.amount = charge.amountInCents / 100
     this.reference = charge.orderNumber
     this.customer_ip = charge.customerIp
-    if (typeof charge.cardToken !== undefined) {
+    if (charge.cardToken !== undefined) {
       this.card_token = charge.cardToken
     } else {
       this.card_number = charge.creditCard?.cardNumber
