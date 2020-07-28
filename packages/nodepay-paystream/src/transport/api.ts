@@ -10,7 +10,6 @@ import {
   CreditCardDTO,
   PlanDTO,
   CustomerDTO,
-  // PaymentScheduleDTO,
 } from './dtos'
 import { SubscriptionDTO } from './dtos/subscription'
 

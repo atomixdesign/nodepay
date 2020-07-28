@@ -45,6 +45,22 @@ export class PaywayAPI {
     return Buffer.from(key, 'binary').toString('base64')
   }
 
+  private async _process(requestConfig: any): Promise<IPaywayAPIResponse> {
+    let response
+    try {
+      response = await this.httpClient!.request(requestConfig)
+    } catch (error) {
+      return Promise.reject(error)
+    }
+
+    return {
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
+      originalResponse: response,
+    }
+  }
+
   // Verify key expiry/validity
   async verifyKey(): Promise<IPaywayAPIResponse> {
     const config: IPaywayConfig = Container.get('payway.config')
@@ -65,92 +81,44 @@ export class PaywayAPI {
   }
 
   async getCCtoken(creditCard: CreditCardDTO): Promise<IPaywayAPIResponse> {
-    let response
-    try {
-      response = await this.httpClient!.request({
-        method: 'post',
-        url: '/single-use-tokens',
-        data: qs.stringify({ ...creditCard }),
-        headers: {
-          Authorization: this.publicAuthHeader,
-        }
-      })
-    } catch (error) {
-      return Promise.reject(error)
-    }
-
-    return {
-      status: response.status,
-      statusText: response.statusText,
-      data: response.data,
-      originalResponse: response,
-    }
+    return this._process({
+      method: 'post',
+      url: '/single-use-tokens',
+      data: qs.stringify({ ...creditCard }),
+      headers: {
+        Authorization: this.publicAuthHeader,
+      }
+    })
   }
 
   async getBankAccountToken(bankAccount: BankAccountDTO): Promise<IPaywayAPIResponse> {
-    let response
-    try {
-      response = await this.httpClient!.request({
-        method: 'post',
-        url: '/single-use-tokens',
-        data: qs.stringify({ ...bankAccount }),
-        headers: {
-          Authorization: this.publicAuthHeader,
-        }
-      })
-    } catch (error) {
-      return Promise.reject(error)
-    }
-
-    return {
-      status: response.status,
-      statusText: response.statusText,
-      data: response.data,
-      originalResponse: response,
-    }
+    return this._process({
+      method: 'post',
+      url: '/single-use-tokens',
+      data: qs.stringify({ ...bankAccount }),
+      headers: {
+        Authorization: this.publicAuthHeader,
+      }
+    })
   }
 
   async addCustomer(customer: CustomerDTO): Promise<IPaywayAPIResponse> {
     const payload = { ...customer }
     delete payload.customerNumber
 
-    let response
-    try {
-      response = await this.httpClient!.request({
-        method: 'put',
-        url: `/customers/${customer.customerNumber}`,
-        data: qs.stringify({ ...payload }),
-      })
-    } catch (error) {
-      return Promise.reject(error)
-    }
-
-    return {
-      status: response.status,
-      statusText: response.statusText,
-      data: response.data,
-      originalResponse: response,
-    }
+    return this._process({
+      method: 'put',
+      url: `/customers/${customer.customerNumber}`,
+      data: qs.stringify({ ...payload }),
+    })
   }
 
   async stopCustomerPayments(customerId: string): Promise<IPaywayAPIResponse> {
-    let response
-    try {
-      response = await this.httpClient!.request({
-        method: 'patch',
-        url: `/customers/${customerId}/payment-setup`,
-        data: qs.stringify({ stopped: true }),
-      })
-    } catch (error) {
-      return Promise.reject(error)
-    }
-
-    return {
-      status: response.status,
-      statusText: response.statusText,
-      data: response.data,
-      originalResponse: response,
-    }
+    return this._process({
+      method: 'patch',
+      url: `/customers/${customerId}/payment-setup`,
+      data: qs.stringify({ stopped: true }),
+    })
   }
 
   async deleteCustomer(customerId: string): Promise<IPaywayAPIResponse> {
@@ -174,62 +142,26 @@ export class PaywayAPI {
   }
 
   async placeCharge(singleUseTokenId: string, charge: ChargeDTO): Promise<IPaywayAPIResponse> {
-    let response
-    try {
-      response = await this.httpClient!.request({
-        method: 'post',
-        url: '/transactions',
-        data: qs.stringify({ singleUseTokenId, ...charge }),
-      })
-    } catch (error) {
-      return Promise.reject(error)
-    }
-
-    return {
-      status: response.status,
-      statusText: response.statusText,
-      data: response.data,
-      originalResponse: response,
-    }
+    return this._process({
+      method: 'post',
+      url: '/transactions',
+      data: qs.stringify({ singleUseTokenId, ...charge }),
+    })
   }
 
   async placeDirectCharge(charge: ChargeDTO): Promise<IPaywayAPIResponse> {
-    let response
-    try {
-      response = await this.httpClient!.request({
-        method: 'post',
-        url: '/transactions',
-        data: qs.stringify({ ...charge }),
-      })
-    } catch (error) {
-      return Promise.reject(error)
-    }
-
-    return {
-      status: response.status,
-      statusText: response.statusText,
-      data: response.data,
-      originalResponse: response,
-    }
+    return this._process({
+      method: 'post',
+      url: '/transactions',
+      data: qs.stringify({ ...charge }),
+    })
   }
 
   async schedulePayment(customerId: string, schedule: PaymentScheduleDTO): Promise<IPaywayAPIResponse> {
-    let response
-    try {
-      response = await this.httpClient!.request({
-        method: 'put',
-        url: `/customers/${customerId}/schedule`,
-        data: qs.stringify({ ...schedule }),
-      })
-    } catch (error) {
-      return Promise.reject(error)
-    }
-
-    return {
-      status: response.status,
-      statusText: response.statusText,
-      data: response.data,
-      originalResponse: response,
-    }
+    return this._process({
+      method: 'put',
+      url: `/customers/${customerId}/schedule`,
+      data: qs.stringify({ ...schedule }),
+    })
   }
 }
