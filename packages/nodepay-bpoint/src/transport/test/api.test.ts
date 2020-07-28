@@ -1,30 +1,29 @@
 import { Container } from 'typedi'
-// import { AxiosResponse } from 'axios'
-// import moment from 'moment'
 import cryptoRandomString from 'crypto-random-string'
-import { API as BpointTransport } from '../api'
-import { APIResponse } from '../api-response'
-import { ActionType, Currency, TransactionType, } from '../../types'
+import { BPOINTAPI as BpointTransport } from '../api'
+import { BPOINTActionType, BPOINTCurrency, BPOINTTransactionType, } from '../../types'
+import { IBPOINTAPIResponse } from '../api-response'
 import {
-  ChargeDTO, CreditCardDTO,
+  ChargeDTO, CreditCardDTO, CustomerDTO,
 } from '../dtos'
 
 const fixtures = {
   creditCard: {
-    CardHolderName: 'John Doe',
-    CardNumber: '5123456789012346',
-    Cvn: '123',
-    ExpiryDate: '0521',
+    cardHolderName: 'John Doe',
+    cardNumber: '5123456789012346',
+    CCV: '123',
+    expiryDateMonth: '05',
+    expiryDateYear: '2021',
   },
   simpleCharge: {
-    Action: ActionType.payment,
+    Action: BPOINTActionType.payment,
     Amount: 100,
     CardDetails: undefined,
-    Currency: Currency.AUD,
+    Currency: BPOINTCurrency.AUD,
     Crn1: '',
     SubType: 'single' as const,
     TestMode: true,
-    Type: TransactionType.ecommerce,
+    Type: BPOINTTransactionType.ecommerce,
   }
 }
 
@@ -57,7 +56,7 @@ describe('test bpoint api transport', () => {
       CardDetails: new CreditCardDTO(fixtures.creditCard),
     }
     const simpleCharge = new ChargeDTO(chargeObject)
-    const response: APIResponse = await api.placeCharge(simpleCharge)
+    const response: IBPOINTAPIResponse = await api.placeCharge(simpleCharge)
 
     expect(validCodes).toContain(response.status)
   })
@@ -70,7 +69,19 @@ describe('test bpoint api transport', () => {
       SubType: 'recurring' as const,
     }
     const simpleCharge = new ChargeDTO(chargeObject)
-    const response: APIResponse = await api.placeCharge(simpleCharge)
+    const response: IBPOINTAPIResponse = await api.placeCharge(simpleCharge)
+
+    expect(validCodes).toContain(response.status)
+  })
+
+  test('it registers a customer with a credit card', async () => {
+    const customerObject = {
+      CardDetails: new CreditCardDTO(fixtures.creditCard),
+      EmailAddress: 'test@example.com',
+      Crn1: cryptoRandomString({ length: 49 }),
+    }
+    const customer = new CustomerDTO(customerObject)
+    const response: IBPOINTAPIResponse = await api.addCustomer(customer)
 
     expect(validCodes).toContain(response.status)
   })

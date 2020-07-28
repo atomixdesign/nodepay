@@ -1,18 +1,36 @@
 import { Container } from 'typedi'
 import { validateOrReject } from 'class-validator'
-import { BaseGateway } from '@atomixdesign/nodepay-core/gateways'
-import { DirectDebit, OnceOffPayment, RecurringPayment } from '@atomixdesign/nodepay-core/features'
-import { Config, PaymentFrequency } from './types'
-import { API, APIResponse } from './transport'
+import { BaseGateway } from '@atomixdesign/nodepay-core'
+import {
+  DirectDebit,
+  OnceOffPayment,
+  RecurringPayment,
+  CustomerDetails,
+} from '@atomixdesign/nodepay-core/features'
+import {
+  IPaywayConfig,
+  IPaywayCharge,
+  IPaywayDirectDebit,
+  IPaywayCustomer,
+} from './types'
+import { PaywayAPI, IPaywayAPIResponse } from './transport'
 import {
   ChargeDTO,
   PaymentScheduleDTO,
+  CreditCardDTO,
+  CustomerDTO,
 } from './transport/dtos'
+import { IPaywayPaymentSchedule } from './types/payment-schedule'
 
-export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffPayment, RecurringPayment {
-  private api: API
+export class Payway extends BaseGateway<IPaywayConfig> implements
+  DirectDebit,
+  OnceOffPayment,
+  RecurringPayment,
+  CustomerDetails
+{
+  private api: PaywayAPI
 
-  protected get baseConfig(): Config {
+  protected get baseConfig(): IPaywayConfig {
     return {
       secretKey: '',
       publishableKey: '',
@@ -21,7 +39,7 @@ export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffP
     }
   }
 
-  constructor(config?: Partial<Config>) {
+  constructor(config?: Partial<IPaywayConfig>) {
     super(config)
     Container.set('payway.config', config)
     this.api = Container.get('payway.api')
@@ -35,29 +53,46 @@ export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffP
     return 'pay-way'
   }
 
-  async charge(
-    singleUserTokenId: string,
-    customerNumber: string,
-    principalAmount: number,
-    orderNumber?: string | undefined,
-    customerIpAddress?: string | undefined,
-    merchantId?: string | undefined,
-    // bankAccountId?: string | undefined,
-  ): Promise<APIResponse> {
-    const chargeObject = new ChargeDTO({
-      customerNumber,
-      principalAmount,
-      orderNumber,
-      customerIpAddress,
-      merchantId,
-      // bankAccountId,
+  async addCustomer(
+    customerDetails: IPaywayCustomer,
+  ): Promise<IPaywayAPIResponse> {
+    const customerObject = new CustomerDTO({
+      ...customerDetails,
     })
+    let payload: IPaywayAPIResponse
 
-    let payload: APIResponse
+    try {
+      await validateOrReject(customerObject)
+      payload = await this.api.addCustomer(customerObject)
+    } catch(error) {
+      return Promise.reject(error)
+    }
+    return Promise.resolve(payload)
+  }
+
+  async charge(
+    onceOffCharge: IPaywayCharge
+  ): Promise<IPaywayAPIResponse> {
+    const chargeObject = new ChargeDTO({
+      customerId: onceOffCharge?.customerId ?? '',
+      principalAmount: onceOffCharge.amountInCents / 100,
+      orderNumber: onceOffCharge.orderNumber,
+      customerIpAddress: onceOffCharge?.customerIpAddress,
+      merchantId: onceOffCharge?.merchantId,
+    })
+    let singleUseTokenId = onceOffCharge?.singleUseTokenId ?? ''
+    let payload: IPaywayAPIResponse
 
     try {
       await validateOrReject(chargeObject)
-      payload = await this.api.placeCharge(singleUserTokenId, chargeObject)
+
+      if (singleUseTokenId === undefined) {
+        const creditCardObject = new CreditCardDTO(onceOffCharge.creditCard!)
+        await validateOrReject(creditCardObject)
+        const ccTokenResponse = await this.api.getCCtoken(creditCardObject)
+        singleUseTokenId = ccTokenResponse.data.singleUseTokenId
+      }
+      payload = await this.api.placeCharge(singleUseTokenId, chargeObject)
     } catch(error) {
       return Promise.reject(error)
     }
@@ -65,28 +100,22 @@ export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffP
   }
 
   async chargeRecurring(
-    customerNumber: string,
-    frequency: PaymentFrequency,
-    nextPaymentDate: string,
-    regularPrincipalAmount: number,
-    nextPrincipalAmount?: number,
-    numberOfPaymentsRemaining?: number,
-    finalPrincipalAmount?: number,
-  ): Promise<APIResponse> {
+    paymentSchedule: IPaywayPaymentSchedule,
+  ): Promise<IPaywayAPIResponse> {
     const scheduleObject = new PaymentScheduleDTO({
-      frequency,
-      nextPaymentDate,
-      regularPrincipalAmount,
-      nextPrincipalAmount,
-      numberOfPaymentsRemaining,
-      finalPrincipalAmount,
+      frequency: paymentSchedule.frequency,
+      nextPaymentDate: paymentSchedule.startDate,
+      regularPrincipalAmount: paymentSchedule.amountInCents / 100,
+      nextPrincipalAmount: (paymentSchedule.nextPrincipalAmount ?? 0) / 100,
+      numberOfPaymentsRemaining: paymentSchedule.numberOfPaymentsRemaining,
+      finalPrincipalAmount: paymentSchedule.finalPrincipalAmount,
     })
 
-    let payload: APIResponse
+    let payload: IPaywayAPIResponse
 
     try {
       await validateOrReject(scheduleObject)
-      payload = await this.api.schedulePayment(customerNumber, scheduleObject)
+      payload = await this.api.schedulePayment(paymentSchedule.customerId, scheduleObject)
     } catch(error) {
       return Promise.reject(error)
     }
@@ -94,23 +123,18 @@ export class PayWay extends BaseGateway<Config> implements DirectDebit, OnceOffP
   }
 
   async directDebit(
-    customerNumber: string,
-    principalAmount: number,
-    orderNumber?: string | undefined,
-    customerIpAddress?: string | undefined,
-    merchantId?: string | undefined,
-    // bankAccountId?: string | undefined,
-  ): Promise<APIResponse> {
+    directDebit: IPaywayDirectDebit,
+  ): Promise<IPaywayAPIResponse> {
     const chargeObject = new ChargeDTO({
-      customerNumber,
-      principalAmount,
-      orderNumber,
-      customerIpAddress,
-      merchantId,
+      customerId: directDebit.customerId,
+      orderNumber: directDebit.paymentReference,
+      principalAmount: directDebit.amountInCents / 100,
+      customerIpAddress: directDebit?.customerIpAddress,
+      merchantId: directDebit?.merchantId,
       // bankAccountId,
     })
 
-    let payload: APIResponse
+    let payload: IPaywayAPIResponse
 
     try {
       await validateOrReject(chargeObject)

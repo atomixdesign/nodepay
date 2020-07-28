@@ -1,9 +1,9 @@
 import { IsNotEmpty, IsCreditCard, MaxLength, Length, IsNumberString, IsIn } from 'class-validator'
-import { Errors, ErrorType } from '@atomixdesign/nodepay-core/validation/errors'
-import { INewCreditCard } from '../../types'
+import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation/errors'
+import { IEzidebitNewCreditCard } from '../../types'
 
 export class CreditCardDTO {
-  constructor(creditCard: INewCreditCard) {
+  constructor(creditCard: IEzidebitNewCreditCard) {
     if (creditCard.YourSystemReference === undefined)
       this.EziDebitCustomerID = creditCard.EziDebitCustomerID
     this.CreditCardNumber = creditCard.CreditCardNumber
@@ -17,70 +17,70 @@ export class CreditCardDTO {
   }
   // * EziDebitCustomerID
   @IsNumberString(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotANumber, 'EziDebitCustomerID')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'EziDebitCustomerID')
   })
   @MaxLength(50, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'EziDebitCustomerID')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'EziDebitCustomerID')
   })
   EziDebitCustomerID = '';
 
   // * CreditCardNumber
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'CreditCardNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'CreditCardNumber')
   })
   @IsCreditCard({
-    message: Errors.getErrorMessage(ErrorType.NotACreditCard, 'CreditCardNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotACreditCard, 'CreditCardNumber')
   })
   @MaxLength(16, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'CreditCardNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'CreditCardNumber')
   })
   CreditCardNumber: string;
 
   // * CreditCardExpiryMonth
   @Length(2, 2, {
-    message: Errors.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardExpiryMonth')
+    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardExpiryMonth')
   })
   @IsNumberString(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotANumber, 'CreditCardExpiryMonth')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'CreditCardExpiryMonth')
   })
   CreditCardExpiryMonth: string;
 
   // * CreditCardExpiryYear
   @Length(4, 4, {
-    message: Errors.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardExpiryYear')
+    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardExpiryYear')
   })
   @IsNumberString(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotANumber, 'CreditCardExpiryYear')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'CreditCardExpiryYear')
   })
   CreditCardExpiryYear: string;
 
   // * NameOnCreditCard
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'NameOnCreditCard')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'NameOnCreditCard')
   })
   @MaxLength(100, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'NameOnCreditCard')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'NameOnCreditCard')
   })
   NameOnCreditCard: string;
 
   // * Reactivate
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'Reactivate')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'Reactivate')
   })
   @IsIn(['YES', 'NO'], {
-    message: Errors.getErrorMessage(ErrorType.NotInAllowedSet, 'Reactivate')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotInAllowedSet, 'Reactivate')
   })
   Reactivate: string
 
   // * YourSystemReference
   @MaxLength(50, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'YourSystemReference')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'YourSystemReference')
   })
   YourSystemReference = '';
 
   // * Username
   @MaxLength(50, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'Username')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'Username')
   })
   Username = '';
 }

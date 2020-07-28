@@ -1,3 +1,7 @@
+import { IDirectDebit } from '../types'
+
 export interface DirectDebit {
-  directDebit(...args: unknown[]): Promise<unknown>
+  directDebit(
+    directDebitCharge: IDirectDebit
+  ): Promise<unknown>
 }

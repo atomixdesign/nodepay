@@ -2,9 +2,9 @@ import { Service, Inject } from 'typedi'
 import {
   Client as SoapClient,
 } from 'soap'
-import { Config } from '../types'
+import { IEzidebitConfig } from '../types'
 import { SoapClientFactory } from '@atomixdesign/nodepay-core/network'
-import { APIResponse, formatResponse } from './api-response'
+import { IEzidebitAPIResponse, formatResponse } from './api-response'
 import {
   CreditCardDTO,
   CustomerDTO,
@@ -15,12 +15,12 @@ import {
 import { EzidebitAPIError } from './api-error'
 
 @Service('ezidebit.api')
-export class API {
+export class EzidebitAPI {
   private soapClient: SoapClient | undefined
   private nonPCISoapClient: SoapClient | undefined
 
   constructor(
-    @Inject('ezidebit.config') private config: Config,
+    @Inject('ezidebit.config') private config: IEzidebitConfig,
     @Inject('soap.client') private soapClientFactory: SoapClientFactory
   ) { }
 
@@ -43,7 +43,7 @@ export class API {
     return pci ? this.soapClient!.describe() : this.nonPCISoapClient!.describe()
   }
 
-  async addCustomer(customer: CustomerDTO): Promise<APIResponse> {
+  async addCustomer(customer: CustomerDTO): Promise<IEzidebitAPIResponse> {
     await this.ensureClient()
     let response
     try {
@@ -63,7 +63,7 @@ export class API {
 
   async addCustomerCC(
     creditCard: CreditCardDTO,
-  ): Promise<APIResponse> {
+  ): Promise<IEzidebitAPIResponse> {
     await this.ensureClient()
     let response
     try {
@@ -83,7 +83,7 @@ export class API {
     return formatResponse(response[0]?.EditCustomerCreditCardResult)
   }
 
-  async placeCharge(charge: OnceOffChargeDTO): Promise<APIResponse> {
+  async placeCharge(charge: OnceOffChargeDTO): Promise<IEzidebitAPIResponse> {
     await this.ensureClient()
     let response
     try {
@@ -103,7 +103,7 @@ export class API {
 
   async placeDirectCharge(
     payment: PaymentDTO,
-  ): Promise<APIResponse> {
+  ): Promise<IEzidebitAPIResponse> {
     await this.ensureClient()
     let response
     try {
@@ -121,7 +121,7 @@ export class API {
     return formatResponse(response[0].AddPaymentResult)
   }
 
-  async schedulePayment(schedule: PaymentScheduleDTO): Promise<APIResponse> {
+  async schedulePayment(schedule: PaymentScheduleDTO): Promise<IEzidebitAPIResponse> {
     await this.ensureClient()
     let response
     try {

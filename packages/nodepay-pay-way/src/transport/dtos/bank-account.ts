@@ -4,25 +4,16 @@ import {
 
 import {
   ErrorType,
-  Errors,
+  ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
+import { IBankAccount } from '@atomixdesign/nodepay-core/types'
 
 export class BankAccountDTO {
-  constructor(
-    {
-      bsb,
-      accountNumber,
-      accountName,
-    }:
-      {
-        bsb: string
-        accountNumber: string
-        accountName: string
-      }) {
+  constructor(bankAccount: IBankAccount) {
     this.paymentMethod = 'bankAccount'
-    this.bsb = bsb
-    this.accountNumber = accountNumber
-    this.accountName = accountName
+    this.bsb = bankAccount.BSBNumber
+    this.accountNumber = bankAccount.accountNumber
+    this.accountName = bankAccount.accountName
   }
 
   // * paymentMethod
@@ -30,19 +21,19 @@ export class BankAccountDTO {
 
   // * bsb
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'bsb')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'bsb')
   })
   bsb: string;
 
   // * accountNumber
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'accountNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'accountNumber')
   })
   accountNumber: string;
 
   // * accountName
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'accountName')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'accountName')
   })
   accountName: string;
 }

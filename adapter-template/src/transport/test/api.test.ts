@@ -22,7 +22,7 @@ const fixtures = {
     expiryDateYear: '31'
   },
   onceOffCharge: {
-    customerNumber: 'onceoffCustomer',
+    customerId: 'onceoffCustomer',
     principalAmount: 10.87,
     orderNumber: '123456789',
   },

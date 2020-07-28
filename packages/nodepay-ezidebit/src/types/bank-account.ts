@@ -1,4 +1,4 @@
-export interface IBankAccount {
+export interface IEzidebitBankAccount {
   BankAccountName: string
   BankAccountBSB: string
   BankAccountNumber: string

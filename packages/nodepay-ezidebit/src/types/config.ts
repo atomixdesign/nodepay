@@ -1,4 +1,4 @@
-export type Config = {
+export type IEzidebitConfig = {
     clientId: string
     digitalKey: string
     publicKey: string

@@ -1,4 +1,4 @@
-export enum Currency {
+export enum BPOINTCurrency {
   AED = 'AED',
   AFN = 'AFN',
   ALL = 'ALL',

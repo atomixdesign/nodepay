@@ -1,3 +1,7 @@
+import { IBaseCharge } from '../types'
+
 export interface OnceOffPayment {
-  charge(...args: unknown[]): Promise<unknown>
+  charge(
+    onceOffCharge: IBaseCharge
+  ): Promise<unknown>
 }

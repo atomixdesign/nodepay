@@ -1,4 +1,4 @@
-export type Config = {
+export type IPaywayConfig = {
     secretKey: string
     publishableKey: string
     apiRoot: string

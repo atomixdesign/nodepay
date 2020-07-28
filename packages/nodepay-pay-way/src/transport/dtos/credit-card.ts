@@ -1,3 +1,4 @@
+import { ICreditCard } from '@atomixdesign/nodepay-core/types'
 import {
   IsNotEmpty,
   Length,
@@ -7,31 +8,17 @@ import {
 
 import {
   ErrorType,
-  Errors,
+  ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
 
 export class CreditCardDTO {
-  constructor(
-    {
-      cardNumber,
-      cardholderName,
-      cvn,
-      expiryDateMonth,
-      expiryDateYear,
-    } :
-    {
-    cardNumber: string
-    cardholderName: string
-    cvn: string
-    expiryDateMonth: string
-    expiryDateYear: string
-  }) {
+  constructor(creditCard: ICreditCard) {
     this.paymentMethod = 'creditCard'
-    this.cardNumber = cardNumber
-    this.cardholderName = cardholderName
-    this.cvn = cvn
-    this.expiryDateMonth = expiryDateMonth
-    this.expiryDateYear = expiryDateYear
+    this.cardNumber = creditCard.cardNumber
+    this.cardholderName = creditCard.cardHolderName
+    this.cvn = creditCard.CCV
+    this.expiryDateMonth = creditCard.expiryDateMonth
+    this.expiryDateYear = creditCard.expiryDateYear.slice(-2)
   }
 
   // * paymentMethod
@@ -39,43 +26,43 @@ export class CreditCardDTO {
 
   // * cardNumber
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'cardNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'cardNumber')
   })
   @IsCreditCard({
-    message: Errors.getErrorMessage(ErrorType.NotACreditCard, 'cardNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotACreditCard, 'cardNumber')
   })
   cardNumber: string;
 
   // * cardholderName
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'cardholderName')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'cardholderName')
   })
   cardholderName: string;
 
   // * cvn
   @Length(3, 4, {
-    message: Errors.getErrorMessage(ErrorType.LengthOutOfBounds, 'cvn')
+    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'cvn')
   })
   @IsNumberString(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotANumber, 'cvn')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'cvn')
   })
   cvn: string;
 
   // * expiryDateMonth
   @Length(2, 2, {
-    message: Errors.getErrorMessage(ErrorType.LengthOutOfBounds, 'expiryDateMonth')
+    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'expiryDateMonth')
   })
   @IsNumberString(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotANumber, 'expiryDateMonth')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'expiryDateMonth')
   })
   expiryDateMonth: string;
 
   // * expiryDateYear
   @Length(2, 2, {
-    message: Errors.getErrorMessage(ErrorType.LengthOutOfBounds, 'expiryDateYear')
+    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'expiryDateYear')
   })
   @IsNumberString(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotANumber, 'expiryDateYear')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'expiryDateYear')
   })
   expiryDateYear: string;
 }

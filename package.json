@@ -9,7 +9,8 @@
     "clean:artifacts": "shx rm -R node_modules packages/**/node_modules packages/**/coverage packages/**/docs",
     "clean": "shx rm -R packages/**/build packages/**/tsconfig.tsbuildinfo",
     "cli": "node utils/nodepay-cli",
-    "build:docs": "lerna run build:docs --no-bail"
+    "build:docs": "lerna run build:docs --no-bail",
+    "lint": "lerna run lint"
   },
   "devDependencies": {
     "@types/inquirer": "^6.5.0",

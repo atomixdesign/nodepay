@@ -1,4 +1,4 @@
-export type Config = {
+export type IBPOINTConfig = {
   username: string
   merchantId: string
   password: string

@@ -1,26 +1,30 @@
-// import { ActionType, Currency, TransactionType } from '../types'
 import { Container } from 'typedi'
 import { BPOINT } from '../bpoint'
-import { testAPI, APIResponse } from '../transport'
-import { ActionType, Currency, TransactionType } from '../types'
+import { testAPI, IBPOINTAPIResponse } from '../transport'
+import { IBPOINTCharge } from '../types'
 
 const fixtures = {
   creditCard: {
-    CardHolderName: 'John Doe',
-    CardNumber: '5123456789012346',
-    Cvn: '123',
-    ExpiryMonth: '05',
-    ExpiryYear: '21',
+    cardHolderName: 'John Doe',
+    cardNumber: '5123456789012346',
+    CCV: '123',
+    expiryDateMonth: '05',
+    expiryDateYear: '21',
+  },
+  creditCardBad: {
+    cardHolderName: 'John Doe',
+    cardNumber: 'fake cc',
+    CCV: 'fake ccv',
+    expiryDateMonth: '14',
+    expiryDateYear: '00',
   },
   simpleCharge: {
-    Action: ActionType.payment,
-    Amount: 100,
-    CardDetails: undefined,
-    Currency: Currency.AUD,
-    Crn1: '',
-    SubType: 'single' as const,
-    TestMode: true,
-    Type: TransactionType.ecommerce,
+    orderNumber: '123456789',
+    amountInCents: 100,
+  },
+  simpleChargeBad: {
+    orderNumber: '123456789',
+    amountInCents: -1,
   }
 }
 
@@ -45,28 +49,23 @@ describe('test bpoint gateway', () => {
   })
 
   test('it can be charged', async () => {
-    const { creditCard, simpleCharge } = fixtures
-    const charge: APIResponse = await gateway.charge(
-      creditCard.CardNumber,
-      creditCard.ExpiryMonth,
-      creditCard.ExpiryYear,
-      creditCard.Cvn,
-      creditCard.CardHolderName,
-      simpleCharge.Amount,
-    )
-
+    const onceOffCharge: IBPOINTCharge = {
+      ...fixtures.simpleCharge,
+      creditCard: fixtures.creditCard,
+    }
+    const charge: IBPOINTAPIResponse = await gateway.charge(onceOffCharge)
     expect(charge.statusText).toBe('OK')
   })
 
   test('it reports errors if the charge format is not correct', async () => {
+    const onceOffChargeBad: IBPOINTCharge = {
+      ...fixtures.simpleChargeBad,
+      creditCard: fixtures.creditCardBad,
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const charge: APIResponse = await gateway.charge(
-      'fakecc',
-      '13',
-      '39',
-      'fakecvn',
-      '',
-      -1,
+    const charge: IBPOINTAPIResponse = await gateway.charge(
+      onceOffChargeBad
     ).catch(error => {
       expect(typeof error).toBe('object')
       return error
@@ -74,16 +73,11 @@ describe('test bpoint gateway', () => {
   })
 
   test('it can schedule a charge', async () => {
-    const { creditCard, simpleCharge } = fixtures
-    const charge: APIResponse = await gateway.chargeRecurring(
-      creditCard.CardNumber,
-      creditCard.ExpiryMonth,
-      creditCard.ExpiryYear,
-      creditCard.Cvn,
-      creditCard.CardHolderName,
-      simpleCharge.Amount,
-    )
-
+    const recurringCharge: IBPOINTCharge = {
+      ...fixtures.simpleCharge,
+      creditCard: fixtures.creditCard,
+    }
+    const charge: IBPOINTAPIResponse = await gateway.chargeRecurring(recurringCharge)
     expect(charge.statusText).toBe('OK')
   })
 })

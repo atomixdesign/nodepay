@@ -1,15 +1,33 @@
 import { Container } from 'typedi'
 import { validateOrReject } from 'class-validator'
-import { BaseGateway } from '@atomixdesign/nodepay-core/gateways/base-gateway'
-import { DirectDebit, OnceOffPayment, RecurringPayment } from '@atomixdesign/nodepay-core/features'
-import { Config, PaymentFrequency, DayOfWeek } from './types'
-import { API as Transport, APIResponse } from './transport'
-import { OnceOffChargeDTO, PaymentDTO, PaymentScheduleDTO } from './transport/dtos'
+import { BaseGateway } from '@atomixdesign/nodepay-core'
+import {
+  DirectDebit,
+  OnceOffPayment,
+  RecurringPayment,
+  CustomerDetails,
+} from '@atomixdesign/nodepay-core/features'
+import {
+  IEzidebitConfig,
+  EzidebitDayOfWeek,
+  IEzidebitCharge,
+  IEzidebitPaymentSchedule,
+  IEzidebitDirectDebit,
+  IEzidebitCustomer,
+  IEzidebitInternalCustomer,
+} from './types'
+import { EzidebitAPI as Transport, IEzidebitAPIResponse } from './transport'
+import { OnceOffChargeDTO, PaymentDTO, PaymentScheduleDTO, CustomerDTO } from './transport/dtos'
 
-export class Ezidebit extends BaseGateway<Config> implements DirectDebit, OnceOffPayment, RecurringPayment {
+export class Ezidebit extends BaseGateway<IEzidebitConfig> implements
+  DirectDebit,
+  OnceOffPayment,
+  RecurringPayment,
+  CustomerDetails
+{
   private api: Transport
 
-  protected get baseConfig(): Config {
+  protected get baseConfig(): IEzidebitConfig {
     return {
       clientId: '',
       digitalKey: '',
@@ -19,7 +37,7 @@ export class Ezidebit extends BaseGateway<Config> implements DirectDebit, OnceOf
     }
   }
 
-  constructor(config?: Partial<Config>) {
+  constructor(config?: Partial<IEzidebitConfig>) {
     super(config)
     Container.set('ezidebit.config', config)
     this.api = Container.get('ezidebit.api')
@@ -33,25 +51,58 @@ export class Ezidebit extends BaseGateway<Config> implements DirectDebit, OnceOf
     return 'ezidebit'
   }
 
+  async addCustomer(
+    customer: IEzidebitCustomer,
+  ): Promise<IEzidebitAPIResponse> {
+    const customerObject: { [index:string] : any } = {
+      YourSystemReference: customer.customerId ?? '',
+      YourGeneralReference: customer.generalReference,
+      LastName: customer.lastName ?? '',
+      FirstName: customer.firstName,
+      AddressLine1: customer.address1,
+      AddressLine2: customer.address2,
+      AddressSuburb: customer.suburb,
+      AddressState: customer.region,
+      AddressPostCode: customer.postCode,
+      EmailAddress: customer.emailAddress,
+      MobilePhoneNumber: customer.phoneNumber,
+      ContractStartDate: customer.contractStartDate,
+      SmsPaymentReminder: customer.smsPaymentReminder ?? 'YES',
+      SmsFailedNotification: customer.smsFailedNotification ?? 'YES',
+      SmsExpiredCard: customer.smsExpiredCard ?? 'YES',
+      Username: customer.username,
+    }
+
+    let payload
+
+    try {
+      await validateOrReject(new CustomerDTO(customerObject as IEzidebitInternalCustomer))
+      for(const key of Object.keys(customerObject)) {
+        if (customerObject[key] === undefined) {
+          customerObject[key] = ''
+        }
+      }
+      payload = await this.api.addCustomer(
+        new CustomerDTO(customerObject as IEzidebitInternalCustomer)
+      )
+    } catch(error) {
+      return Promise.reject(error)
+    }
+    return Promise.resolve(payload)
+  }
+
   async charge(
-    creditCardNumber: string,
-    creditCardExpiryMonth: string,
-    creditCardExpiryYear: string,
-    creditCardCCV: string,
-    nameOnCreditCard: string,
-    principalAmount: number,
-    customerName: string,
-    orderNumber: string,
-  ): Promise<APIResponse> {
+    onceOffCharge: IEzidebitCharge,
+  ): Promise<IEzidebitAPIResponse> {
     const chargeObject = {
-      CreditCardNumber: creditCardNumber,
-      CreditCardExpiryMonth: creditCardExpiryMonth,
-      CreditCardExpiryYear: creditCardExpiryYear,
-      CreditCardCCV: creditCardCCV,
-      NameOnCreditCard: nameOnCreditCard,
-      PaymentAmountInCents: principalAmount * 100,
-      CustomerName: customerName,
-      PaymentReference: orderNumber,
+      CreditCardNumber: onceOffCharge.creditCard.cardNumber,
+      CreditCardExpiryMonth: onceOffCharge.creditCard.expiryDateMonth,
+      CreditCardExpiryYear: onceOffCharge.creditCard.expiryDateYear,
+      CreditCardCCV: onceOffCharge.creditCard.CCV,
+      NameOnCreditCard: onceOffCharge.creditCard.cardHolderName,
+      PaymentAmountInCents: onceOffCharge.amountInCents,
+      CustomerName: onceOffCharge.customerName ?? '',
+      PaymentReference: onceOffCharge.orderNumber,
     }
 
     let payload
@@ -66,34 +117,24 @@ export class Ezidebit extends BaseGateway<Config> implements DirectDebit, OnceOf
   }
 
   async chargeRecurring(
-    gatewayCustomerNumber = '',
-    ownCustomerNumber = '',
-    frequency: PaymentFrequency,
-    startDate: string,
-    dayOfWeek = DayOfWeek.MON,
-    dayOfMonth = 0,
-    regularPrincipalAmount: number,
-    maxNumberPayments: number,
-    maxTotalAmount: number,
-    keepManualPayments = 'YES',
-    userName = '',
-  ): Promise<APIResponse> {
+    paymentSchedule: IEzidebitPaymentSchedule
+  ): Promise<IEzidebitAPIResponse> {
     const scheduleObject = {
-      EziDebitCustomerID: gatewayCustomerNumber,
-      YourSystemReference: ownCustomerNumber,
-      ScheduleStartDate: startDate,
-      SchedulePeriodType: frequency,
-      DayOfWeek: dayOfWeek,
-      DayOfMonth: dayOfMonth,
-      FirstWeekOfMonth: '',
-      SecondWeekOfMonth: '',
-      ThirdWeekOfMonth: '',
-      FourthWeekOfMonth: '',
-      PaymentAmountInCents: regularPrincipalAmount * 100,
-      LimitToNumberOfPayments: maxNumberPayments,
-      LimitToTotalAmountInCents: maxTotalAmount * 100,
-      KeepManualPayments: keepManualPayments,
-      Username: userName,
+      EziDebitCustomerID: paymentSchedule.ezidebitCustomerId ?? '',
+      YourSystemReference: paymentSchedule.customerId,
+      ScheduleStartDate: paymentSchedule.startDate,
+      SchedulePeriodType: paymentSchedule.frequency,
+      DayOfWeek: paymentSchedule.dayOfWeek ?? EzidebitDayOfWeek.MON,
+      DayOfMonth: paymentSchedule.dayOfMonth,
+      FirstWeekOfMonth: paymentSchedule.firstWeekOfMonth ?? '',
+      SecondWeekOfMonth: paymentSchedule.secondWeekOfMonth ?? '',
+      ThirdWeekOfMonth: paymentSchedule.thirdWeekOfMonth ?? '',
+      FourthWeekOfMonth: paymentSchedule.fourthWeekOfMonth ?? '',
+      PaymentAmountInCents: paymentSchedule.amountInCents,
+      LimitToNumberOfPayments: paymentSchedule.maxNumberPayments,
+      LimitToTotalAmountInCents: paymentSchedule.maxTotalAmount,
+      KeepManualPayments: paymentSchedule.keepManualPayments ?? 'YES',
+      Username: paymentSchedule.username ?? '',
     }
 
     let payload
@@ -108,20 +149,15 @@ export class Ezidebit extends BaseGateway<Config> implements DirectDebit, OnceOf
   }
 
   async directDebit(
-    gatewayCustomerNumber = '',
-    ownCustomerNumber = '',
-    debitDate: string,
-    principalAmount: number,
-    orderNumber = '',
-    userName = '',
-  ): Promise<APIResponse> {
+    directDebit: IEzidebitDirectDebit,
+  ): Promise<IEzidebitAPIResponse> {
     const paymentObject = {
-      EziDebitCustomerID: gatewayCustomerNumber,
-      YourSystemReference: ownCustomerNumber,
-      DebitDate: debitDate,
-      PaymentAmountInCents: principalAmount * 100,
-      PaymentReference: orderNumber,
-      Username: userName,
+      EziDebitCustomerID: directDebit.ezidebitCustomerId ?? '',
+      YourSystemReference: directDebit.customerId,
+      DebitDate: directDebit.debitDate ?? '',
+      PaymentAmountInCents: directDebit.amountInCents,
+      PaymentReference: directDebit.paymentReference,
+      Username: directDebit.username ?? '',
     }
 
     let payload

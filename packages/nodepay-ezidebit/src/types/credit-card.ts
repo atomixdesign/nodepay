@@ -1,15 +1,15 @@
-export interface IBaseCreditCard {
+export interface IEzidebitBaseCreditCard {
   CreditCardNumber: string
   CreditCardExpiryMonth: string
   CreditCardExpiryYear: string
   NameOnCreditCard: string
 }
 
-export interface ICreditCard extends IBaseCreditCard {
+export interface IEzidebitCreditCard extends IEzidebitBaseCreditCard {
   CreditCardCCV: string
 }
 
-export interface INewCreditCard extends IBaseCreditCard {
+export interface IEzidebitNewCreditCard extends IEzidebitBaseCreditCard {
   EziDebitCustomerID: string
   Reactivate: string
   YourSystemReference: string

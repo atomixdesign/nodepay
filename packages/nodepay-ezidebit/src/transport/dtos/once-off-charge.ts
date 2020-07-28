@@ -9,12 +9,12 @@ import {
 
 import {
   ErrorType,
-  Errors,
+  ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
-import { ICreditCardCharge } from '../../types'
+import { IEzidebitCreditCardCharge } from '../../types'
 
 export class OnceOffChargeDTO {
-  constructor(charge: ICreditCardCharge) {
+  constructor(charge: IEzidebitCreditCardCharge) {
     this.CreditCardNumber = charge.CreditCardNumber
     this.CreditCardExpiryMonth = charge.CreditCardExpiryMonth
     this.CreditCardExpiryYear = charge.CreditCardExpiryYear
@@ -27,70 +27,70 @@ export class OnceOffChargeDTO {
 
   // * CreditCardNumber
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'CreditCardNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'CreditCardNumber')
   })
   @IsCreditCard({
-    message: Errors.getErrorMessage(ErrorType.NotACreditCard, 'CreditCardNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotACreditCard, 'CreditCardNumber')
   })
   @MaxLength(16, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'CreditCardNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'CreditCardNumber')
   })
   CreditCardNumber: string;
 
   // * CreditCardExpiryMonth
   @Length(2, 2, {
-    message: Errors.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardExpiryMonth')
+    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardExpiryMonth')
   })
   @IsNumberString(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotANumber, 'CreditCardExpiryMonth')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'CreditCardExpiryMonth')
   })
   CreditCardExpiryMonth: string;
 
   // * CreditCardExpiryYear
   @Length(4, 4, {
-    message: Errors.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardExpiryYear')
+    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardExpiryYear')
   })
   @IsNumberString(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotANumber, 'CreditCardExpiryYear')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'CreditCardExpiryYear')
   })
   CreditCardExpiryYear: string;
 
   // * CreditCardCCV
   @Length(3, 4, {
-    message: Errors.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardCCV')
+    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardCCV')
   })
   @IsNumberString(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotANumber, 'CreditCardCCV')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'CreditCardCCV')
   })
   CreditCardCCV: string;
 
   // * NameOnCreditCard
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'NameOnCreditCard')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'NameOnCreditCard')
   })
   @MaxLength(100, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'NameOnCreditCard')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'NameOnCreditCard')
   })
   NameOnCreditCard: string;
 
   // * PaymentAmountInCents
   @IsNumber(undefined, {
-    message: Errors.getErrorMessage(ErrorType.NotANumber, 'PaymentAmountInCents')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'PaymentAmountInCents')
   })
   PaymentAmountInCents: number;
 
   // * CustomerName
   @MaxLength(255, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'CustomerName')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'CustomerName')
   })
   CustomerName = '';
 
   // * PaymentReference
   @IsNotEmpty({
-    message: Errors.getErrorMessage(ErrorType.NotEmpty, 'PaymentReference')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'PaymentReference')
   })
   @MaxLength(50, {
-    message: Errors.getErrorMessage(ErrorType.FieldTooLong, 'PaymentReference')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'PaymentReference')
   })
   PaymentReference: string;
 }

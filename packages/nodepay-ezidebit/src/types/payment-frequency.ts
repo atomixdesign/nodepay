@@ -1,4 +1,4 @@
-export enum PaymentFrequency {
+export enum EzidebitPaymentFrequency {
   Weekly = 'W',
   Fortnightly = 'F',
   Monthly = 'M',
@@ -9,7 +9,7 @@ export enum PaymentFrequency {
   Yearly = 'yearly'
 }
 
-export enum DayOfWeek {
+export enum EzidebitDayOfWeek {
   MON = 'MON',
   TUE = 'TUE',
   WED = 'WED',
