@@ -8,8 +8,11 @@ import { IPaystreamAPIResponse } from './api-response'
 import {
   ChargeDTO,
   CreditCardDTO,
+  PlanDTO,
+  CustomerDTO,
   // PaymentScheduleDTO,
 } from './dtos'
+import { SubscriptionDTO } from './dtos/subscription'
 
 @Service('paystream.api')
 export class PaystreamAPI {
@@ -30,13 +33,13 @@ export class PaystreamAPI {
     })
   }
 
-  async getCCtoken(creditCard: CreditCardDTO): Promise<IPaystreamAPIResponse> {
+  private async _process(endpoint: string, payload: any): Promise<IPaystreamAPIResponse> {
     let response
     try {
       response = await this.httpClient!.request({
         method: 'post',
-        url: '/credit_cards',
-        data: creditCard,
+        url: endpoint,
+        data: payload,
       })
     } catch (error) {
       return Promise.reject(error)
@@ -52,50 +55,25 @@ export class PaystreamAPI {
       data: response.data.response,
       originalResponse: response,
     }
+  }
+
+  async getCCtoken(creditCard: CreditCardDTO): Promise<IPaystreamAPIResponse> {
+    return this._process('/credit_cards', creditCard)
+  }
+
+  async addCustomer(customer: CustomerDTO): Promise<IPaystreamAPIResponse> {
+    return this._process('/customers', customer)
+  }
+
+  async addPlan(plan: PlanDTO): Promise<IPaystreamAPIResponse> {
+    return this._process('/plans', plan)
+  }
+
+  async addSubscription(subscription: SubscriptionDTO): Promise<IPaystreamAPIResponse> {
+    return this._process('/subscriptions', subscription)
   }
 
   async placeCharge(charge: ChargeDTO): Promise<IPaystreamAPIResponse> {
-    let response
-    try {
-      response = await this.httpClient!.request({
-        method: 'post',
-        url: '/purchases',
-        data: charge,
-      })
-    } catch (error) {
-      return Promise.reject(error)
-    }
-
-    if (!response.data.successful) {
-      return Promise.reject(response.data.errors.toString())
-    }
-
-    return {
-      status: response.status,
-      statusText: response.statusText,
-      data: response.data.response,
-      originalResponse: response,
-    }
-  }
-
-  async schedulePayment(/* _schedule: PaymentScheduleDTO */): Promise<IPaystreamAPIResponse | undefined> {
-    /* let response
-    try {
-      response = await this.httpClient!.request({
-        method: 'put',
-        url: `/customers/${customerId}/schedule`,
-        data: qs.stringify({ ...schedule }),
-      })
-    } catch (error) {
-      return Promise.reject(error)
-    }
-
-    return {
-      status: response.status,
-      statusText: response.statusText,
-      data: response.data,
-      originalResponse: response,
-    } */
-    return
+    return this._process('/purchases', charge)
   }
 }

@@ -19,7 +19,7 @@ import { IPaystreamInternalCharge } from '../../types'
 
 export class ChargeDTO {
   constructor(charge: IPaystreamInternalCharge) {
-    this.amount = charge.amountInCents / 100
+    this.amount = charge.amountInCents
     this.reference = charge.orderNumber
     this.customer_ip = charge.customerIp
     if (charge.cardToken !== undefined) {
@@ -46,7 +46,7 @@ export class ChargeDTO {
 
   // * customer_ip
   @IsIP('4', {
-    message: ErrorFactory.getErrorMessage(ErrorType.IpInvalid, 'customer_ip')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotAValidIP, 'customer_ip')
   })
   customer_ip: string;
 

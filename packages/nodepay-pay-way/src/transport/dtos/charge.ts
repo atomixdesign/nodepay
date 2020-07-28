@@ -59,7 +59,7 @@ export class ChargeDTO {
   // * customerIpAddress
   @IsOptional()
   @IsIP('4', {
-    message: ErrorFactory.getErrorMessage(ErrorType.IpInvalid, 'customerIpAddress')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotAValidIP, 'customerIpAddress')
   })
   customerIpAddress: string | undefined;
 

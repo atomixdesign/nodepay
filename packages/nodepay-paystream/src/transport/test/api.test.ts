@@ -1,10 +1,13 @@
 import { Container } from 'typedi'
+import cryptoRandomString from 'crypto-random-string'
 // import moment from 'moment'
 import { PaystreamAPI as PaystreamTransport } from '../api'
 import { IPaystreamAPIResponse } from '../api-response'
 import {
   ChargeDTO,
   CreditCardDTO,
+  PlanDTO,
+  CustomerDTO,
 } from '../dtos'
 
 const validCodes = [
@@ -13,6 +16,20 @@ const validCodes = [
 ]
 
 const fixtures = {
+  customer: {
+    firstName: 'John',
+    lastName: 'Doe',
+    reference: cryptoRandomString({ length: 10 }),
+    email: 'mail@example.com',
+    ipAddress: '169.254.169.254',
+  },
+  address: {
+    address: 'The Street',
+    city: 'The City',
+    state: 'QLD',
+    postcode: '69000',
+    country: 'Australia',
+  },
   creditCard: {
     cardNumber: '5123456789012346',
     cardHolderName: 'John Doe',
@@ -27,8 +44,14 @@ const fixtures = {
   },
   onceOffCharge: {
     amountInCents: 1087,
-    orderNumber: '123456789',
+    orderNumber: cryptoRandomString({ length: 10 }),
     customerIp: '169.254.169.254',
+  },
+  plan: {
+    name: 'Test Plan',
+    amount: 1000,
+    reference: cryptoRandomString({ length: 10 }),
+    description: 'This is a test plan.',
   },
 }
 
@@ -49,16 +72,31 @@ describe('test paystream api transport', () => {
     const creditCard = new CreditCardDTO(fixtures.creditCard)
     const response: IPaystreamAPIResponse = await api.getCCtoken(creditCard)
     expect(validCodes).toContain(response.status)
-    expect(response?.originalResponse?.data?.successful).toBe(true)
   })
 
   test('it places a once-off charge using credit card', async () => {
     const chargeObject = { ...fixtures.onceOffCharge, creditCard: fixtures.creditCard }
     const onceOffCharge = new ChargeDTO(chargeObject)
-    console.log(chargeObject, onceOffCharge)
     const response: IPaystreamAPIResponse = await api.placeCharge(onceOffCharge)
 
     expect(validCodes).toContain(response.status)
-    expect(response?.originalResponse?.data?.successful).toBe(true)
+  })
+
+  test('it can create a plan', async () => {
+    const plan = new PlanDTO(fixtures.plan)
+    const response: IPaystreamAPIResponse = await api.addPlan(plan)
+
+    expect(validCodes).toContain(response.status)
+  })
+
+  test('it can add a customer', async () => {
+    const customer = new CustomerDTO({
+      ...fixtures.customer,
+      creditCard: fixtures.creditCard,
+      address: fixtures.address,
+    })
+    const response: IPaystreamAPIResponse = await api.addCustomer(customer)
+
+    expect(validCodes).toContain(response.status)
   })
 })
