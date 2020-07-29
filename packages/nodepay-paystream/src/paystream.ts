@@ -6,7 +6,8 @@ import {
   RecurringPayment,
   CustomerDetails,
 } from '@atomixdesign/nodepay-core/features'
-import { IPaystreamConfig, IPaystreamCharge, IPaystreamCustomer, IPaystreamSubscription } from './types'
+import { ICreditCard } from '@atomixdesign/nodepay-core/types'
+import { IPaystreamConfig, IPaystreamInternalCharge, IPaystreamCustomer, IPaystreamSubscription } from './types'
 import { IPaystreamAPIResponse } from './transport'
 import { ChargeDTO, CustomerDTO, SubscriptionDTO } from './transport/dtos'
 import { PaystreamAPI } from './transport/api'
@@ -49,9 +50,13 @@ export class Paystream extends BaseGateway<IPaystreamConfig> implements
   }
 
   async charge(
-    onceOffCharge: IPaystreamCharge,
+    onceOffCharge: IPaystreamInternalCharge,
+    creditCard?: ICreditCard,
   ): Promise<IPaystreamAPIResponse> {
-    const chargeObject = new ChargeDTO(onceOffCharge)
+    const chargeObject = new ChargeDTO({
+      ...onceOffCharge,
+      ...creditCard,
+    })
     await validateOrReject(chargeObject)
     return await this.api.placeCharge(chargeObject)
   }

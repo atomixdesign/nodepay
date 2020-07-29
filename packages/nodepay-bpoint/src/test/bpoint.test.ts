@@ -1,7 +1,7 @@
 import { Container } from 'typedi'
+import { IBaseResponse } from '@atomixdesign/nodepay-core/network'
 import { BPOINT } from '../bpoint'
-import { testAPI, IBPOINTAPIResponse } from '../transport'
-import { IBPOINTCharge } from '../types'
+import { testAPI } from '../transport'
 
 const fixtures = {
   creditCard: {
@@ -49,23 +49,18 @@ describe('test bpoint gateway', () => {
   })
 
   test('it can be charged', async () => {
-    const onceOffCharge: IBPOINTCharge = {
-      ...fixtures.simpleCharge,
-      creditCard: fixtures.creditCard,
-    }
-    const charge: IBPOINTAPIResponse = await gateway.charge(onceOffCharge)
+    const charge: IBaseResponse = await gateway.charge(
+      fixtures.simpleCharge,
+      fixtures.creditCard,
+    )
     expect(charge.statusText).toBe('OK')
   })
 
   test('it reports errors if the charge format is not correct', async () => {
-    const onceOffChargeBad: IBPOINTCharge = {
-      ...fixtures.simpleChargeBad,
-      creditCard: fixtures.creditCardBad,
-    }
-
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const charge: IBPOINTAPIResponse = await gateway.charge(
-      onceOffChargeBad
+    const charge: IBaseResponse = await gateway.charge(
+      fixtures.simpleChargeBad,
+      fixtures.creditCardBad,
     ).catch(error => {
       expect(typeof error).toBe('object')
       return error
@@ -73,11 +68,10 @@ describe('test bpoint gateway', () => {
   })
 
   test('it can schedule a charge', async () => {
-    const recurringCharge: IBPOINTCharge = {
-      ...fixtures.simpleCharge,
-      creditCard: fixtures.creditCard,
-    }
-    const charge: IBPOINTAPIResponse = await gateway.chargeRecurring(recurringCharge)
+    const charge: IBaseResponse = await gateway.chargeRecurring(
+      fixtures.simpleCharge,
+      fixtures.creditCard,
+    )
     expect(charge.statusText).toBe('OK')
   })
 })

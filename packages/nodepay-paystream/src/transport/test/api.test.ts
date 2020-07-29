@@ -11,7 +11,6 @@ import {
   SubscriptionDTO,
 } from '../dtos'
 import { PaystreamPaymentFrequency } from '../../types'
-import { MockResponse } from 'nodepay-ezidebit/src/transport'
 
 const validCodes = [
   200,
@@ -86,7 +85,7 @@ describe('test paystream api transport', () => {
   })
 
   test('it places a once-off charge using credit card', async () => {
-    const chargeObject = { ...fixtures.onceOffCharge, creditCard: fixtures.creditCard }
+    const chargeObject = { ...fixtures.onceOffCharge, ...fixtures.creditCard }
     const onceOffCharge = new ChargeDTO(chargeObject)
     const response: IPaystreamAPIResponse = await api.placeCharge(onceOffCharge)
 

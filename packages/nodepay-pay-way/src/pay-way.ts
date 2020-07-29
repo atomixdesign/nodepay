@@ -21,6 +21,7 @@ import {
   CustomerDTO,
 } from './transport/dtos'
 import { IPaywayPaymentSchedule } from './types/payment-schedule'
+import { ICreditCard } from '@atomixdesign/nodepay-core/src/types'
 
 export class Payway extends BaseGateway<IPaywayConfig> implements
   DirectDebit,
@@ -71,7 +72,8 @@ export class Payway extends BaseGateway<IPaywayConfig> implements
   }
 
   async charge(
-    onceOffCharge: IPaywayCharge
+    onceOffCharge: IPaywayCharge,
+    creditCard?: ICreditCard,
   ): Promise<IPaywayAPIResponse> {
     const chargeObject = new ChargeDTO({
       customerId: onceOffCharge?.customerId ?? '',
@@ -80,23 +82,17 @@ export class Payway extends BaseGateway<IPaywayConfig> implements
       customerIpAddress: onceOffCharge?.customerIpAddress,
       merchantId: onceOffCharge?.merchantId,
     })
-    let singleUseTokenId = onceOffCharge?.singleUseTokenId ?? ''
-    let payload: IPaywayAPIResponse
+    let singleUseTokenId = onceOffCharge?.singleUseTokenId
 
-    try {
-      await validateOrReject(chargeObject)
+    await validateOrReject(chargeObject)
 
-      if (singleUseTokenId === undefined) {
-        const creditCardObject = new CreditCardDTO(onceOffCharge.creditCard!)
-        await validateOrReject(creditCardObject)
-        const ccTokenResponse = await this.api.getCCtoken(creditCardObject)
-        singleUseTokenId = ccTokenResponse.data.singleUseTokenId
-      }
-      payload = await this.api.placeCharge(singleUseTokenId, chargeObject)
-    } catch(error) {
-      return Promise.reject(error)
+    if (singleUseTokenId === undefined) {
+      const creditCardObject = new CreditCardDTO(creditCard!)
+      await validateOrReject(creditCardObject)
+      const ccTokenResponse = await this.api.getCCtoken(creditCardObject)
+      singleUseTokenId = ccTokenResponse.data.singleUseTokenId
     }
-    return Promise.resolve(payload)
+    return await this.api.placeCharge(singleUseTokenId!, chargeObject)
   }
 
   async chargeRecurring(

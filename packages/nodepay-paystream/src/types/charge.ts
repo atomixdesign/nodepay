@@ -1,6 +1,7 @@
-import { IBaseCharge } from '@atomixdesign/nodepay-core/types'
+import { IBaseCharge, ICreditCard } from '@atomixdesign/nodepay-core/types'
 
-export interface IPaystreamCharge extends IBaseCharge {
+/** @internal */
+export interface IPaystreamInternalCharge extends IBaseCharge, ICreditCard {
   cardToken?: string
   customerIp: string
 }

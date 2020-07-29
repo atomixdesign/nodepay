@@ -1,7 +1,7 @@
 import { Container } from 'typedi'
 import { Ezidebit } from '../ezidebit'
 import { testAPI, IEzidebitAPIResponse } from '../transport'
-import { EzidebitPaymentFrequency, EzidebitDayOfWeek, IEzidebitCharge } from '../types'
+import { EzidebitPaymentFrequency, EzidebitDayOfWeek } from '../types'
 
 const fixtures = {
   simpleCharge: {
@@ -72,26 +72,19 @@ describe('test ezidebit gateway', () => {
   })
 
   test('it can be charged', async () => {
-    const onceOffCharge: IEzidebitCharge = {
-      ...fixtures.simpleCharge,
-      creditCard: fixtures.creditCard,
-    }
     const charge: IEzidebitAPIResponse = await gateway.charge(
-      onceOffCharge
+      fixtures.simpleCharge,
+      fixtures.creditCard,
     )
 
     expect(charge.data.resultText).toBe('OK')
   })
 
   test('it reports errors if the charge format is not correct', async () => {
-    const onceOffChargeBad: IEzidebitCharge = {
-      ...fixtures.simpleChargeBad,
-      creditCard: fixtures.creditCardBad,
-    }
-
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const charge: IEzidebitAPIResponse = await gateway.charge(
-      onceOffChargeBad
+      fixtures.simpleChargeBad,
+      fixtures.creditCardBad,
     ).catch(error => {
       expect(typeof error).toBe('object')
       return error

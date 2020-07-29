@@ -3,7 +3,7 @@ import { Container } from 'typedi'
 import cryptoRandomString from 'crypto-random-string'
 import { Paystream } from '../paystream'
 import { testAPI, IPaystreamAPIResponse } from '../transport'
-import { PaystreamPaymentFrequency, IPaystreamCharge } from '../types'
+import { PaystreamPaymentFrequency, IPaystreamInternalCharge } from '../types'
 
 
 const fixtures = {
@@ -77,18 +77,18 @@ describe('test paystream gateway', () => {
   })
 
   test('it can be charged', async () => {
-    const onceOffCharge: IPaystreamCharge = {
+    const onceOffCharge: IPaystreamInternalCharge = {
       ...fixtures.simpleCharge,
-      creditCard: fixtures.creditCard,
+      ...fixtures.creditCard,
     }
     const response: IPaystreamAPIResponse = await gateway.charge(onceOffCharge)
     expect(response?.status).toBe(200)
   })
 
   test('it reports errors if the charge format is not correct', async () => {
-    const onceOffChargeBad: IPaystreamCharge = {
+    const onceOffChargeBad: IPaystreamInternalCharge = {
       ...fixtures.simpleCharge,
-      creditCard: fixtures.creditCard,
+      ...fixtures.creditCard,
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

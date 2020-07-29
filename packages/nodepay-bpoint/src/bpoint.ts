@@ -10,6 +10,7 @@ import {
 import {
   ICreditCard, IBankAccount,
 } from '@atomixdesign/nodepay-core/types'
+import { IBaseResponse } from '@atomixdesign/nodepay-core/network'
 import {
   IBPOINTConfig,
   IBPOINTCustomer,
@@ -17,7 +18,7 @@ import {
   BPOINTActionType,
   BPOINTTransactionType,
 } from './types'
-import { BPOINTAPI, IBPOINTAPIResponse } from './transport'
+import { BPOINTAPI } from './transport'
 import {
   ChargeDTO,
   CreditCardDTO,
@@ -54,16 +55,16 @@ export class BPOINT extends BaseGateway<IBPOINTConfig> implements
     return 'bpoint'
   }
 
-  private async internalCharge(
+  private async _processCharge(
     charge: IBPOINTCharge,
+    creditCard: ICreditCard,
     subType: 'single' | 'recurring' = 'single'
-  ): Promise<IBPOINTAPIResponse> {
-    let payload
-
+  ): Promise<IBaseResponse> {
     const chargeObject = {
       Action: BPOINTActionType.payment,
-      Amount: charge.amountInCents, // TODO: Amount is scaled depending on currency. Setup scaling table for currencies.
-      CardDetails: new CreditCardDTO(charge.creditCard),
+      // TODO: Amount is scaled depending on currency. Setup scaling table for currencies.
+      Amount: charge.amountInCents,
+      CardDetails: new CreditCardDTO(creditCard),
       Crn1: `${charge?.merchantReference ?? ''}${cryptoRandomString({ length: 10 })}`,
       EmailAddress: charge?.emailAddress,
       MerchantReference: charge?.merchantReference,
@@ -72,23 +73,16 @@ export class BPOINT extends BaseGateway<IBPOINTConfig> implements
       type: BPOINTTransactionType.internet,
     }
 
-    try {
-      const chargeDTO = new ChargeDTO(chargeObject)
-      await validateOrReject(chargeDTO)
-      payload = await this.api.placeCharge(chargeDTO)
-    } catch(error) {
-      return Promise.reject(error)
-    }
-    return Promise.resolve(payload)
+    const chargeDTO = new ChargeDTO(chargeObject)
+    await validateOrReject(chargeDTO)
+    return await this.api.placeCharge(chargeDTO)
   }
 
   async addCustomer(
     customerDetails: IBPOINTCustomer,
     creditCard: ICreditCard,
     bankAccount?: IBankAccount,
-  ): Promise<IBPOINTAPIResponse> {
-    let payload
-
+  ): Promise<IBaseResponse> {
     const customerObject = {
       CardDetails: new CreditCardDTO(creditCard),
       BankAccountDetails: bankAccount && new BankAccountDTO(bankAccount),
@@ -96,29 +90,35 @@ export class BPOINT extends BaseGateway<IBPOINTConfig> implements
       EmailAddress: customerDetails.emailAddress,
     }
 
-    try {
-      const customerDTO = new CustomerDTO(customerObject)
-      await validateOrReject(customerDTO)
-      payload = await this.api.addCustomer(customerDTO)
-    } catch(error) {
-      return Promise.reject(error)
-    }
-    return Promise.resolve(payload)
+    const customerDTO = new CustomerDTO(customerObject)
+    await validateOrReject(customerDTO)
+
+    return await this.api.addCustomer(customerDTO)
   }
 
   async charge(
-    onceOffCharge: IBPOINTCharge
-  ): Promise<IBPOINTAPIResponse> {
-    return this.internalCharge(onceOffCharge, 'single')
+    onceOffCharge: IBPOINTCharge,
+    creditCard: ICreditCard,
+  ): Promise<IBaseResponse> {
+    return this._processCharge(
+      onceOffCharge,
+      creditCard,
+      'single',
+    )
   }
 
   async chargeRecurring(
-    recurringCharge: IBPOINTCharge
-  ): Promise<IBPOINTAPIResponse> {
-    return this.internalCharge(recurringCharge, 'recurring')
+    recurringCharge: IBPOINTCharge,
+    creditCard: ICreditCard,
+  ): Promise<IBaseResponse> {
+    return this._processCharge(
+      recurringCharge,
+      creditCard,
+      'recurring',
+    )
   }
 
-  async directDebit(): Promise<IBPOINTAPIResponse> {
+  async directDebit(): Promise<IBaseResponse> {
     return Promise.reject('Not implemented')
   }
 

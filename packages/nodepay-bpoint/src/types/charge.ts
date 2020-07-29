@@ -31,7 +31,6 @@ export interface IBPOINTInternalCharge {
 }
 
 export interface IBPOINTCharge extends IBaseCharge {
-  creditCard: ICreditCard
   merchantReference?: string
   emailAddress?: string
   testMode?: boolean

@@ -7,6 +7,7 @@ import {
   RecurringPayment,
   CustomerDetails,
 } from '@atomixdesign/nodepay-core/features'
+import { ICreditCard } from '@atomixdesign/nodepay-core/types'
 import {
   IEzidebitConfig,
   EzidebitDayOfWeek,
@@ -93,27 +94,21 @@ export class Ezidebit extends BaseGateway<IEzidebitConfig> implements
 
   async charge(
     onceOffCharge: IEzidebitCharge,
+    creditCard: ICreditCard,
   ): Promise<IEzidebitAPIResponse> {
     const chargeObject = {
-      CreditCardNumber: onceOffCharge.creditCard.cardNumber,
-      CreditCardExpiryMonth: onceOffCharge.creditCard.expiryDateMonth,
-      CreditCardExpiryYear: onceOffCharge.creditCard.expiryDateYear,
-      CreditCardCCV: onceOffCharge.creditCard.CCV,
-      NameOnCreditCard: onceOffCharge.creditCard.cardHolderName,
+      CreditCardNumber: creditCard.cardNumber,
+      CreditCardExpiryMonth: creditCard.expiryDateMonth,
+      CreditCardExpiryYear: creditCard.expiryDateYear,
+      CreditCardCCV: creditCard.CCV,
+      NameOnCreditCard: creditCard.cardHolderName,
       PaymentAmountInCents: onceOffCharge.amountInCents,
       CustomerName: onceOffCharge.customerName ?? '',
       PaymentReference: onceOffCharge.orderNumber,
     }
 
-    let payload
-
-    try {
-      await validateOrReject(new OnceOffChargeDTO(chargeObject))
-      payload = await this.api.placeCharge(chargeObject)
-    } catch(error) {
-      return Promise.reject(error)
-    }
-    return Promise.resolve(payload)
+    await validateOrReject(new OnceOffChargeDTO(chargeObject))
+    return await this.api.placeCharge(chargeObject)
   }
 
   async chargeRecurring(
@@ -137,15 +132,8 @@ export class Ezidebit extends BaseGateway<IEzidebitConfig> implements
       Username: paymentSchedule.username ?? '',
     }
 
-    let payload
-
-    try {
-      await validateOrReject(new PaymentScheduleDTO(scheduleObject))
-      payload = await this.api.schedulePayment(scheduleObject)
-    } catch(error) {
-      return Promise.reject(error)
-    }
-    return Promise.resolve(payload)
+    await validateOrReject(new PaymentScheduleDTO(scheduleObject))
+    return await this.api.schedulePayment(scheduleObject)
   }
 
   async directDebit(
@@ -160,14 +148,7 @@ export class Ezidebit extends BaseGateway<IEzidebitConfig> implements
       Username: directDebit.username ?? '',
     }
 
-    let payload
-
-    try {
-      await validateOrReject(new PaymentDTO(paymentObject))
-      payload = await this.api.placeDirectCharge(paymentObject)
-    } catch(error) {
-      return Promise.reject(error)
-    }
-    return Promise.resolve(payload)
+    await validateOrReject(new PaymentDTO(paymentObject))
+    return await this.api.placeDirectCharge(paymentObject)
   }
 }
