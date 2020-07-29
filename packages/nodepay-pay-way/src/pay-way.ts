@@ -94,7 +94,7 @@ export class Payway extends BaseGateway<IPaywayConfig> implements
   ): Promise<IPaywayAPIResponse> {
     const scheduleObject = new PaymentScheduleDTO({
       frequency: paymentSchedule.frequency,
-      nextPaymentDate: paymentSchedule.startDate,
+      nextPaymentDate: paymentSchedule?.nextPaymentDate ?? paymentSchedule.startDate,
       regularPrincipalAmount: paymentSchedule.amountInCents / 100,
       nextPrincipalAmount: (paymentSchedule.nextPrincipalAmount ?? 0) / 100,
       numberOfPaymentsRemaining: paymentSchedule.numberOfPaymentsRemaining,
