@@ -42,46 +42,25 @@ export class Paystream extends BaseGateway<IPaystreamConfig> implements
 
   async addCustomer(
     customerDetails: IPaystreamCustomer,
-  ): Promise<IPaystreamAPIResponse | undefined> {
+  ): Promise<IPaystreamAPIResponse> {
     const customerObject = new CustomerDTO(customerDetails)
-    let payload: IPaystreamAPIResponse
-
-    try {
-      await validateOrReject(customerObject)
-      payload = await this.api.addCustomer(customerObject)
-    } catch(error) {
-      return Promise.reject(error)
-    }
-    return Promise.resolve(payload)
+    await validateOrReject(customerObject)
+    return await this.api.addCustomer(customerObject)
   }
 
   async charge(
     onceOffCharge: IPaystreamCharge,
   ): Promise<IPaystreamAPIResponse> {
     const chargeObject = new ChargeDTO(onceOffCharge)
-    let payload: IPaystreamAPIResponse
-
-    try {
-      await validateOrReject(chargeObject)
-      payload = await this.api.placeCharge(chargeObject)
-    } catch(error) {
-      return Promise.reject(error)
-    }
-    return Promise.resolve(payload)
+    await validateOrReject(chargeObject)
+    return await this.api.placeCharge(chargeObject)
   }
 
   async chargeRecurring(
     subscription: IPaystreamSubscription,
-  ): Promise<IPaystreamAPIResponse | undefined> {
+  ): Promise<IPaystreamAPIResponse> {
     const subscriptionObject = new SubscriptionDTO(subscription)
-    let payload: IPaystreamAPIResponse
-
-    try {
-      await validateOrReject(subscriptionObject)
-      payload = await this.api.addSubscription(subscriptionObject)
-    } catch(error) {
-      return Promise.reject(error)
-    }
-    return Promise.resolve(payload)
+    await validateOrReject(subscriptionObject)
+    return await this.api.addSubscription(subscriptionObject)
   }
 }

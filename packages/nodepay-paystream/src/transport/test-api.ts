@@ -1,5 +1,5 @@
 import { IPaystreamAPIResponse } from './api-response'
-import { ChargeDTO /*, PaymentScheduleDTO */ } from './dtos'
+import { CustomerDTO, ChargeDTO, SubscriptionDTO, } from './dtos'
 
 /** @internal */
 export const MockResponse = {
@@ -16,11 +16,15 @@ export const MockResponse = {
 export class testAPI {
   constructor() {}
 
+  async addCustomer(_customer: CustomerDTO): Promise<IPaystreamAPIResponse> {
+    return Promise.resolve(MockResponse)
+  }
+
   async placeCharge(_charge: ChargeDTO): Promise<IPaystreamAPIResponse> {
     return Promise.resolve(MockResponse)
   }
 
-  async schedulePayment(/* _paymentSchedule: PaymentScheduleDTO */): Promise<IPaystreamAPIResponse> {
+  async addSubscription(_subscription: SubscriptionDTO): Promise<IPaystreamAPIResponse> {
     return Promise.resolve(MockResponse)
   }
 }
