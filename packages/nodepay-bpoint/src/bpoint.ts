@@ -92,7 +92,6 @@ export class BPOINT extends BaseGateway<IBPOINTConfig> implements
 
     const customerDTO = new CustomerDTO(customerObject)
     await validateOrReject(customerDTO)
-
     return await this.api.addCustomer(customerDTO)
   }
 
@@ -117,9 +116,4 @@ export class BPOINT extends BaseGateway<IBPOINTConfig> implements
       'recurring',
     )
   }
-
-  async directDebit(): Promise<IBaseResponse> {
-    return Promise.reject('Not implemented')
-  }
-
 }

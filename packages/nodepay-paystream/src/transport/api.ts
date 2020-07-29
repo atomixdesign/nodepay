@@ -41,14 +41,11 @@ export class PaystreamAPI {
         data: payload,
       })
     } catch (error) {
-      return Promise.reject({
-        messages: error?.response?.data?.errors?.toString(),
-        originalError: error,
-      })
+      throw new Error(error?.response?.data?.errors?.toString())
     }
 
     if (!response.data.successful) {
-      return Promise.reject(response?.data?.errors?.toString())
+      throw new Error(response?.data?.errors?.toString())
     }
 
     return {

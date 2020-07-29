@@ -60,15 +60,9 @@ export class Payway extends BaseGateway<IPaywayConfig> implements
     const customerObject = new CustomerDTO({
       ...customerDetails,
     })
-    let payload: IPaywayAPIResponse
 
-    try {
-      await validateOrReject(customerObject)
-      payload = await this.api.addCustomer(customerObject)
-    } catch(error) {
-      return Promise.reject(error)
-    }
-    return Promise.resolve(payload)
+    await validateOrReject(customerObject)
+    return await this.api.addCustomer(customerObject)
   }
 
   async charge(
@@ -107,15 +101,8 @@ export class Payway extends BaseGateway<IPaywayConfig> implements
       finalPrincipalAmount: paymentSchedule.finalPrincipalAmount,
     })
 
-    let payload: IPaywayAPIResponse
-
-    try {
-      await validateOrReject(scheduleObject)
-      payload = await this.api.schedulePayment(paymentSchedule.customerId, scheduleObject)
-    } catch(error) {
-      return Promise.reject(error)
-    }
-    return Promise.resolve(payload)
+    await validateOrReject(scheduleObject)
+    return await this.api.schedulePayment(paymentSchedule.customerId, scheduleObject)
   }
 
   async directDebit(
@@ -130,15 +117,7 @@ export class Payway extends BaseGateway<IPaywayConfig> implements
       // bankAccountId,
     })
 
-    let payload: IPaywayAPIResponse
-
-    try {
-      await validateOrReject(chargeObject)
-      payload = await this.api.placeDirectCharge(chargeObject)
-    } catch(error) {
-      return Promise.reject(error)
-    }
-    return Promise.resolve(payload)
+    await validateOrReject(chargeObject)
+    return await this.api.placeDirectCharge(chargeObject)
   }
-
 }

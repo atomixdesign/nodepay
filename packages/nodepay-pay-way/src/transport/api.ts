@@ -46,12 +46,7 @@ export class PaywayAPI {
   }
 
   private async _process(requestConfig: any): Promise<IPaywayAPIResponse> {
-    let response
-    try {
-      response = await this.httpClient!.request(requestConfig)
-    } catch (error) {
-      return Promise.reject(error)
-    }
+    const response = await this.httpClient!.request(requestConfig)
 
     return {
       status: response.status,
@@ -122,16 +117,11 @@ export class PaywayAPI {
   }
 
   async deleteCustomer(customerId: string): Promise<IPaywayAPIResponse> {
-    let response
-    try {
-      await this.stopCustomerPayments(customerId)
-      response = await this.httpClient!.request({
-        method: 'delete',
-        url: `/customers/${customerId}`,
-      })
-    } catch (error) {
-      return Promise.reject(error)
-    }
+    await this.stopCustomerPayments(customerId)
+    const response = await this.httpClient!.request({
+      method: 'delete',
+      url: `/customers/${customerId}`,
+    })
 
     return {
       status: response.status,

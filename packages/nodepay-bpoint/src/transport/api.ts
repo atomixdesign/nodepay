@@ -38,10 +38,10 @@ export class BPOINTAPI {
       data: { 'TxnReq': charge },
     })
     if (Number(response?.data.APIResponse.ResponseCode) !== 0) {
-      return Promise.reject(new BPOINTAPIError(response.data.APIResponse))
+      throw new BPOINTAPIError(response.data.APIResponse)
     }
     if (Number(response?.data.TxnResp.ResponseCode) !== 0) {
-      return Promise.reject(new BPOINTAPIError(response.data.TxnResp))
+      throw new BPOINTAPIError(response.data.TxnResp)
     }
 
     return {
@@ -58,9 +58,8 @@ export class BPOINTAPI {
       url: '/dvtokens/',
       data: { 'DVTokenReq': customer },
     })
-
     if (Number(response?.data.APIResponse.ResponseCode) !== 0) {
-      return Promise.reject(new BPOINTAPIError(response.data.APIResponse))
+      throw new BPOINTAPIError(response.data.APIResponse)
     }
 
     return {

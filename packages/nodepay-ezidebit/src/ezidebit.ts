@@ -74,22 +74,15 @@ export class Ezidebit extends BaseGateway<IEzidebitConfig> implements
       Username: customer.username,
     }
 
-    let payload
-
-    try {
-      await validateOrReject(new CustomerDTO(customerObject as IEzidebitInternalCustomer))
-      for(const key of Object.keys(customerObject)) {
-        if (customerObject[key] === undefined) {
-          customerObject[key] = ''
-        }
+    await validateOrReject(new CustomerDTO(customerObject as IEzidebitInternalCustomer))
+    for(const key of Object.keys(customerObject)) {
+      if (customerObject[key] === undefined) {
+        customerObject[key] = ''
       }
-      payload = await this.api.addCustomer(
-        new CustomerDTO(customerObject as IEzidebitInternalCustomer)
-      )
-    } catch(error) {
-      return Promise.reject(error)
     }
-    return Promise.resolve(payload)
+    return await this.api.addCustomer(
+      new CustomerDTO(customerObject as IEzidebitInternalCustomer)
+    )
   }
 
   async charge(
