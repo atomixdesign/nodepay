@@ -1,10 +1,10 @@
 import { PaystreamPaymentFrequency } from './payment-frequency'
 
-export interface IPaystreamInternalSubscription {
+export interface IPaystreamSubscription {
   customer: string
   plan: string
   frequency: PaystreamPaymentFrequency
   startDate: string
   reference: string
-  isActive: true
+  isActive: boolean
 }

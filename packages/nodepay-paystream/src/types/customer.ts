@@ -8,12 +8,12 @@ export interface IPaystreamInternalAddress {
   country: string
 }
 
-export interface IPaystreamInternalCustomer {
+export interface IPaystreamCustomer {
   firstName: string
   lastName: string
   reference: string
-  email: string
+  emailAddress: string
   ipAddress: string
-  creditCard: ICreditCard
-  address: IPaystreamInternalAddress
+  creditCard?: ICreditCard
+  address?: IPaystreamInternalAddress
 }

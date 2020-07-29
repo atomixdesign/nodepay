@@ -15,10 +15,10 @@ import {
   ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
 
-import { IPaystreamInternalCharge } from '../../types'
+import { IPaystreamCharge } from '../../types'
 
 export class ChargeDTO {
-  constructor(charge: IPaystreamInternalCharge) {
+  constructor(charge: IPaystreamCharge) {
     this.amount = charge.amountInCents
     this.reference = charge.orderNumber
     this.customer_ip = charge.customerIp
@@ -36,26 +36,26 @@ export class ChargeDTO {
   @IsNumber(undefined, {
     message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'amount')
   })
-  amount: number;
+  readonly amount: number;
 
   // * reference
   @IsNotEmpty({
     message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'reference')
   })
-  reference: string;
+  readonly reference: string;
 
   // * customer_ip
   @IsIP('4', {
     message: ErrorFactory.getErrorMessage(ErrorType.NotAValidIP, 'customer_ip')
   })
-  customer_ip: string;
+  readonly customer_ip: string;
 
   // * card_token
   @IsOptional()
   @IsNotEmpty({
     message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'card_token')
   })
-  card_token: string | undefined;
+  readonly card_token: string | undefined;
 
   // * card_number
   @IsOptional()
@@ -65,14 +65,14 @@ export class ChargeDTO {
   @IsCreditCard({
     message: ErrorFactory.getErrorMessage(ErrorType.NotACreditCard, 'card_number')
   })
-  card_number: string | undefined;
+  readonly card_number: string | undefined;
 
   // * card_holder
   @IsOptional()
   @IsNotEmpty({
     message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'card_holder')
   })
-  card_holder: string | undefined;
+  readonly card_holder: string | undefined;
 
   // * cvv
   @IsOptional()
@@ -82,12 +82,12 @@ export class ChargeDTO {
   @IsNumberString(undefined, {
     message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'cvv')
   })
-  cvv: string | undefined;
+  readonly cvv: string | undefined;
 
   // * card_expiry
   @IsOptional()
   @Length(7, 7, {
     message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'card_expiry')
   })
-  card_expiry: string | undefined;
+  readonly card_expiry: string | undefined;
 }

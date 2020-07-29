@@ -8,7 +8,10 @@ import {
   CreditCardDTO,
   PlanDTO,
   CustomerDTO,
+  SubscriptionDTO,
 } from '../dtos'
+import { PaystreamPaymentFrequency } from '../../types'
+import { MockResponse } from 'nodepay-ezidebit/src/transport'
 
 const validCodes = [
   200,
@@ -20,7 +23,7 @@ const fixtures = {
     firstName: 'John',
     lastName: 'Doe',
     reference: cryptoRandomString({ length: 10 }),
-    email: 'mail@example.com',
+    emailAddress: 'mail@example.com',
     ipAddress: '169.254.169.254',
   },
   address: {
@@ -53,6 +56,14 @@ const fixtures = {
     reference: cryptoRandomString({ length: 10 }),
     description: 'This is a test plan.',
   },
+  subscription: {
+    customer: '',
+    plan: '',
+    frequency: PaystreamPaymentFrequency.Weekly,
+    startDate: '2027-05-09',
+    reference: cryptoRandomString({ length: 10 }),
+    isActive: true
+  },
 }
 
 describe('test paystream api transport', () => {
@@ -83,7 +94,7 @@ describe('test paystream api transport', () => {
   })
 
   test('it can create a plan', async () => {
-    const plan = new PlanDTO(fixtures.plan)
+    const plan = new PlanDTO({ ...fixtures.plan, ...{ reference: cryptoRandomString({ length: 10 }) } })
     const response: IPaystreamAPIResponse = await api.addPlan(plan)
 
     expect(validCodes).toContain(response.status)
@@ -91,11 +102,33 @@ describe('test paystream api transport', () => {
 
   test('it can add a customer', async () => {
     const customer = new CustomerDTO({
-      ...fixtures.customer,
+      ...{ ...fixtures.customer, ...{ reference: cryptoRandomString({ length: 10 }) } },
       creditCard: fixtures.creditCard,
       address: fixtures.address,
     })
     const response: IPaystreamAPIResponse = await api.addCustomer(customer)
+
+    expect(validCodes).toContain(response.status)
+  })
+
+  test('it can add a subscription', async () => {
+    const planReference = cryptoRandomString({ length: 10 })
+    const plan = new PlanDTO({ ...fixtures.plan, ...{ reference: planReference } })
+    await api.addPlan(plan)
+
+    const customer = new CustomerDTO({
+      ...{ ...fixtures.customer, ...{ reference: cryptoRandomString({ length: 10 }) } },
+      creditCard: fixtures.creditCard,
+      address: fixtures.address,
+    })
+    const customerResponse: IPaystreamAPIResponse = await api.addCustomer(customer)
+
+    const subscriptionObject = fixtures.subscription
+    subscriptionObject.customer = customerResponse?.data?.id as string
+    subscriptionObject.plan = planReference
+
+    const subscription = new SubscriptionDTO(subscriptionObject)
+    const response: IPaystreamAPIResponse = await api.addSubscription(subscription)
 
     expect(validCodes).toContain(response.status)
   })

@@ -11,4 +11,5 @@ export interface IBaseResponse {
   statusText: string
   internalErrorCode?: number
   data: any
+  originalResponse: any
 }

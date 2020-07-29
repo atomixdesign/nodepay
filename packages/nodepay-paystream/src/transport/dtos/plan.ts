@@ -22,23 +22,23 @@ export class PlanDTO {
   @IsNotEmpty({
     message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'name')
   })
-  name: string;
+  readonly name: string;
 
   // * amount
   @IsNumber(undefined, {
     message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'amount')
   })
-  amount: number;
+  readonly amount: number;
 
   // * reference
   @IsNotEmpty({
     message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'reference')
   })
-  reference: string;
+  readonly reference: string;
 
   // * description
   @IsNotEmpty({
     message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'description')
   })
-  description: string;
+  readonly description: string;
 }

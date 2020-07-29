@@ -18,5 +18,6 @@ export const formatResponse = function(payload: IEzidebitResponse): IEzidebitAPI
     statusText: payload.ErrorMessage !== undefined ? payload.ErrorMessage : dataHash,
     internalErrorCode: payload.Error,
     data: payload.Data,
+    originalResponse: payload,
   }
 }

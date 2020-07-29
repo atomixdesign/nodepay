@@ -1,6 +1,6 @@
 import { IBaseCharge } from '@atomixdesign/nodepay-core/types'
 
-export interface IPaystreamInternalCharge extends IBaseCharge {
+export interface IPaystreamCharge extends IBaseCharge {
   cardToken?: string
   customerIp: string
 }
