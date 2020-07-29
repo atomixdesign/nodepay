@@ -1,6 +1,6 @@
 export interface ICustomerDetails {
-  lastName?: string
   firstName?: string
+  lastName?: string
   phoneNumber?: string
   emailAddress?: string
   address1?: string

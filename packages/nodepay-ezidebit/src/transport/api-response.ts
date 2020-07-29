@@ -8,7 +8,6 @@ export interface IEzidebitResponse {
 
 export interface IEzidebitAPIResponse extends IBaseResponse{
   data: Record<string, unknown>
-  statusText: string
 }
 
 export const formatResponse = function(payload: IEzidebitResponse): IEzidebitAPIResponse{
@@ -19,5 +18,6 @@ export const formatResponse = function(payload: IEzidebitResponse): IEzidebitAPI
     statusText: payload.ErrorMessage !== undefined ? payload.ErrorMessage : dataHash,
     internalErrorCode: payload.Error,
     data: payload.Data,
+    originalResponse: payload,
   }
 }
