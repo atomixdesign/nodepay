@@ -15,10 +15,10 @@ import {
   ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
 
-import { IPaystreamInternalCharge } from '../../types'
+import { PaystreamCharge } from '../../types'
 
 export class ChargeDTO {
-  constructor(charge: IPaystreamInternalCharge) {
+  constructor(charge: PaystreamCharge) {
     this.amount = charge.amountInCents
     this.reference = charge.orderNumber
     this.customer_ip = charge.customerIp

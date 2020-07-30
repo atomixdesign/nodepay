@@ -3,7 +3,7 @@ import { Container } from 'typedi'
 import cryptoRandomString from 'crypto-random-string'
 import { Paystream } from '../paystream'
 import { testAPI, IPaystreamAPIResponse } from '../transport'
-import { PaystreamPaymentFrequency, IPaystreamInternalCharge } from '../types'
+import { PaystreamPaymentFrequency, PaystreamCharge } from '../types'
 
 
 const fixtures = {
@@ -77,7 +77,7 @@ describe('test paystream gateway', () => {
   })
 
   test('it can be charged', async () => {
-    const onceOffCharge: IPaystreamInternalCharge = {
+    const onceOffCharge: PaystreamCharge = {
       ...fixtures.simpleCharge,
       ...fixtures.creditCard,
     }
@@ -86,7 +86,7 @@ describe('test paystream gateway', () => {
   })
 
   test('it reports errors if the charge format is not correct', async () => {
-    const onceOffChargeBad: IPaystreamInternalCharge = {
+    const onceOffChargeBad: PaystreamCharge = {
       ...fixtures.simpleCharge,
       ...fixtures.creditCard,
     }

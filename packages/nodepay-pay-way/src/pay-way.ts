@@ -21,7 +21,7 @@ import {
   CustomerDTO,
 } from './transport/dtos'
 import { IPaywayPaymentSchedule } from './types/payment-schedule'
-import { ICreditCard } from '@atomixdesign/nodepay-core/src/types'
+import { PaywayCreditCard } from './types'
 
 export class Payway extends BaseGateway<IPaywayConfig> implements
   DirectDebit,
@@ -67,7 +67,7 @@ export class Payway extends BaseGateway<IPaywayConfig> implements
 
   async charge(
     onceOffCharge: IPaywayCharge,
-    creditCard?: ICreditCard,
+    creditCard?: PaywayCreditCard,
   ): Promise<IPaywayAPIResponse> {
     const chargeObject = new ChargeDTO({
       customerId: onceOffCharge?.customerId ?? '',

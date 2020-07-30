@@ -8,7 +8,7 @@ import {
   CustomerDetails,
 } from '@atomixdesign/nodepay-core/features'
 import {
-  ICreditCard, IBankAccount,
+  IBankAccount,
 } from '@atomixdesign/nodepay-core/types'
 import { IBaseResponse } from '@atomixdesign/nodepay-core/network'
 import {
@@ -17,6 +17,7 @@ import {
   BPOINTCharge,
   BPOINTActionType,
   BPOINTTransactionType,
+  BPOINTCreditCard,
 } from './types'
 import { BPOINTAPI } from './transport'
 import {
@@ -57,7 +58,7 @@ export class BPOINT extends BaseGateway<BPOINTConfig> implements
 
   private async _processCharge(
     charge: BPOINTCharge,
-    creditCard: ICreditCard,
+    creditCard: BPOINTCreditCard,
     subType: 'single' | 'recurring' = 'single'
   ): Promise<IBaseResponse> {
     const chargeObject = {
@@ -80,7 +81,7 @@ export class BPOINT extends BaseGateway<BPOINTConfig> implements
 
   async addCustomer(
     customerDetails: BPOINTCustomer,
-    creditCard: ICreditCard,
+    creditCard: BPOINTCreditCard,
     bankAccount?: IBankAccount,
   ): Promise<IBaseResponse> {
     const customerObject = {
@@ -97,7 +98,7 @@ export class BPOINT extends BaseGateway<BPOINTConfig> implements
 
   async charge(
     onceOffCharge: BPOINTCharge,
-    creditCard: ICreditCard,
+    creditCard: BPOINTCreditCard,
   ): Promise<IBaseResponse> {
     return this._processCharge(
       onceOffCharge,
@@ -108,7 +109,7 @@ export class BPOINT extends BaseGateway<BPOINTConfig> implements
 
   async chargeRecurring(
     recurringCharge: BPOINTCharge,
-    creditCard: ICreditCard,
+    creditCard: BPOINTCreditCard,
   ): Promise<IBaseResponse> {
     return this._processCharge(
       recurringCharge,

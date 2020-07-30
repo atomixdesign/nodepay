@@ -3,6 +3,6 @@ import { ICreditCard, IBaseCharge } from '../types'
 export interface OnceOffPayment {
   charge(
     onceOffCharge: IBaseCharge,
-    creditCard: ICreditCard,
+    creditCard?: ICreditCard,
   ): Promise<unknown>
 }

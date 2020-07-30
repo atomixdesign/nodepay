@@ -1,6 +1,6 @@
 import { ICreditCard } from '@atomixdesign/nodepay-core/types'
 
-export class BPOINTCreditCard implements ICreditCard {
+export class PaystreamCreditCard implements ICreditCard {
   constructor(
     public cardNumber: string,
     public expiryDateMonth: string,

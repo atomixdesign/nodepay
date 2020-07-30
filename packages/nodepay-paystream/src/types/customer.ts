@@ -1,4 +1,4 @@
-import { ICreditCard } from '@atomixdesign/nodepay-core/types'
+import { PaystreamCreditCard } from '../types'
 
 export interface IPaystreamInternalAddress {
   address: string
@@ -14,6 +14,6 @@ export interface IPaystreamCustomer {
   reference: string
   emailAddress: string
   ipAddress: string
-  creditCard?: ICreditCard
+  creditCard?: PaystreamCreditCard
   address?: IPaystreamInternalAddress
 }

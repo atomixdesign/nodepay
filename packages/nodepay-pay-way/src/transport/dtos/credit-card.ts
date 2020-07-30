@@ -1,4 +1,3 @@
-import { ICreditCard } from '@atomixdesign/nodepay-core/types'
 import {
   IsNotEmpty,
   Length,
@@ -10,9 +9,10 @@ import {
   ErrorType,
   ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation/errors'
+import { PaywayCreditCard } from 'nodepay-pay-way/src/types'
 
 export class CreditCardDTO {
-  constructor(creditCard: ICreditCard) {
+  constructor(creditCard: PaywayCreditCard) {
     this.paymentMethod = 'creditCard'
     this.cardNumber = creditCard.cardNumber
     this.cardholderName = creditCard.cardHolderName

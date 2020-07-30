@@ -31,23 +31,11 @@ export interface IBPOINTInternalCharge {
 }
 
 export class BPOINTCharge implements IBaseCharge {
-  orderNumber: string
-  amountInCents: number
-  merchantReference?: string
-  emailAddress?: string
-  testMode?: boolean
-
   constructor(
-    orderNumber: string,
-    amountInCents: number,
-    merchantReference?: string,
-    emailAddress?: string,
-    testMode = true,
-  ) {
-    this.orderNumber = orderNumber
-    this.amountInCents = amountInCents
-    this.merchantReference = merchantReference
-    this.emailAddress = emailAddress
-    this.testMode = testMode
-  }
+    public orderNumber: string,
+    public amountInCents: number,
+    public merchantReference?: string,
+    public emailAddress?: string,
+    public testMode = true,
+  ) { }
 }

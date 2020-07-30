@@ -7,7 +7,6 @@ import {
   RecurringPayment,
   CustomerDetails,
 } from '@atomixdesign/nodepay-core/features'
-import { ICreditCard } from '@atomixdesign/nodepay-core/types'
 import {
   IEzidebitConfig,
   EzidebitDayOfWeek,
@@ -16,6 +15,7 @@ import {
   IEzidebitDirectDebit,
   IEzidebitCustomer,
   IEzidebitInternalCustomer,
+  EzidebitCreditCard,
 } from './types'
 import { EzidebitAPI as Transport, IEzidebitAPIResponse } from './transport'
 import { OnceOffChargeDTO, PaymentDTO, PaymentScheduleDTO, CustomerDTO } from './transport/dtos'
@@ -87,7 +87,7 @@ export class Ezidebit extends BaseGateway<IEzidebitConfig> implements
 
   async charge(
     onceOffCharge: IEzidebitCharge,
-    creditCard: ICreditCard,
+    creditCard: EzidebitCreditCard,
   ): Promise<IEzidebitAPIResponse> {
     const chargeObject = {
       CreditCardNumber: creditCard.cardNumber,
