@@ -1,4 +1,4 @@
-import { IBaseCharge, ICreditCard } from '@atomixdesign/nodepay-core/types'
+import { IBaseCharge } from '@atomixdesign/nodepay-core/types'
 import { BPOINTCurrency } from './currencies'
 import { CreditCardDTO } from '../transport/dtos'
 
@@ -30,8 +30,24 @@ export interface IBPOINTInternalCharge {
   MerchantReference?: string
 }
 
-export interface IBPOINTCharge extends IBaseCharge {
+export class BPOINTCharge implements IBaseCharge {
+  orderNumber: string
+  amountInCents: number
   merchantReference?: string
   emailAddress?: string
   testMode?: boolean
+
+  constructor(
+    orderNumber: string,
+    amountInCents: number,
+    merchantReference?: string,
+    emailAddress?: string,
+    testMode = true,
+  ) {
+    this.orderNumber = orderNumber
+    this.amountInCents = amountInCents
+    this.merchantReference = merchantReference
+    this.emailAddress = emailAddress
+    this.testMode = testMode
+  }
 }

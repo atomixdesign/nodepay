@@ -12,9 +12,9 @@ import {
 } from '@atomixdesign/nodepay-core/types'
 import { IBaseResponse } from '@atomixdesign/nodepay-core/network'
 import {
-  IBPOINTConfig,
-  IBPOINTCustomer,
-  IBPOINTCharge,
+  BPOINTConfig,
+  BPOINTCustomer,
+  BPOINTCharge,
   BPOINTActionType,
   BPOINTTransactionType,
 } from './types'
@@ -26,13 +26,13 @@ import {
   CustomerDTO,
 } from './transport/dtos'
 
-export class BPOINT extends BaseGateway<IBPOINTConfig> implements
+export class BPOINT extends BaseGateway<BPOINTConfig> implements
   OnceOffPayment,
   RecurringPayment,
   CustomerDetails {
   private api: BPOINTAPI
 
-  protected get baseConfig(): IBPOINTConfig {
+  protected get baseConfig(): BPOINTConfig {
     return {
       username: '',
       merchantId: '',
@@ -41,7 +41,7 @@ export class BPOINT extends BaseGateway<IBPOINTConfig> implements
     }
   }
 
-  constructor(config?: Partial<IBPOINTConfig>) {
+  constructor(config?: Partial<BPOINTConfig>) {
     super(config)
     Container.set('bpoint.config', config)
     this.api = Container.get('bpoint.api')
@@ -56,7 +56,7 @@ export class BPOINT extends BaseGateway<IBPOINTConfig> implements
   }
 
   private async _processCharge(
-    charge: IBPOINTCharge,
+    charge: BPOINTCharge,
     creditCard: ICreditCard,
     subType: 'single' | 'recurring' = 'single'
   ): Promise<IBaseResponse> {
@@ -79,7 +79,7 @@ export class BPOINT extends BaseGateway<IBPOINTConfig> implements
   }
 
   async addCustomer(
-    customerDetails: IBPOINTCustomer,
+    customerDetails: BPOINTCustomer,
     creditCard: ICreditCard,
     bankAccount?: IBankAccount,
   ): Promise<IBaseResponse> {
@@ -96,7 +96,7 @@ export class BPOINT extends BaseGateway<IBPOINTConfig> implements
   }
 
   async charge(
-    onceOffCharge: IBPOINTCharge,
+    onceOffCharge: BPOINTCharge,
     creditCard: ICreditCard,
   ): Promise<IBaseResponse> {
     return this._processCharge(
@@ -107,7 +107,7 @@ export class BPOINT extends BaseGateway<IBPOINTConfig> implements
   }
 
   async chargeRecurring(
-    recurringCharge: IBPOINTCharge,
+    recurringCharge: BPOINTCharge,
     creditCard: ICreditCard,
   ): Promise<IBaseResponse> {
     return this._processCharge(

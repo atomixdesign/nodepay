@@ -9,6 +9,36 @@ export interface IBPOINTInternalCustomer {
   EmailAddress: string
 }
 
-export interface IBPOINTCustomer extends ICustomerDetails {
+export class BPOINTCustomer implements ICustomerDetails {
+  firstName?: string
+  lastName?: string
+  phoneNumber?: string
   emailAddress: string
+  address1?: string
+  address2?: string
+  postCode?: string
+  region?: string
+  country?: string
+
+  constructor(
+    emailAddress: string,
+    firstName?: string,
+    lastName?: string,
+    phoneNumber?: string,
+    address1?: string,
+    address2?: string,
+    postCode?: string,
+    region?: string,
+    country?: string,
+  ) {
+    this.firstName = firstName
+    this.lastName = lastName
+    this.phoneNumber = phoneNumber
+    this.emailAddress = emailAddress
+    this.address1 = address1
+    this.address2 = address2
+    this.postCode = postCode
+    this.region = region
+    this.country = country
+  }
 }

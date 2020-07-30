@@ -10,6 +10,7 @@ import { IBPOINTInternalCustomer } from '../../types'
 import { CreditCardDTO } from './credit-card'
 import { BankAccountDTO } from './bank-account'
 
+/** @internal */
 export class CustomerDTO {
   constructor(customer: IBPOINTInternalCustomer) {
     this.CardDetails = customer.CardDetails
@@ -17,11 +18,11 @@ export class CustomerDTO {
     this.Crn1 = customer.Crn1
     this.EmailAddress = customer.EmailAddress
     /*
-
-Crn1	string	(MaxLen = 50)
-Crn2	string	(MaxLen = 50) Optional
-Crn3	string	(MaxLen = 50) Optional
-EmailAddress	string	Customer's email address. (MaxLen = 250) Optional
+      TODO: extend support to include optional fields.
+      Crn1	string	(MaxLen = 50)
+      Crn2	string	(MaxLen = 50) Optional
+      Crn3	string	(MaxLen = 50) Optional
+      EmailAddress	string	Customer's email address. (MaxLen = 250) Optional
     */
   }
 

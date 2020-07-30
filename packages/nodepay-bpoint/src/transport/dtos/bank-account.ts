@@ -6,6 +6,7 @@ import {
 } from '@atomixdesign/nodepay-core/validation/errors'
 import { IBankAccount } from '@atomixdesign/nodepay-core/types'
 
+/** @internal */
 export class BankAccountDTO {
   constructor(bankAccount: IBankAccount) {
     this.AccountName = bankAccount.accountName

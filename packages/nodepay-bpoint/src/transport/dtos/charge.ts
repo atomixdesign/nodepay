@@ -20,6 +20,7 @@ import {
 } from '../../types'
 import { CreditCardDTO } from './credit-card'
 
+/** @internal */
 export class ChargeDTO {
   constructor(charge: IBPOINTInternalCharge) {
     this.Action = BPOINTActionType.payment

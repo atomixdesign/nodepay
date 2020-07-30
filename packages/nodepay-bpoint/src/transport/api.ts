@@ -4,7 +4,7 @@ import {
   HttpClientFactory,
   IBaseResponse,
 } from '@atomixdesign/nodepay-core/network'
-import { IBPOINTConfig } from '../types'
+import { BPOINTConfig } from '../types'
 import { ChargeDTO, CustomerDTO } from './dtos'
 import { BPOINTAPIError } from './api-error'
 
@@ -15,7 +15,7 @@ export class BPOINTAPI {
   constructor(
     @Inject('http.client') httpClientFactory: HttpClientFactory
   ) {
-    const config: IBPOINTConfig = Container.get('bpoint.config')
+    const config: BPOINTConfig = Container.get('bpoint.config')
     const authHeader = this.encodeKey(`${config.username}|${config.merchantId}:${config.password}`)
 
     this.httpClient = httpClientFactory.create({
