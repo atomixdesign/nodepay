@@ -7,7 +7,10 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:unicorn/recommended"
+    "plugin:unicorn/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript"
   ],
   "rules": {
     "indent": ["error", 2],
@@ -29,6 +32,8 @@
       "multiline": {
         "delimiter": "none"
       }
-    }]
+    }],
+    "import/no-extraneous-dependencies" : "warn",
+    "import/no-unresolved" : "off"
   }
 }

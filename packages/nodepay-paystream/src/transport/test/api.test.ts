@@ -21,7 +21,7 @@ const fixtures = {
   customer: {
     firstName: 'John',
     lastName: 'Doe',
-    reference: cryptoRandomString({ length: 10 }),
+    reference: cryptoRandomString({ length: 32 }),
     emailAddress: 'mail@example.com',
     ipAddress: '169.254.169.254',
   },
@@ -46,13 +46,13 @@ const fixtures = {
   },
   onceOffCharge: {
     amountInCents: 1087,
-    orderNumber: cryptoRandomString({ length: 10 }),
+    orderNumber: cryptoRandomString({ length: 32 }),
     customerIp: '169.254.169.254',
   },
   plan: {
     name: 'Test Plan',
     amount: 1000,
-    reference: cryptoRandomString({ length: 10 }),
+    reference: cryptoRandomString({ length: 32 }),
     description: 'This is a test plan.',
   },
   subscription: {
@@ -60,7 +60,7 @@ const fixtures = {
     plan: '',
     frequency: PaystreamPaymentFrequency.Weekly,
     startDate: '2027-05-09',
-    reference: cryptoRandomString({ length: 10 }),
+    reference: cryptoRandomString({ length: 32 }),
     isActive: true
   },
 }
@@ -85,41 +85,43 @@ describe('test paystream api transport', () => {
   })
 
   test('it places a once-off charge using credit card', async () => {
-    const chargeObject = { ...fixtures.onceOffCharge, ...fixtures.creditCard }
-    const onceOffCharge = new ChargeDTO(chargeObject)
+    const onceOffCharge = new ChargeDTO(
+      fixtures.onceOffCharge,
+      fixtures.creditCard,
+    )
     const response: IPaystreamAPIResponse = await api.placeCharge(onceOffCharge)
 
     expect(validCodes).toContain(response.status)
   })
 
   test('it can create a plan', async () => {
-    const plan = new PlanDTO({ ...fixtures.plan, ...{ reference: cryptoRandomString({ length: 10 }) } })
+    const plan = new PlanDTO({ ...fixtures.plan, ...{ reference: cryptoRandomString({ length: 32 }) } })
     const response: IPaystreamAPIResponse = await api.addPlan(plan)
 
     expect(validCodes).toContain(response.status)
   })
 
   test('it can add a customer', async () => {
-    const customer = new CustomerDTO({
-      ...{ ...fixtures.customer, ...{ reference: cryptoRandomString({ length: 10 }) } },
-      creditCard: fixtures.creditCard,
-      address: fixtures.address,
-    })
+    const customer = new CustomerDTO(
+      { ...fixtures.customer, ...{ reference: cryptoRandomString({ length: 32 }) } },
+      fixtures.creditCard,
+      fixtures.address,
+    )
     const response: IPaystreamAPIResponse = await api.addCustomer(customer)
 
     expect(validCodes).toContain(response.status)
   })
 
   test('it can add a subscription', async () => {
-    const planReference = cryptoRandomString({ length: 10 })
+    const planReference = cryptoRandomString({ length: 32 })
     const plan = new PlanDTO({ ...fixtures.plan, ...{ reference: planReference } })
     await api.addPlan(plan)
 
-    const customer = new CustomerDTO({
-      ...{ ...fixtures.customer, ...{ reference: cryptoRandomString({ length: 10 }) } },
-      creditCard: fixtures.creditCard,
-      address: fixtures.address,
-    })
+    const customer = new CustomerDTO(
+      { ...fixtures.customer, ...{ reference: cryptoRandomString({ length: 32 }) } },
+      fixtures.creditCard,
+      fixtures.address,
+    )
     const customerResponse: IPaystreamAPIResponse = await api.addCustomer(customer)
 
     const subscriptionObject = fixtures.subscription
@@ -130,5 +132,26 @@ describe('test paystream api transport', () => {
     const response: IPaystreamAPIResponse = await api.addSubscription(subscription)
 
     expect(validCodes).toContain(response.status)
+  })
+
+  test('it can update a customer', async () => {
+    const reference = cryptoRandomString({ length: 32 })
+    const customer = new CustomerDTO(
+      { ...fixtures.customer, ...{ reference } },
+      fixtures.creditCard,
+      fixtures.address,
+    )
+    const customerResponse: IPaystreamAPIResponse = await api.addCustomer(customer)
+    const id = customerResponse?.data?.id as string
+
+    const updateCustomer = new CustomerDTO(
+      { ...fixtures.customer, ...{ reference } },
+      undefined,
+      fixtures.address,
+    )
+
+    const updateResponse: IPaystreamAPIResponse = await api.updateCustomer(id, updateCustomer)
+
+    expect(validCodes).toContain(updateResponse.status)
   })
 })

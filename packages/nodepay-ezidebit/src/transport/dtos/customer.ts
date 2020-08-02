@@ -11,7 +11,7 @@ import {
 import {
   ErrorType,
   ErrorFactory,
-} from '@atomixdesign/nodepay-core/validation/errors'
+} from '@atomixdesign/nodepay-core/validation'
 import { IEzidebitInternalCustomer } from '../../types'
 
 export class CustomerDTO {

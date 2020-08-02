@@ -8,10 +8,13 @@ import {
   CustomerDetails,
 } from '@atomixdesign/nodepay-core/features'
 import {
-  IPaywayConfig,
-  IPaywayCharge,
-  IPaywayDirectDebit,
-  IPaywayCustomer,
+  PaywayConfig,
+  PaywayCharge,
+  PaywayDirectDebit,
+  PaywayCustomer,
+  PaywayPaymentSchedule,
+  PaywayCreditCard,
+  PaywayAddress,
 } from './types'
 import { PaywayAPI, IPaywayAPIResponse } from './transport'
 import {
@@ -19,11 +22,11 @@ import {
   PaymentScheduleDTO,
   CreditCardDTO,
   CustomerDTO,
+  AddressDTO,
 } from './transport/dtos'
-import { IPaywayPaymentSchedule } from './types/payment-schedule'
-import { PaywayCreditCard } from './types'
 
-export class Payway extends BaseGateway<IPaywayConfig> implements
+
+export class Payway extends BaseGateway<PaywayConfig> implements
   DirectDebit,
   OnceOffPayment,
   RecurringPayment,
@@ -31,7 +34,7 @@ export class Payway extends BaseGateway<IPaywayConfig> implements
 {
   private api: PaywayAPI
 
-  protected get baseConfig(): IPaywayConfig {
+  protected get baseConfig(): PaywayConfig {
     return {
       secretKey: '',
       publishableKey: '',
@@ -40,7 +43,7 @@ export class Payway extends BaseGateway<IPaywayConfig> implements
     }
   }
 
-  constructor(config?: Partial<IPaywayConfig>) {
+  constructor(config?: Partial<PaywayConfig>) {
     super(config)
     Container.set('payway.config', config)
     this.api = Container.get('payway.api')
@@ -55,7 +58,7 @@ export class Payway extends BaseGateway<IPaywayConfig> implements
   }
 
   async addCustomer(
-    customerDetails: IPaywayCustomer,
+    customerDetails: PaywayCustomer,
   ): Promise<IPaywayAPIResponse> {
     const customerObject = new CustomerDTO({
       ...customerDetails,
@@ -65,8 +68,29 @@ export class Payway extends BaseGateway<IPaywayConfig> implements
     return await this.api.addCustomer(customerObject)
   }
 
+  async updateCustomer(
+    reference: string,
+    customerDetails: PaywayAddress,
+  ): Promise<IPaywayAPIResponse> {
+    const addressObject = new AddressDTO({
+      firstName: customerDetails.firstName,
+      lastName: customerDetails.lastName,
+      emailAddress: customerDetails.emailAddress,
+      sendEmailReceipts: customerDetails.sendEmailReceipts ?? false,
+      phoneNumber: customerDetails.phoneNumber,
+      address1: customerDetails.address1,
+      address2: customerDetails.address2,
+      city: customerDetails.city,
+      region: customerDetails.region,
+      postCode: customerDetails.postCode,
+    })
+
+    await validateOrReject(addressObject)
+    return await this.api.updateCustomerDetails(reference, addressObject)
+  }
+
   async charge(
-    onceOffCharge: IPaywayCharge,
+    onceOffCharge: PaywayCharge,
     creditCard?: PaywayCreditCard,
   ): Promise<IPaywayAPIResponse> {
     const chargeObject = new ChargeDTO({
@@ -90,13 +114,14 @@ export class Payway extends BaseGateway<IPaywayConfig> implements
   }
 
   async chargeRecurring(
-    paymentSchedule: IPaywayPaymentSchedule,
+    paymentSchedule: PaywayPaymentSchedule,
   ): Promise<IPaywayAPIResponse> {
     const scheduleObject = new PaymentScheduleDTO({
       frequency: paymentSchedule.frequency,
       nextPaymentDate: paymentSchedule?.nextPaymentDate ?? paymentSchedule.startDate,
       regularPrincipalAmount: paymentSchedule.amountInCents / 100,
-      nextPrincipalAmount: (paymentSchedule.nextPrincipalAmount ?? 0) / 100,
+      nextPrincipalAmount: paymentSchedule.nextPrincipalAmount ?
+        paymentSchedule.nextPrincipalAmount / 100 : undefined,
       numberOfPaymentsRemaining: paymentSchedule.numberOfPaymentsRemaining,
       finalPrincipalAmount: paymentSchedule.finalPrincipalAmount,
     })
@@ -106,14 +131,14 @@ export class Payway extends BaseGateway<IPaywayConfig> implements
   }
 
   async directDebit(
-    directDebit: IPaywayDirectDebit,
+    directDebitOrder: PaywayDirectDebit,
   ): Promise<IPaywayAPIResponse> {
     const chargeObject = new ChargeDTO({
-      customerId: directDebit.customerId,
-      orderNumber: directDebit.paymentReference,
-      principalAmount: directDebit.amountInCents / 100,
-      customerIpAddress: directDebit?.customerIpAddress,
-      merchantId: directDebit?.merchantId,
+      customerId: directDebitOrder.customerId,
+      orderNumber: directDebitOrder.paymentReference,
+      principalAmount: directDebitOrder.amountInCents / 100,
+      customerIpAddress: directDebitOrder?.customerIpAddress,
+      merchantId: directDebitOrder?.merchantId,
       // bankAccountId,
     })
 

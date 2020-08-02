@@ -8,19 +8,20 @@ import {
   CustomerDetails,
 } from '@atomixdesign/nodepay-core/features'
 import {
-  IEzidebitConfig,
+  EzidebitConfig,
   EzidebitDayOfWeek,
   IEzidebitCharge,
-  IEzidebitPaymentSchedule,
+  EzidebitPaymentSchedule,
   IEzidebitDirectDebit,
-  IEzidebitCustomer,
+  EzidebitCustomer,
   IEzidebitInternalCustomer,
   EzidebitCreditCard,
+  EzidebitCustomerDetails,
 } from './types'
 import { EzidebitAPI as Transport, IEzidebitAPIResponse } from './transport'
 import { OnceOffChargeDTO, PaymentDTO, PaymentScheduleDTO, CustomerDTO } from './transport/dtos'
 
-export class Ezidebit extends BaseGateway<IEzidebitConfig> implements
+export class Ezidebit extends BaseGateway<EzidebitConfig> implements
   DirectDebit,
   OnceOffPayment,
   RecurringPayment,
@@ -28,7 +29,7 @@ export class Ezidebit extends BaseGateway<IEzidebitConfig> implements
 {
   private api: Transport
 
-  protected get baseConfig(): IEzidebitConfig {
+  protected get baseConfig(): EzidebitConfig {
     return {
       clientId: '',
       digitalKey: '',
@@ -38,7 +39,7 @@ export class Ezidebit extends BaseGateway<IEzidebitConfig> implements
     }
   }
 
-  constructor(config?: Partial<IEzidebitConfig>) {
+  constructor(config?: Partial<EzidebitConfig>) {
     super(config)
     Container.set('ezidebit.config', config)
     this.api = Container.get('ezidebit.api')
@@ -53,7 +54,7 @@ export class Ezidebit extends BaseGateway<IEzidebitConfig> implements
   }
 
   async addCustomer(
-    customer: IEzidebitCustomer,
+    customer: EzidebitCustomer,
   ): Promise<IEzidebitAPIResponse> {
     const customerObject: { [index:string] : any } = {
       YourSystemReference: customer.customerId ?? '',
@@ -85,6 +86,13 @@ export class Ezidebit extends BaseGateway<IEzidebitConfig> implements
     )
   }
 
+  async updateCustomer(
+    _reference: string,
+    _customerDetails: EzidebitCustomerDetails,
+  ): Promise<IEzidebitAPIResponse | undefined> {
+    return
+  }
+
   async charge(
     onceOffCharge: IEzidebitCharge,
     creditCard: EzidebitCreditCard,
@@ -105,7 +113,7 @@ export class Ezidebit extends BaseGateway<IEzidebitConfig> implements
   }
 
   async chargeRecurring(
-    paymentSchedule: IEzidebitPaymentSchedule
+    paymentSchedule: EzidebitPaymentSchedule
   ): Promise<IEzidebitAPIResponse> {
     const scheduleObject = {
       EziDebitCustomerID: paymentSchedule.ezidebitCustomerId ?? '',

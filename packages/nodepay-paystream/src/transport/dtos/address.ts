@@ -1,9 +1,10 @@
 import { IsNotEmpty, IsPostalCode } from 'class-validator'
 import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation'
-import { IPaystreamInternalAddress } from '../../types'
+import { PaystreamAddress } from '../../types'
 
+/** @internal */
 export class AddressDTO {
-  constructor(address: IPaystreamInternalAddress) {
+  constructor(address: PaystreamAddress) {
     this.address = address.address
     this.city = address.city
     this.state = address.state

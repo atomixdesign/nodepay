@@ -2,7 +2,7 @@ import { Service, Inject } from 'typedi'
 import {
   Client as SoapClient,
 } from 'soap'
-import { IEzidebitConfig } from '../types'
+import { EzidebitConfig } from '../types'
 import { SoapClientFactory } from '@atomixdesign/nodepay-core/network'
 import { IEzidebitAPIResponse, formatResponse } from './api-response'
 import {
@@ -20,7 +20,7 @@ export class EzidebitAPI {
   private nonPCISoapClient: SoapClient | undefined
 
   constructor(
-    @Inject('ezidebit.config') private config: IEzidebitConfig,
+    @Inject('ezidebit.config') private config: EzidebitConfig,
     @Inject('soap.client') private soapClientFactory: SoapClientFactory
   ) { }
 

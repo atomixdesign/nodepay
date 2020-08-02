@@ -38,10 +38,10 @@
     "@atomixdesign/nodepay-core": "^0.2.0",
     "@types/qs": "^6.9.3",
     "@types/uuid": "^8.0.0",
+    "axios": "^0.19.2",
     "class-validator": "^0.12.2",
     "moment": "^2.27.0",
     "qs": "^6.9.4",
-    "ts-custom-error": "^3.1.1",
     "typedi": "^0.8.0",
     "uuid": "^8.2.0"
   }

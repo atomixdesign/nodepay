@@ -20,7 +20,7 @@
     "eslint": "^7.1.0",
     "eslint-plugin-ava": "^10.3.0",
     "eslint-plugin-eslint-comments": "^3.2.0",
-    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-no-use-extend-native": "^0.5.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
@@ -34,7 +34,7 @@
     "typescript": "^3.9.6",
     "yargs": "^15.4.0"
   },
-  "workspaces": [
-    "packages/*"
-  ]
+  "workspaces": {
+    "packages" : ["packages/*"]
+  }
 }

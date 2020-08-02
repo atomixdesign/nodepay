@@ -57,8 +57,7 @@ describe('test bpoint gateway', () => {
   })
 
   test('it reports errors if the charge format is not correct', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const charge: IBaseResponse = await gateway.charge(
+    await gateway.charge(
       fixtures.simpleChargeBad,
       fixtures.creditCardBad,
     ).catch(error => {
@@ -73,5 +72,44 @@ describe('test bpoint gateway', () => {
       fixtures.creditCard,
     )
     expect(charge.statusText).toBe('OK')
+  })
+
+  test('it can create a customer', async () => {
+    const customerObject = {
+      emailAddress: 'test@example.com',
+    }
+
+    const customer: IBaseResponse = await gateway.addCustomer(
+      customerObject,
+      fixtures.creditCard,
+    )
+    expect(customer.statusText).toBe('OK')
+  })
+
+  test('it reports errors if the customer format is not correct', async () => {
+    const customerObject = {
+      emailAddress: '123',
+    }
+
+    await gateway.addCustomer(
+      customerObject,
+      fixtures.creditCard,
+    ).catch(error => {
+      expect(typeof error).toBe('object')
+      return error
+    })
+  })
+
+  test('it can update a customer', async () => {
+    const customerObject = {
+      emailAddress: 'test@example.com',
+    }
+
+    const customer: IBaseResponse = await gateway.updateCustomer(
+      '123456789',
+      customerObject,
+      fixtures.creditCard,
+    )
+    expect(customer.statusText).toBe('OK')
   })
 })

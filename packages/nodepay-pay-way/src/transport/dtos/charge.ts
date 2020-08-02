@@ -10,9 +10,10 @@ import {
 import {
   ErrorType,
   ErrorFactory,
-} from '@atomixdesign/nodepay-core/validation/errors'
+} from '@atomixdesign/nodepay-core/validation'
 import { IPaywayInternalCharge } from '../../types'
 
+/** @internal */
 export class ChargeDTO {
   constructor(charge: IPaywayInternalCharge) {
     this.customerNumber = charge.customerId

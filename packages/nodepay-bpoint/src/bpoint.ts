@@ -22,8 +22,6 @@ import {
 import { BPOINTAPI } from './transport'
 import {
   ChargeDTO,
-  CreditCardDTO,
-  BankAccountDTO,
   CustomerDTO,
 } from './transport/dtos'
 
@@ -65,8 +63,7 @@ export class BPOINT extends BaseGateway<BPOINTConfig> implements
       Action: BPOINTActionType.payment,
       // TODO: Amount is scaled depending on currency. Setup scaling table for currencies.
       Amount: charge.amountInCents,
-      CardDetails: new CreditCardDTO(creditCard),
-      Crn1: `${charge?.merchantReference ?? ''}${cryptoRandomString({ length: 10 })}`,
+      Crn1: `${charge?.merchantReference ?? ''}${cryptoRandomString({ length: 32 })}`,
       EmailAddress: charge?.emailAddress,
       MerchantReference: charge?.merchantReference,
       TestMode: Boolean(charge?.testMode),
@@ -74,26 +71,64 @@ export class BPOINT extends BaseGateway<BPOINTConfig> implements
       type: BPOINTTransactionType.internet,
     }
 
-    const chargeDTO = new ChargeDTO(chargeObject)
+    const chargeDTO = new ChargeDTO(chargeObject, creditCard)
     await validateOrReject(chargeDTO)
     return await this.api.placeCharge(chargeDTO)
   }
 
   async addCustomer(
     customerDetails: BPOINTCustomer,
-    creditCard: BPOINTCreditCard,
+    creditCard?: BPOINTCreditCard,
     bankAccount?: IBankAccount,
   ): Promise<IBaseResponse> {
-    const customerObject = {
-      CardDetails: new CreditCardDTO(creditCard),
-      BankAccountDetails: bankAccount && new BankAccountDTO(bankAccount),
-      Crn1: `${cryptoRandomString({ length: 10 })}`,
+    const customer = {
+      // TODO: Track idempotency tokens
+      Crn1: `${cryptoRandomString({ length: 32 })}`,
       EmailAddress: customerDetails.emailAddress,
+      FirstName: customerDetails.firstName,
+      LastName: customerDetails.lastName,
+      AddressLine1: customerDetails.address1,
+      AddressLine2: customerDetails.address2,
+      PostCode: customerDetails.postCode,
+      State: customerDetails.region,
+      HomePhoneNumber: customerDetails.phoneNumber,
     }
 
-    const customerDTO = new CustomerDTO(customerObject)
+    const customerDTO = new CustomerDTO(
+      customer,
+      creditCard,
+      bankAccount,
+    )
     await validateOrReject(customerDTO)
     return await this.api.addCustomer(customerDTO)
+  }
+
+  async updateCustomer(
+    reference: string,
+    customerDetails: BPOINTCustomer,
+    creditCard?: BPOINTCreditCard,
+    bankAccount?: IBankAccount,
+  ): Promise<IBaseResponse> {
+    const customer = {
+      // TODO: Track idempotency tokens
+      Crn1: `${cryptoRandomString({ length: 32 })}`,
+      EmailAddress: customerDetails.emailAddress,
+      FirstName: customerDetails.firstName,
+      LastName: customerDetails.lastName,
+      AddressLine1: customerDetails.address1,
+      AddressLine2: customerDetails.address2,
+      PostCode: customerDetails.postCode,
+      State: customerDetails.region,
+      HomePhoneNumber: customerDetails.phoneNumber,
+    }
+
+    const customerDTO = new CustomerDTO(
+      customer,
+      creditCard,
+      bankAccount,
+    )
+    await validateOrReject(customerDTO)
+    return await this.api.updateCustomer(reference, customerDTO)
   }
 
   async charge(

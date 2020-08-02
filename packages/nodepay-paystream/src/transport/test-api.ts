@@ -20,6 +20,13 @@ export class testAPI {
     return Promise.resolve(MockResponse)
   }
 
+  async updateCustomer(
+    _reference: string,
+    _customer: CustomerDTO,
+  ): Promise<IPaystreamAPIResponse> {
+    return Promise.resolve(MockResponse)
+  }
+
   async placeCharge(_charge: ChargeDTO): Promise<IPaystreamAPIResponse> {
     return Promise.resolve(MockResponse)
   }

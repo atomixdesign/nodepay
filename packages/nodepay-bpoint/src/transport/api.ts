@@ -24,7 +24,7 @@ export class BPOINTAPI {
         Authorization: authHeader,
         'Content-Type': 'application/json; charset=utf-8',
       }
-    }, false)
+    })
   }
 
   private encodeKey(key: string): string {
@@ -37,10 +37,10 @@ export class BPOINTAPI {
       url: '/txns/',
       data: { 'TxnReq': charge },
     })
-    if (Number(response?.data.APIResponse.ResponseCode) !== 0) {
+    if (Number(response?.data?.APIResponse?.ResponseCode) !== 0) {
       throw new BPOINTAPIError(response.data.APIResponse)
     }
-    if (Number(response?.data.TxnResp.ResponseCode) !== 0) {
+    if (Number(response?.data?.TxnResp?.ResponseCode) !== 0) {
       throw new BPOINTAPIError(response.data.TxnResp)
     }
 
@@ -58,7 +58,25 @@ export class BPOINTAPI {
       url: '/dvtokens/',
       data: { 'DVTokenReq': customer },
     })
-    if (Number(response?.data.APIResponse.ResponseCode) !== 0) {
+    if (Number(response?.data?.APIResponse?.ResponseCode) !== 0) {
+      throw new BPOINTAPIError(response.data.APIResponse)
+    }
+
+    return {
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
+      originalResponse: response,
+    }
+  }
+
+  async updateCustomer(reference: string, customer: CustomerDTO): Promise<IBaseResponse> {
+    const response = await this.httpClient!.request({
+      method: 'put',
+      url: `/dvtokens/${reference}`,
+      data: { 'DVTokenReq': customer },
+    })
+    if (Number(response?.data?.APIResponse?.ResponseCode) !== 0) {
       throw new BPOINTAPIError(response.data.APIResponse)
     }
 

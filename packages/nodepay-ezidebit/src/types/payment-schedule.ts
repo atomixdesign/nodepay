@@ -20,16 +20,24 @@ export interface IEzidebitInternalPaymentSchedule {
   Username: string
 }
 
-export interface IEzidebitPaymentSchedule extends IPaymentSchedule {
-  ezidebitCustomerId: string
-  dayOfWeek: EzidebitDayOfWeek
-  dayOfMonth: number
-  firstWeekOfMonth?: 'YES' | 'NO'
-  secondWeekOfMonth?: 'YES' | 'NO'
-  thirdWeekOfMonth?: 'YES' | 'NO'
-  fourthWeekOfMonth?: 'YES' | 'NO'
-  maxNumberPayments: number
-  maxTotalAmount: number
-  keepManualPayments: 'YES' | 'NO'
-  username?: string
+export class EzidebitPaymentSchedule implements IPaymentSchedule {
+  constructor(
+    public readonly customerId: string,
+    public readonly startDate: string,
+    public readonly frequency: EzidebitPaymentFrequency,
+    public readonly amountInCents: number,
+    public readonly dayOfWeek: EzidebitDayOfWeek,
+    public readonly dayOfMonth: number,
+    public readonly maxNumberPayments: number,
+    public readonly maxTotalAmount: number,
+    public readonly keepManualPayments: 'YES' | 'NO',
+    public readonly username?: string,
+    public readonly ezidebitCustomerId?: string,
+    public readonly firstWeekOfMonth?: 'YES' | 'NO',
+    public readonly secondWeekOfMonth?: 'YES' | 'NO',
+    public readonly thirdWeekOfMonth?: 'YES' | 'NO',
+    public readonly fourthWeekOfMonth?: 'YES' | 'NO',
+  ) {
+
+  }
 }

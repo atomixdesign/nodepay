@@ -11,21 +11,25 @@ import {
 import {
   ErrorType,
   ErrorFactory,
-} from '@atomixdesign/nodepay-core/validation/errors'
+} from '@atomixdesign/nodepay-core/validation'
 import {
   IBPOINTInternalCharge,
   BPOINTCurrency,
   BPOINTTransactionType,
   BPOINTActionType,
+  BPOINTCreditCard,
 } from '../../types'
 import { CreditCardDTO } from './credit-card'
 
 /** @internal */
 export class ChargeDTO {
-  constructor(charge: IBPOINTInternalCharge) {
+  constructor(
+    charge: IBPOINTInternalCharge,
+    creditCard: BPOINTCreditCard,
+  ) {
     this.Action = BPOINTActionType.payment
     this.Amount = charge.Amount
-    this.CardDetails = charge.CardDetails
+    this.CardDetails = new CreditCardDTO(creditCard)
     this.Currency = BPOINTCurrency.AUD
     this.Crn1 = charge.Crn1
     this.SubType = 'single'

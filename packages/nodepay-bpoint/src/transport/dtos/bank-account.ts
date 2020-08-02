@@ -3,7 +3,7 @@ import { IsNotEmpty, Length, IsNumberString } from 'class-validator'
 import {
   ErrorType,
   ErrorFactory,
-} from '@atomixdesign/nodepay-core/validation/errors'
+} from '@atomixdesign/nodepay-core/validation'
 import { IBankAccount } from '@atomixdesign/nodepay-core/types'
 
 /** @internal */

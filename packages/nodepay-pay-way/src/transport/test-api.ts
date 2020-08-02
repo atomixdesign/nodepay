@@ -17,6 +17,10 @@ export class testAPI {
     return Promise.resolve(MockResponse)
   }
 
+  async updateCustomerDetails(_reference: string, _customer: CustomerDTO): Promise<IPaywayAPIResponse> {
+    return Promise.resolve(MockResponse)
+  }
+
   async placeCharge(_singleUseTokenId: string, _charge: ChargeDTO): Promise<IPaywayAPIResponse> {
     return Promise.resolve(MockResponse)
   }

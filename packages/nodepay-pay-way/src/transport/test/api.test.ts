@@ -9,6 +9,7 @@ import {
   CreditCardDTO,
   CustomerDTO,
   PaymentScheduleDTO,
+  AddressDTO,
 } from '../dtos'
 
 const validCodes = [
@@ -165,4 +166,25 @@ describe('test payway api transport', () => {
     expect(validCodes).toContain(response.status)
   })
 
+  test('it can update a customer', async () => {
+    const creditCard = new CreditCardDTO(fixtures.creditCard)
+    const ccResponse: IPaywayAPIResponse = await api.getCCtoken(creditCard)
+    const customer = new CustomerDTO({
+      singleUseTokenId: ccResponse?.data.singleUseTokenId,
+      customerId: fixtures.customerWithCC.customerId,
+      merchantId: fixtures.customerWithCC.merchantId,
+    })
+    await api.addCustomer(customer)
+
+    const newCustomerDetails = new AddressDTO({
+      emailAddress: 'updatedemail@example.com'
+    })
+
+    const updateResponse: IPaywayAPIResponse = await api.updateCustomerDetails(
+      fixtures.customerWithCC.customerId,
+      newCustomerDetails,
+    )
+
+    expect(validCodes).toContain(updateResponse.status)
+  })
 })

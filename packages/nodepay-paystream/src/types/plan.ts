@@ -1,3 +1,4 @@
+/** @internal */
 export interface IPaystreamInternalPlan {
   name: string
   amount: number

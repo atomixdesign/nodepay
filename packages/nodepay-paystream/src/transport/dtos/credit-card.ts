@@ -8,9 +8,10 @@ import {
 import {
   ErrorType,
   ErrorFactory,
-} from '@atomixdesign/nodepay-core/validation/errors'
+} from '@atomixdesign/nodepay-core/validation'
 import { PaystreamCreditCard } from '../../types'
 
+/** @internal */
 export class CreditCardDTO {
   constructor(creditCard: PaystreamCreditCard) {
     this.card_number = creditCard.cardNumber

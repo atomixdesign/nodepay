@@ -6,20 +6,26 @@ import {
   RecurringPayment,
   CustomerDetails,
 } from '@atomixdesign/nodepay-core/features'
-import { ICreditCard } from '@atomixdesign/nodepay-core/types'
-import { IPaystreamConfig, PaystreamCharge, IPaystreamCustomer, IPaystreamSubscription, PaystreamCreditCard, IPaystreamInternalAddress } from './types'
+import {
+  PaystreamConfig,
+  PaystreamCharge,
+  PaystreamCustomer,
+  PaystreamSubscription,
+  PaystreamCreditCard,
+  PaystreamAddress,
+} from './types'
 import { IPaystreamAPIResponse } from './transport'
 import { ChargeDTO, CustomerDTO, SubscriptionDTO } from './transport/dtos'
 import { PaystreamAPI } from './transport/api'
 
-export class Paystream extends BaseGateway<IPaystreamConfig> implements
+export class Paystream extends BaseGateway<PaystreamConfig> implements
   OnceOffPayment,
   RecurringPayment,
   CustomerDetails
 {
   private api: PaystreamAPI
 
-  protected get baseConfig(): IPaystreamConfig {
+  protected get baseConfig(): PaystreamConfig {
     return {
       username: '',
       apiKey: '',
@@ -27,7 +33,7 @@ export class Paystream extends BaseGateway<IPaystreamConfig> implements
     }
   }
 
-  constructor(config?: Partial<IPaystreamConfig>) {
+  constructor(config?: Partial<PaystreamConfig>) {
     super(config)
     Container.set('paystream.config', config)
     this.api = Container.get('paystream.api')
@@ -42,27 +48,52 @@ export class Paystream extends BaseGateway<IPaystreamConfig> implements
   }
 
   async addCustomer(
-    customerDetails: IPaystreamCustomer,
+    customerDetails: PaystreamCustomer,
+    creditCard?: PaystreamCreditCard,
+    address?: PaystreamAddress,
   ): Promise<IPaystreamAPIResponse> {
-    const customerObject = new CustomerDTO(customerDetails)
+    const customerObject = new CustomerDTO(
+      customerDetails,
+      creditCard,
+      address,
+    )
     await validateOrReject(customerObject)
     return await this.api.addCustomer(customerObject)
   }
 
+  async updateCustomer(
+    reference: string,
+    customerDetails: PaystreamCustomer,
+    creditCard?: PaystreamCreditCard,
+    address?: PaystreamAddress,
+  ): Promise<IPaystreamAPIResponse> {
+    const customerObject = new CustomerDTO(
+      customerDetails,
+      undefined,
+      address,
+    )
+
+    // TODO: Verify expiry format issue on update. Update probably expecting full ISO date as string.
+    if (creditCard !== undefined) console.warn('Credit card information for a customer cannot be updated with Paystream')
+
+    await validateOrReject(customerObject)
+    return await this.api.updateCustomer(reference, customerObject)
+  }
+
   async charge(
     onceOffCharge: PaystreamCharge,
-    creditCard?: ICreditCard,
+    creditCard?: PaystreamCreditCard,
   ): Promise<IPaystreamAPIResponse> {
-    const chargeObject = new ChargeDTO({
-      ...onceOffCharge,
-      ...creditCard,
-    })
+    const chargeObject = new ChargeDTO(
+      onceOffCharge,
+      creditCard,
+    )
     await validateOrReject(chargeObject)
     return await this.api.placeCharge(chargeObject)
   }
 
   async chargeRecurring(
-    subscription: IPaystreamSubscription,
+    subscription: PaystreamSubscription,
   ): Promise<IPaystreamAPIResponse> {
     const subscriptionObject = new SubscriptionDTO(subscription)
     await validateOrReject(subscriptionObject)

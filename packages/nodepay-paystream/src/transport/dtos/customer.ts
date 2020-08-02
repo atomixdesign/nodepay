@@ -1,21 +1,26 @@
 import { IsNotEmpty, IsEmail, IsIP, ValidateNested } from 'class-validator'
 import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation'
 
-import { IPaystreamCustomer } from '../../types'
+import { PaystreamCustomer, PaystreamCreditCard, PaystreamAddress } from '../../types'
 import { CreditCardDTO } from './credit-card'
 import { AddressDTO } from './address'
 
+/** @internal */
 export class CustomerDTO {
-  constructor(customer: IPaystreamCustomer) {
+  constructor(
+    customer: PaystreamCustomer,
+    creditCard?: PaystreamCreditCard,
+    address?: PaystreamAddress,
+  ) {
     this.first_name = customer.firstName
     this.last_name = customer.lastName
     this.reference = customer.reference
     this.email = customer.emailAddress
     this.ipAddress = customer.ipAddress
-    if (customer.creditCard !== undefined)
-      this.card = new CreditCardDTO(customer.creditCard)
-    if (customer.address !== undefined)
-      this.address = new AddressDTO(customer.address)
+    if (creditCard !== undefined)
+      this.card = new CreditCardDTO(creditCard)
+    if (address !== undefined)
+      this.address = new AddressDTO(address)
   }
 
   // * first_name

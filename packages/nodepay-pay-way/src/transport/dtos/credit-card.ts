@@ -8,9 +8,10 @@ import {
 import {
   ErrorType,
   ErrorFactory,
-} from '@atomixdesign/nodepay-core/validation/errors'
-import { PaywayCreditCard } from 'nodepay-pay-way/src/types'
+} from '@atomixdesign/nodepay-core/validation'
+import { PaywayCreditCard } from '../../types'
 
+/** @internal */
 export class CreditCardDTO {
   constructor(creditCard: PaywayCreditCard) {
     this.paymentMethod = 'creditCard'

@@ -1,5 +1,5 @@
 import { IBaseResponse } from '@atomixdesign/nodepay-core/network'
-import { ChargeDTO } from './dtos'
+import { ChargeDTO, CustomerDTO } from './dtos'
 
 /** @internal */
 export const MockResponse = {
@@ -12,6 +12,17 @@ export const MockResponse = {
 /** @internal */
 export class testAPI {
   constructor() {}
+
+  async addCustomer(_customer: CustomerDTO): Promise<IBaseResponse> {
+    return Promise.resolve(MockResponse)
+  }
+
+  async updateCustomer(
+    _reference: string,
+    _customer: CustomerDTO,
+  ): Promise<IBaseResponse> {
+    return Promise.resolve(MockResponse)
+  }
 
   async placeCharge(_charge: ChargeDTO): Promise<IBaseResponse> {
     return Promise.resolve(MockResponse)

@@ -6,10 +6,11 @@ import {
 import {
   ErrorType,
   ErrorFactory,
-} from '@atomixdesign/nodepay-core/validation/errors'
+} from '@atomixdesign/nodepay-core/validation'
 
 import { IPaystreamInternalPlan } from '../../types'
 
+/** @internal */
 export class PlanDTO {
   constructor(plan: IPaystreamInternalPlan) {
     this.name = plan.name

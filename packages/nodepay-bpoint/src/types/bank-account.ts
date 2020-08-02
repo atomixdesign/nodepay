@@ -2,8 +2,8 @@ import { IBankAccount } from '@atomixdesign/nodepay-core/types'
 
 export class BPOINTBankAccount implements IBankAccount {
   constructor(
-    public accountName:  string,
-    public accountNumber: string,
-    public BSBNumber: string,
+    public readonly accountName:  string,
+    public readonly accountNumber: string,
+    public readonly BSBNumber: string,
   ) {}
 }

@@ -10,9 +10,13 @@ export interface IPaywayInternalCharge {
   bankAccountId?: string
 }
 
-export interface IPaywayCharge extends IBaseCharge {
-  customerId?: string
-  customerIpAddress?: string
-  merchantId?: string
-  singleUseTokenId?: string
+export class PaywayCharge implements IBaseCharge {
+  constructor(
+    public readonly orderNumber: string,
+    public readonly amountInCents: number,
+    public readonly customerId?: string,
+    public readonly customerIpAddress?: string,
+    public readonly merchantId?: string,
+    public readonly singleUseTokenId?: string,
+  ) {}
 }
