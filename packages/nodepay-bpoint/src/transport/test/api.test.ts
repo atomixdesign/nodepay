@@ -1,10 +1,10 @@
 import { Container } from 'typedi'
 import cryptoRandomString from 'crypto-random-string'
+import { IBaseResponse } from '@atomixdesign/nodepay-core/network'
 import { BPOINTAPI as BpointTransport } from '../api'
 import { BPOINTActionType, BPOINTCurrency, BPOINTTransactionType, } from '../../types'
-import { IBPOINTAPIResponse } from '../api-response'
 import {
-  ChargeDTO, CreditCardDTO, CustomerDTO,
+  ChargeDTO, CustomerDTO,
 } from '../dtos'
 
 const fixtures = {
@@ -53,10 +53,9 @@ describe('test bpoint api transport', () => {
     const chargeObject = {
       ...fixtures.simpleCharge,
       Crn1: cryptoRandomString({ length: 49 }),
-      CardDetails: new CreditCardDTO(fixtures.creditCard),
     }
-    const simpleCharge = new ChargeDTO(chargeObject)
-    const response: IBPOINTAPIResponse = await api.placeCharge(simpleCharge)
+    const simpleCharge = new ChargeDTO(chargeObject, fixtures.creditCard)
+    const response: IBaseResponse = await api.placeCharge(simpleCharge)
 
     expect(validCodes).toContain(response.status)
   })
@@ -65,24 +64,39 @@ describe('test bpoint api transport', () => {
     const chargeObject = {
       ...fixtures.simpleCharge,
       Crn1: cryptoRandomString({ length: 49 }),
-      CardDetails: new CreditCardDTO(fixtures.creditCard),
       SubType: 'recurring' as const,
     }
-    const simpleCharge = new ChargeDTO(chargeObject)
-    const response: IBPOINTAPIResponse = await api.placeCharge(simpleCharge)
+    const simpleCharge = new ChargeDTO(chargeObject, fixtures.creditCard)
+    const response: IBaseResponse = await api.placeCharge(simpleCharge)
 
     expect(validCodes).toContain(response.status)
   })
 
   test('it registers a customer with a credit card', async () => {
     const customerObject = {
-      CardDetails: new CreditCardDTO(fixtures.creditCard),
       EmailAddress: 'test@example.com',
       Crn1: cryptoRandomString({ length: 49 }),
     }
-    const customer = new CustomerDTO(customerObject)
-    const response: IBPOINTAPIResponse = await api.addCustomer(customer)
+    const customer = new CustomerDTO(customerObject, fixtures.creditCard)
+    const response: IBaseResponse = await api.addCustomer(customer)
 
     expect(validCodes).toContain(response.status)
+  })
+
+  test('it can update a customer', async () => {
+    const customerObject = {
+      EmailAddress: 'test@example.com',
+      Crn1: cryptoRandomString({ length: 49 }),
+    }
+    let customer = new CustomerDTO(customerObject, fixtures.creditCard)
+    const createResponse: IBaseResponse = await api.addCustomer(customer)
+
+    const reference = createResponse?.data?.DVTokenResp?.DVToken
+    customerObject.EmailAddress = 'updatedemail@example.com'
+
+    customer = new CustomerDTO(customerObject)
+    const updateResponse: IBaseResponse = await api.updateCustomer(reference, customer)
+
+    expect(validCodes).toContain(updateResponse.status)
   })
 })

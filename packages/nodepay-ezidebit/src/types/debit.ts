@@ -9,18 +9,27 @@ export interface IEzidebitInternalDebit extends IEzidebitBasePayment {
   DebitDate: string
 }
 
-export interface IEzidebitDirectDebit extends IDirectDebit {
-  ezidebitCustomerId?: string
-  debitDate?: string
-  username?: string
+export class EzidebitDirectDebit implements IDirectDebit {
+  constructor(
+    public readonly customerId: string,
+    public readonly paymentReference: string,
+    public readonly amountInCents: number,
+    public readonly ezidebitCustomerId?: string,
+    public readonly debitDate?: string,
+    public readonly username?: string,
+  ) {}
 }
 
+/** @internal */
 export interface IEzidebitBaseDebit extends IEzidebitBaseAccount, IEzidebitInternalDebit {}
 
+/** @internal */
 export interface IEzidebitCreditCardDebit extends IEzidebitBaseDebit, IEzidebitBaseCreditCard {}
 
+/** @internal */
 export interface IEzidebitBankAccountDebit extends IEzidebitBaseDebit, IEzidebitBankAccount {}
 
+/** @internal */
 export interface IEzidebitDirectDebitPayment extends IEzidebitInternalDebit {
   EziDebitCustomerID: string
   YourSystemReference: string

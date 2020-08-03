@@ -1,5 +1,7 @@
+export * from './address'
 export * from './bank-account'
 export * from './charge'
 export * from './credit-card'
 export * from './customer'
+export * from './payment-details'
 export * from './payment-schedule'

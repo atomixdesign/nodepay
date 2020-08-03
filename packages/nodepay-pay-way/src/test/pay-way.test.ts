@@ -2,7 +2,7 @@ import { Container } from 'typedi'
 import moment from 'moment'
 import { Payway } from '../pay-way'
 import { testAPI, IPaywayAPIResponse } from '../transport'
-import { PaywayPaymentFrequency, IPaywayCharge } from '../types'
+import { PaywayPaymentFrequency } from '../types'
 
 const fixtures = {
   creditCard: {
@@ -60,22 +60,18 @@ describe('test payway gateway', () => {
   })
 
   test('it can be charged', async () => {
-    const onceOffCharge: IPaywayCharge = {
-      ...fixtures.simpleCharge,
-      creditCard: fixtures.creditCard,
-    }
-    const response: IPaywayAPIResponse = await gateway.charge(onceOffCharge)
+    const response: IPaywayAPIResponse = await gateway.charge(
+      fixtures.simpleCharge,
+      fixtures.creditCard,
+    )
     expect(response?.status).toBe(200)
   })
 
   test('it reports errors if the charge format is not correct', async () => {
-    const onceOffChargeBad: IPaywayCharge = {
-      ...fixtures.simpleCharge,
-      creditCard: fixtures.creditCard,
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const charge: IPaywayAPIResponse = await gateway.charge(onceOffChargeBad).catch(error => {
+    await gateway.charge(
+      fixtures.simpleChargeBad,
+      fixtures.creditCard,
+    ).catch(error => {
       expect(typeof error).toBe('object')
       return error
     })
@@ -133,6 +129,13 @@ describe('test payway gateway', () => {
       customerId: '123456789',
       singleUseTokenId: 'fakeTokenId',
     })
+    expect(response?.status).toBe(200)
+  })
+
+  test('it can update a customer', async () => {
+    const response: IPaywayAPIResponse = await gateway.updateCustomer(
+      '123456789',
+      { emailAddress: 'updatedemail@example.com' })
     expect(response?.status).toBe(200)
   })
 })

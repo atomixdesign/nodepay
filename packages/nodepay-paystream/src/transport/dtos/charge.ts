@@ -1,7 +1,5 @@
 import {
   IsNotEmpty,
-  /* IsAlphanumeric,
-  MaxLength, */
   IsNumber,
   IsOptional,
   IsIP,
@@ -13,22 +11,26 @@ import {
 import {
   ErrorType,
   ErrorFactory,
-} from '@atomixdesign/nodepay-core/validation/errors'
+} from '@atomixdesign/nodepay-core/validation'
 
-import { IPaystreamCharge } from '../../types'
+import { PaystreamCharge, PaystreamCreditCard } from '../../types'
 
+/** @internal */
 export class ChargeDTO {
-  constructor(charge: IPaystreamCharge) {
+  constructor(
+    charge: PaystreamCharge,
+    creditCard?: PaystreamCreditCard,
+  ) {
     this.amount = charge.amountInCents
     this.reference = charge.orderNumber
     this.customer_ip = charge.customerIp
     if (charge.cardToken !== undefined) {
       this.card_token = charge.cardToken
     } else {
-      this.card_number = charge.creditCard?.cardNumber
-      this.card_holder = charge.creditCard?.cardHolderName
-      this.cvv = charge.creditCard?.CCV
-      this.card_expiry = `${charge.creditCard?.expiryDateMonth}/${charge.creditCard?.expiryDateYear}`
+      this.card_number = creditCard?.cardNumber
+      this.card_holder = creditCard?.cardHolderName
+      this.cvv = creditCard?.CCV
+      this.card_expiry = `${creditCard?.expiryDateMonth}/${creditCard?.expiryDateYear}`
     }
   }
 

@@ -1,7 +1,7 @@
 import { Container } from 'typedi'
 import { Ezidebit } from '../ezidebit'
 import { testAPI, IEzidebitAPIResponse } from '../transport'
-import { EzidebitPaymentFrequency, EzidebitDayOfWeek, IEzidebitCharge } from '../types'
+import { EzidebitPaymentFrequency, EzidebitDayOfWeek } from '../types'
 
 const fixtures = {
   simpleCharge: {
@@ -49,6 +49,22 @@ const fixtures = {
     keepManualPayments: 'NO' as const,
     username: 'jdoe',
   },
+  customerDetails: {
+    generalReference: '',
+    firstName: 'John',
+    lastName: 'Doe',
+    address1: 'address1',
+    address2: 'address2',
+    postCode: '2000',
+    suburb: 'suburb',
+    region: 'QLD',
+    emailAddress: 'test@example.com',
+    phoneNumber: '0400123456',
+    smsPaymentReminder: 'NO' as const,
+    smsExpiredCard: 'NO' as const,
+    smsFailedNotification: 'NO' as const,
+    username: 'jdoe'
+  }
 }
 
 describe('test ezidebit gateway', () => {
@@ -72,26 +88,19 @@ describe('test ezidebit gateway', () => {
   })
 
   test('it can be charged', async () => {
-    const onceOffCharge: IEzidebitCharge = {
-      ...fixtures.simpleCharge,
-      creditCard: fixtures.creditCard,
-    }
     const charge: IEzidebitAPIResponse = await gateway.charge(
-      onceOffCharge
+      fixtures.simpleCharge,
+      fixtures.creditCard,
     )
 
     expect(charge.data.resultText).toBe('OK')
   })
 
   test('it reports errors if the charge format is not correct', async () => {
-    const onceOffChargeBad: IEzidebitCharge = {
-      ...fixtures.simpleChargeBad,
-      creditCard: fixtures.creditCardBad,
-    }
-
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const charge: IEzidebitAPIResponse = await gateway.charge(
-      onceOffChargeBad
+      fixtures.simpleChargeBad,
+      fixtures.creditCardBad,
     ).catch(error => {
       expect(typeof error).toBe('object')
       return error
@@ -145,7 +154,18 @@ describe('test ezidebit gateway', () => {
       customerId: '123456789',
       contractStartDate: '2010-12-22',
       lastName: 'Doe',
+      smsPaymentReminder: 'NO',
+      smsExpiredCard: 'NO',
+      smsFailedNotification: 'NO',
     })
+    expect(response?.data.resultText).toBe('OK')
+  })
+
+  test('it can update a customer', async () => {
+    const response: IEzidebitAPIResponse = await gateway.updateCustomer(
+      '123456789',
+      fixtures.customerDetails,
+    )
     expect(response?.data.resultText).toBe('OK')
   })
 })

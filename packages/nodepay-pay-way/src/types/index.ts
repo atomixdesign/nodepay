@@ -1,5 +1,7 @@
 export * from './charge'
 export * from './config'
+export * from './credit-card'
 export * from './customer'
 export * from './direct-debit'
 export * from './payment-frequency'
+export * from './payment-schedule'

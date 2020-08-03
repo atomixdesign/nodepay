@@ -2,9 +2,9 @@ import { Service, Inject, Container } from 'typedi'
 import { AxiosInstance } from 'axios'
 import {
   HttpClientFactory,
+  IBaseResponse,
 } from '@atomixdesign/nodepay-core/network'
-import { IBPOINTConfig } from '../types'
-import { IBPOINTAPIResponse } from './api-response'
+import { BPOINTConfig } from '../types'
 import { ChargeDTO, CustomerDTO } from './dtos'
 import { BPOINTAPIError } from './api-error'
 
@@ -15,7 +15,7 @@ export class BPOINTAPI {
   constructor(
     @Inject('http.client') httpClientFactory: HttpClientFactory
   ) {
-    const config: IBPOINTConfig = Container.get('bpoint.config')
+    const config: BPOINTConfig = Container.get('bpoint.config')
     const authHeader = this.encodeKey(`${config.username}|${config.merchantId}:${config.password}`)
 
     this.httpClient = httpClientFactory.create({
@@ -24,29 +24,24 @@ export class BPOINTAPI {
         Authorization: authHeader,
         'Content-Type': 'application/json; charset=utf-8',
       }
-    }, false)
+    })
   }
 
   private encodeKey(key: string): string {
     return Buffer.from(key, 'binary').toString('base64')
   }
 
-  async placeCharge(/* dvToken?: string,*/ charge: ChargeDTO): Promise<IBPOINTAPIResponse> {
-    let response
-    try {
-      response = await this.httpClient!.request({
-        method: 'post',
-        url: '/txns/',
-        data: { 'TxnReq': charge },
-      })
-    } catch (error) {
-      return Promise.reject(error)
+  async placeCharge(/* dvToken?: string,*/ charge: ChargeDTO): Promise<IBaseResponse> {
+    const response = await this.httpClient!.request({
+      method: 'post',
+      url: '/txns/',
+      data: { 'TxnReq': charge },
+    })
+    if (Number(response?.data?.APIResponse?.ResponseCode) !== 0) {
+      throw new BPOINTAPIError(response.data.APIResponse)
     }
-    if (Number(response?.data.APIResponse.ResponseCode) !== 0) {
-      return Promise.reject(new BPOINTAPIError(response.data.APIResponse))
-    }
-    if (Number(response?.data.TxnResp.ResponseCode) !== 0) {
-      return Promise.reject(new BPOINTAPIError(response.data.TxnResp))
+    if (Number(response?.data?.TxnResp?.ResponseCode) !== 0) {
+      throw new BPOINTAPIError(response.data.TxnResp)
     }
 
     return {
@@ -57,19 +52,32 @@ export class BPOINTAPI {
     }
   }
 
-  async addCustomer(customer: CustomerDTO): Promise<IBPOINTAPIResponse> {
-    let response
-    try {
-      response = await this.httpClient!.request({
-        method: 'post',
-        url: '/dvtokens/',
-        data: { 'DVTokenReq': customer },
-      })
-    } catch (error) {
-      return Promise.reject(error)
+  async addCustomer(customer: CustomerDTO): Promise<IBaseResponse> {
+    const response = await this.httpClient!.request({
+      method: 'post',
+      url: '/dvtokens/',
+      data: { 'DVTokenReq': customer },
+    })
+    if (Number(response?.data?.APIResponse?.ResponseCode) !== 0) {
+      throw new BPOINTAPIError(response.data.APIResponse)
     }
-    if (Number(response?.data.APIResponse.ResponseCode) !== 0) {
-      return Promise.reject(new BPOINTAPIError(response.data.APIResponse))
+
+    return {
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
+      originalResponse: response,
+    }
+  }
+
+  async updateCustomer(reference: string, customer: CustomerDTO): Promise<IBaseResponse> {
+    const response = await this.httpClient!.request({
+      method: 'put',
+      url: `/dvtokens/${reference}`,
+      data: { 'DVTokenReq': customer },
+    })
+    if (Number(response?.data?.APIResponse?.ResponseCode) !== 0) {
+      throw new BPOINTAPIError(response.data.APIResponse)
     }
 
     return {

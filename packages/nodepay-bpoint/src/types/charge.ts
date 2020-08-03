@@ -1,6 +1,5 @@
-import { IBaseCharge, ICreditCard } from '@atomixdesign/nodepay-core/types'
+import { IBaseCharge } from '@atomixdesign/nodepay-core/types'
 import { BPOINTCurrency } from './currencies'
-import { CreditCardDTO } from '../transport/dtos'
 
 export enum BPOINTActionType {
   payment = 'payment',
@@ -20,7 +19,6 @@ export enum BPOINTTransactionType {
 export interface IBPOINTInternalCharge {
   Action?: BPOINTActionType
   Amount: number // TODO: Consider bigInt. For now, MAX_SAFE_INTEGER appears sufficient.
-  CardDetails: CreditCardDTO
   Crn1: string
   Currency?: BPOINTCurrency
   SubType?: 'single' | 'recurring'
@@ -30,9 +28,14 @@ export interface IBPOINTInternalCharge {
   MerchantReference?: string
 }
 
-export interface IBPOINTCharge extends IBaseCharge {
-  creditCard: ICreditCard
-  merchantReference?: string
-  emailAddress?: string
-  testMode?: boolean
+export class BPOINTCharge implements IBaseCharge {
+  constructor(
+    public readonly orderNumber: string,
+    public readonly amountInCents: number,
+    public readonly merchantReference?: string,
+    public readonly emailAddress?: string,
+    public readonly testMode?: boolean,
+  ) {
+    this.testMode = testMode === undefined ? true : Boolean(testMode)
+  }
 }

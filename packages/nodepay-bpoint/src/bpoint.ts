@@ -8,30 +8,30 @@ import {
   CustomerDetails,
 } from '@atomixdesign/nodepay-core/features'
 import {
-  ICreditCard, IBankAccount,
+  IBankAccount,
 } from '@atomixdesign/nodepay-core/types'
+import { IBaseResponse } from '@atomixdesign/nodepay-core/network'
 import {
-  IBPOINTConfig,
-  IBPOINTCustomer,
-  IBPOINTCharge,
+  BPOINTConfig,
+  BPOINTCustomer,
+  BPOINTCharge,
   BPOINTActionType,
   BPOINTTransactionType,
+  BPOINTCreditCard,
 } from './types'
-import { BPOINTAPI, IBPOINTAPIResponse } from './transport'
+import { BPOINTAPI } from './transport'
 import {
   ChargeDTO,
-  CreditCardDTO,
-  BankAccountDTO,
   CustomerDTO,
 } from './transport/dtos'
 
-export class BPOINT extends BaseGateway<IBPOINTConfig> implements
+export class BPOINT extends BaseGateway<BPOINTConfig> implements
   OnceOffPayment,
   RecurringPayment,
   CustomerDetails {
   private api: BPOINTAPI
 
-  protected get baseConfig(): IBPOINTConfig {
+  protected get baseConfig(): BPOINTConfig {
     return {
       username: '',
       merchantId: '',
@@ -40,7 +40,7 @@ export class BPOINT extends BaseGateway<IBPOINTConfig> implements
     }
   }
 
-  constructor(config?: Partial<IBPOINTConfig>) {
+  constructor(config?: Partial<BPOINTConfig>) {
     super(config)
     Container.set('bpoint.config', config)
     this.api = Container.get('bpoint.api')
@@ -54,17 +54,16 @@ export class BPOINT extends BaseGateway<IBPOINTConfig> implements
     return 'bpoint'
   }
 
-  private async internalCharge(
-    charge: IBPOINTCharge,
+  private async _processCharge(
+    charge: BPOINTCharge,
+    creditCard: BPOINTCreditCard,
     subType: 'single' | 'recurring' = 'single'
-  ): Promise<IBPOINTAPIResponse> {
-    let payload
-
+  ): Promise<IBaseResponse> {
     const chargeObject = {
       Action: BPOINTActionType.payment,
-      Amount: charge.amountInCents, // TODO: Amount is scaled depending on currency. Setup scaling table for currencies.
-      CardDetails: new CreditCardDTO(charge.creditCard),
-      Crn1: `${charge?.merchantReference ?? ''}${cryptoRandomString({ length: 10 })}`,
+      // TODO: Amount is scaled depending on currency. Setup scaling table for currencies.
+      Amount: charge.amountInCents,
+      Crn1: `${charge?.merchantReference ?? ''}${cryptoRandomString({ length: 32 })}`,
       EmailAddress: charge?.emailAddress,
       MerchantReference: charge?.merchantReference,
       TestMode: Boolean(charge?.testMode),
@@ -72,54 +71,85 @@ export class BPOINT extends BaseGateway<IBPOINTConfig> implements
       type: BPOINTTransactionType.internet,
     }
 
-    try {
-      const chargeDTO = new ChargeDTO(chargeObject)
-      await validateOrReject(chargeDTO)
-      payload = await this.api.placeCharge(chargeDTO)
-    } catch(error) {
-      return Promise.reject(error)
-    }
-    return Promise.resolve(payload)
+    const chargeDTO = new ChargeDTO(chargeObject, creditCard)
+    await validateOrReject(chargeDTO)
+    return await this.api.placeCharge(chargeDTO)
   }
 
   async addCustomer(
-    customerDetails: IBPOINTCustomer,
-    creditCard: ICreditCard,
+    customerDetails: BPOINTCustomer,
+    creditCard?: BPOINTCreditCard,
     bankAccount?: IBankAccount,
-  ): Promise<IBPOINTAPIResponse> {
-    let payload
-
-    const customerObject = {
-      CardDetails: new CreditCardDTO(creditCard),
-      BankAccountDetails: bankAccount && new BankAccountDTO(bankAccount),
-      Crn1: `${cryptoRandomString({ length: 10 })}`,
+  ): Promise<IBaseResponse> {
+    const customer = {
+      // TODO: Track idempotency tokens
+      Crn1: `${cryptoRandomString({ length: 32 })}`,
       EmailAddress: customerDetails.emailAddress,
+      FirstName: customerDetails.firstName,
+      LastName: customerDetails.lastName,
+      AddressLine1: customerDetails.address1,
+      AddressLine2: customerDetails.address2,
+      PostCode: customerDetails.postCode,
+      State: customerDetails.region,
+      HomePhoneNumber: customerDetails.phoneNumber,
     }
 
-    try {
-      const customerDTO = new CustomerDTO(customerObject)
-      await validateOrReject(customerDTO)
-      payload = await this.api.addCustomer(customerDTO)
-    } catch(error) {
-      return Promise.reject(error)
+    const customerDTO = new CustomerDTO(
+      customer,
+      creditCard,
+      bankAccount,
+    )
+    await validateOrReject(customerDTO)
+    return await this.api.addCustomer(customerDTO)
+  }
+
+  async updateCustomer(
+    reference: string,
+    customerDetails: BPOINTCustomer,
+    creditCard?: BPOINTCreditCard,
+    bankAccount?: IBankAccount,
+  ): Promise<IBaseResponse> {
+    const customer = {
+      // TODO: Track idempotency tokens
+      Crn1: `${cryptoRandomString({ length: 32 })}`,
+      EmailAddress: customerDetails.emailAddress,
+      FirstName: customerDetails.firstName,
+      LastName: customerDetails.lastName,
+      AddressLine1: customerDetails.address1,
+      AddressLine2: customerDetails.address2,
+      PostCode: customerDetails.postCode,
+      State: customerDetails.region,
+      HomePhoneNumber: customerDetails.phoneNumber,
     }
-    return Promise.resolve(payload)
+
+    const customerDTO = new CustomerDTO(
+      customer,
+      creditCard,
+      bankAccount,
+    )
+    await validateOrReject(customerDTO)
+    return await this.api.updateCustomer(reference, customerDTO)
   }
 
   async charge(
-    onceOffCharge: IBPOINTCharge
-  ): Promise<IBPOINTAPIResponse> {
-    return this.internalCharge(onceOffCharge, 'single')
+    onceOffCharge: BPOINTCharge,
+    creditCard: BPOINTCreditCard,
+  ): Promise<IBaseResponse> {
+    return this._processCharge(
+      onceOffCharge,
+      creditCard,
+      'single',
+    )
   }
 
   async chargeRecurring(
-    recurringCharge: IBPOINTCharge
-  ): Promise<IBPOINTAPIResponse> {
-    return this.internalCharge(recurringCharge, 'recurring')
+    recurringCharge: BPOINTCharge,
+    creditCard: BPOINTCreditCard,
+  ): Promise<IBaseResponse> {
+    return this._processCharge(
+      recurringCharge,
+      creditCard,
+      'recurring',
+    )
   }
-
-  async directDebit(): Promise<IBPOINTAPIResponse> {
-    return Promise.reject('Not implemented')
-  }
-
 }

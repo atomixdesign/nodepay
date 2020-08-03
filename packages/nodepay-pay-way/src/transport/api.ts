@@ -2,7 +2,7 @@ import { Service, Inject, Container } from 'typedi'
 import { AxiosInstance } from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import qs from 'qs'
-import { IPaywayConfig } from '../types'
+import { PaywayConfig } from '../types'
 import {
   HttpClientFactory,
 } from '@atomixdesign/nodepay-core/network'
@@ -13,6 +13,8 @@ import {
   CreditCardDTO,
   CustomerDTO,
   PaymentScheduleDTO,
+  AddressDTO,
+  PaymentDetailsDTO,
 } from './dtos'
 
 @Service('payway.api')
@@ -26,7 +28,7 @@ export class PaywayAPI {
   constructor(
     @Inject('http.client') httpClientFactory: HttpClientFactory
   ) {
-    const config: IPaywayConfig = Container.get('payway.config')
+    const config: PaywayConfig = Container.get('payway.config')
     this.idempotencyKey = uuidv4()
     this.secretAuthHeader = `Basic ${this.encodeKey(config.secretKey)}`
     this.publicAuthHeader = `Basic ${this.encodeKey(config.publishableKey)}`
@@ -46,12 +48,7 @@ export class PaywayAPI {
   }
 
   private async _process(requestConfig: any): Promise<IPaywayAPIResponse> {
-    let response
-    try {
-      response = await this.httpClient!.request(requestConfig)
-    } catch (error) {
-      return Promise.reject(error)
-    }
+    const response = await this.httpClient!.request(requestConfig)
 
     return {
       status: response.status,
@@ -63,7 +60,7 @@ export class PaywayAPI {
 
   // Verify key expiry/validity
   async verifyKey(): Promise<IPaywayAPIResponse> {
-    const config: IPaywayConfig = Container.get('payway.config')
+    const config: PaywayConfig = Container.get('payway.config')
     const response = await this.httpClient!.request({
       url: '/api-keys/latest',
     })
@@ -113,6 +110,28 @@ export class PaywayAPI {
     })
   }
 
+  async updateCustomerDetails(
+    reference: string,
+    customerAddress: AddressDTO,
+  ): Promise<IPaywayAPIResponse> {
+    return this._process({
+      method: 'put',
+      url: `/customers/${reference}/contact`,
+      data: qs.stringify({ ...customerAddress }),
+    })
+  }
+
+  async updateCustomerPayment(
+    reference: string,
+    customerPaymentDetails: PaymentDetailsDTO,
+  ): Promise<IPaywayAPIResponse> {
+    return this._process({
+      method: 'put',
+      url: `/customers/${reference}/payment-setup`,
+      data: qs.stringify({ ...customerPaymentDetails }),
+    })
+  }
+
   async stopCustomerPayments(customerId: string): Promise<IPaywayAPIResponse> {
     return this._process({
       method: 'patch',
@@ -122,16 +141,11 @@ export class PaywayAPI {
   }
 
   async deleteCustomer(customerId: string): Promise<IPaywayAPIResponse> {
-    let response
-    try {
-      await this.stopCustomerPayments(customerId)
-      response = await this.httpClient!.request({
-        method: 'delete',
-        url: `/customers/${customerId}`,
-      })
-    } catch (error) {
-      return Promise.reject(error)
-    }
+    await this.stopCustomerPayments(customerId)
+    const response = await this.httpClient!.request({
+      method: 'delete',
+      url: `/customers/${customerId}`,
+    })
 
     return {
       status: response.status,

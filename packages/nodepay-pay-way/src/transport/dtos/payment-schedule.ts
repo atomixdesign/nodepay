@@ -7,35 +7,21 @@ import {
 import {
   ErrorType,
   ErrorFactory,
-} from '@atomixdesign/nodepay-core/validation/errors'
+} from '@atomixdesign/nodepay-core/validation'
 
-import { PaywayPaymentFrequency } from '../../types/payment-frequency'
+import { PaywayPaymentFrequency, IPaywayInternalPaymentSchedule } from '../../types'
 
+/** @internal */
 export class PaymentScheduleDTO {
   constructor(
-    {
-      frequency,
-      nextPaymentDate,
-      regularPrincipalAmount,
-      nextPrincipalAmount,
-      numberOfPaymentsRemaining,
-      finalPrincipalAmount
-    } :
-    {
-      frequency: PaywayPaymentFrequency
-      nextPaymentDate: string
-      regularPrincipalAmount: number
-      nextPrincipalAmount?: number
-      numberOfPaymentsRemaining?: number
-      finalPrincipalAmount?: number
-    }
+    paymentSchedule: IPaywayInternalPaymentSchedule
   ) {
-    this.frequency = frequency
-    this.nextPaymentDate = nextPaymentDate
-    this.regularPrincipalAmount = regularPrincipalAmount
-    this.nextPrincipalAmount = nextPrincipalAmount
-    this.numberOfPaymentsRemaining = numberOfPaymentsRemaining
-    this.finalPrincipalAmount = finalPrincipalAmount
+    this.frequency = paymentSchedule.frequency
+    this.nextPaymentDate = paymentSchedule.nextPaymentDate
+    this.regularPrincipalAmount = paymentSchedule.regularPrincipalAmount
+    this.nextPrincipalAmount = paymentSchedule.nextPrincipalAmount
+    this.numberOfPaymentsRemaining = paymentSchedule.numberOfPaymentsRemaining
+    this.finalPrincipalAmount = paymentSchedule.finalPrincipalAmount
   }
 
   // * frequency

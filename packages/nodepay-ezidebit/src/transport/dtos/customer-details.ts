@@ -12,30 +12,30 @@ import {
   ErrorType,
   ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation'
-import { IEzidebitInternalCustomer } from '../../types'
+import { IEzidebitInternalCustomerDetails } from '../../types'
 
 /** @internal */
-export class CustomerDTO {
-  constructor(customer: IEzidebitInternalCustomer) {
-    this.YourSystemReference = customer.YourSystemReference
-    this.YourGeneralReference = customer.YourGeneralReference
-    this.LastName = customer.LastName
-    this.FirstName = customer.FirstName
+export class CustomerDetailsDTO {
+  constructor(customerDetails: IEzidebitInternalCustomerDetails) {
+    this.YourSystemReference = customerDetails.YourSystemReference
+    this.NewYourSystemReference = customerDetails.NewYourSystemReference
+    this.YourGeneralReference = customerDetails.YourGeneralReference
+    this.LastName = customerDetails.LastName
+    this.FirstName = customerDetails.FirstName
 
-    this.AddressLine1 = customer.AddressLine1
-    this.AddressLine2 = customer.AddressLine2
-    this.AddressSuburb = customer.AddressSuburb
-    this.AddressState = customer.AddressState
-    this.AddressPostCode = customer.AddressPostCode
-    this.EmailAddress = customer.EmailAddress
-    this.MobilePhoneNumber = customer.MobilePhoneNumber
+    this.AddressLine1 = customerDetails.AddressLine1
+    this.AddressLine2 = customerDetails.AddressLine2
+    this.AddressSuburb = customerDetails.AddressSuburb
+    this.AddressState = customerDetails.AddressState
+    this.AddressPostCode = customerDetails.AddressPostCode
+    this.EmailAddress = customerDetails.EmailAddress
+    this.MobilePhoneNumber = customerDetails.MobilePhoneNumber
 
-    this.ContractStartDate = customer.ContractStartDate
-    this.SmsPaymentReminder = customer.SmsPaymentReminder
-    this.SmsFailedNotification = customer.SmsFailedNotification
-    this.SmsExpiredCard = customer.SmsExpiredCard
+    this.SmsPaymentReminder = customerDetails.SmsPaymentReminder
+    this.SmsFailedNotification = customerDetails.SmsFailedNotification
+    this.SmsExpiredCard = customerDetails.SmsExpiredCard
 
-    this.Username = customer.Username
+    this.Username = customerDetails.Username
   }
 
   // * YourSystemReference
@@ -43,6 +43,12 @@ export class CustomerDTO {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'YourSystemReference')
   })
   YourSystemReference: string;
+
+  // * NewYourSystemReference
+  @MaxLength(50, {
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'NewYourSystemReference')
+  })
+  NewYourSystemReference: string;
 
   // * YourGeneralReference
   @IsOptional()
@@ -124,12 +130,6 @@ export class CustomerDTO {
     message: ErrorFactory.getErrorMessage(ErrorType.NotAMobilePhone, 'MobilePhoneNumber')
   })
   MobilePhoneNumber: string | undefined;
-
-  // * ContractStartDate
-  @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'ContractStartDate')
-  })
-  ContractStartDate: string;
 
   // * SmsPaymentReminder
   @IsNotEmpty({

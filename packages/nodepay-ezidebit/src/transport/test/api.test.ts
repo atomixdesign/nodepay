@@ -18,6 +18,7 @@ const fixtures = {
   },
   customer: {
     YourSystemReference: '',
+    NewYourSystemReference: '',
     YourGeneralReference: '',
     LastName: 'Doe',
     FirstName: 'John',
@@ -211,5 +212,18 @@ describe('test ezidebit api transport', () => {
     }
 
     expect(paymentScheduleUpdateResult).toBe('S')
+  })
+
+  test('it updates a customer account', async () => {
+    const { customer } = fixtures
+    customer.YourSystemReference = randomId(32)
+    await api.addCustomer(customer)
+
+    customer.NewYourSystemReference = customer.YourSystemReference
+    customer.EmailAddress = 'updatedemail@example.com'
+
+    const result: IEzidebitAPIResponse = await api.updateCustomer(customer)
+
+    expect(result.statusText).toBe('S')
   })
 })

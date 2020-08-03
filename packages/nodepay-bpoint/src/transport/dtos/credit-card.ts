@@ -7,10 +7,11 @@ import {
 } from 'class-validator'
 
 import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation'
-import { ICreditCard } from '@atomixdesign/nodepay-core/types'
+import { BPOINTCreditCard } from '../../types'
 
+/** @internal */
 export class CreditCardDTO {
-  constructor(creditCard: ICreditCard) {
+  constructor(creditCard: BPOINTCreditCard) {
     this.CardHolderName = creditCard.cardHolderName
     this.CardNumber = creditCard.cardNumber
     this.Cvn = creditCard.CCV

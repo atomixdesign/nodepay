@@ -2,7 +2,7 @@ import { Service, Inject } from 'typedi'
 import {
   Client as SoapClient,
 } from 'soap'
-import { IEzidebitConfig } from '../types'
+import { EzidebitConfig } from '../types'
 import { SoapClientFactory } from '@atomixdesign/nodepay-core/network'
 import { IEzidebitAPIResponse, formatResponse } from './api-response'
 import {
@@ -11,6 +11,7 @@ import {
   OnceOffChargeDTO,
   PaymentDTO,
   PaymentScheduleDTO,
+  CustomerDetailsDTO,
 } from './dtos'
 import { EzidebitAPIError } from './api-error'
 
@@ -20,22 +21,21 @@ export class EzidebitAPI {
   private nonPCISoapClient: SoapClient | undefined
 
   constructor(
-    @Inject('ezidebit.config') private config: IEzidebitConfig,
+    @Inject('ezidebit.config') private config: EzidebitConfig,
     @Inject('soap.client') private soapClientFactory: SoapClientFactory
   ) { }
 
   private async ensureClient(): Promise<void> {
-    if (this.soapClient !== undefined) return Promise.resolve()
-    try {
-      this.soapClient = await this.soapClientFactory!.createAsync(this.config)
-      this.nonPCISoapClient = await this.soapClientFactory!.createAsync({
-        ...this.config,
-        ...{ apiRoot: this.config.nonPCIApiRoot }
-      })
-    }
-    catch (error) {
-      return Promise.reject(error)
-    }
+    if (
+      this.soapClient !== undefined &&
+      this.nonPCISoapClient !== undefined
+    ) return
+
+    this.soapClient = await this.soapClientFactory!.createAsync(this.config)
+    this.nonPCISoapClient = await this.soapClientFactory!.createAsync({
+      ...this.config,
+      ...{ apiRoot: this.config.nonPCIApiRoot }
+    })
   }
 
   async describe(pci = true): Promise<unknown> {
@@ -45,39 +45,45 @@ export class EzidebitAPI {
 
   async addCustomer(customer: CustomerDTO): Promise<IEzidebitAPIResponse> {
     await this.ensureClient()
-    let response
-    try {
-      response = await this.nonPCISoapClient!.AddCustomerAsync({
-        ...{ DigitalKey: this.config.digitalKey },
-        ...customer,
-      })
-    } catch (error) {
-      return Promise.reject(error)
-    }
-    if (response[0]?.AddCustomerResult.ErrorMessage !== undefined) {
+
+    const response = await this.nonPCISoapClient!.AddCustomerAsync({
+      ...{ DigitalKey: this.config.digitalKey },
+      ...customer,
+    })
+    if (response[0]?.AddCustomerResult?.ErrorMessage !== undefined) {
       return Promise.reject(new EzidebitAPIError(response[0].AddCustomerResult))
     }
 
     return formatResponse(response[0]?.AddCustomerResult)
   }
 
+  async updateCustomer(customerDetails: CustomerDetailsDTO): Promise<IEzidebitAPIResponse> {
+    await this.ensureClient()
+
+    const response = await this.nonPCISoapClient!.EditCustomerDetailsAsync({
+      ...{ DigitalKey: this.config.digitalKey },
+      ...customerDetails,
+    })
+    if (response[0]?.EditCustomerDetailsResult?.ErrorMessage !== undefined) {
+      return Promise.reject(new EzidebitAPIError(response[0].EditCustomerDetailsResult))
+    }
+
+    return formatResponse(response[0]?.EditCustomerDetailsResult)
+  }
+
   async addCustomerCC(
     creditCard: CreditCardDTO,
   ): Promise<IEzidebitAPIResponse> {
     await this.ensureClient()
-    let response
-    try {
-      response = await this.soapClient!.EditCustomerCreditCardAsync({
-        ...{
-          DigitalKey: this.config.digitalKey,
-        },
-        ...creditCard,
-      })
-    } catch (error) {
-      return Promise.reject(error)
-    }
-    if (response[0]?.EditCustomerCreditCardResult.ErrorMessage !== undefined) {
-      return Promise.reject(new EzidebitAPIError(response[0].EditCustomerCreditCardResult))
+
+    const response = await this.soapClient!.EditCustomerCreditCardAsync({
+      ...{
+        DigitalKey: this.config.digitalKey,
+      },
+      ...creditCard,
+    })
+    if (response[0]?.EditCustomerCreditCardResult?.ErrorMessage !== undefined) {
+      throw new EzidebitAPIError(response[0].EditCustomerCreditCardResult)
     }
 
     return formatResponse(response[0]?.EditCustomerCreditCardResult)
@@ -85,17 +91,13 @@ export class EzidebitAPI {
 
   async placeCharge(charge: OnceOffChargeDTO): Promise<IEzidebitAPIResponse> {
     await this.ensureClient()
-    let response
-    try {
-      response = await this.soapClient!.ProcessRealtimeCreditCardPaymentAsync({
-        ...{ DigitalKey: this.config.digitalKey },
-        ...charge,
-      })
-    } catch (error) {
-      return Promise.reject(error)
-    }
-    if (response[0]?.ProcessRealtimeCreditCardPaymentResult.ErrorMessage !== undefined) {
-      return Promise.reject(new EzidebitAPIError(response[0].ProcessRealtimeCreditCardPaymentResult))
+
+    const response = await this.soapClient!.ProcessRealtimeCreditCardPaymentAsync({
+      ...{ DigitalKey: this.config.digitalKey },
+      ...charge,
+    })
+    if (response[0]?.ProcessRealtimeCreditCardPaymentResult?.ErrorMessage !== undefined) {
+      throw new EzidebitAPIError(response[0].ProcessRealtimeCreditCardPaymentResult)
     }
 
     return formatResponse(response[0]?.ProcessRealtimeCreditCardPaymentResult)
@@ -105,17 +107,13 @@ export class EzidebitAPI {
     payment: PaymentDTO,
   ): Promise<IEzidebitAPIResponse> {
     await this.ensureClient()
-    let response
-    try {
-      response = await this.nonPCISoapClient!.AddPaymentAsync({
-        ...{ DigitalKey: this.config.digitalKey },
-        ...payment,
-      })
-    } catch (error) {
-      return Promise.reject(error)
-    }
-    if (response[0]?.AddPaymentResult.ErrorMessage !== undefined) {
-      return Promise.reject(new EzidebitAPIError(response[0].AddPaymentResult))
+
+    const response = await this.nonPCISoapClient!.AddPaymentAsync({
+      ...{ DigitalKey: this.config.digitalKey },
+      ...payment,
+    })
+    if (response[0]?.AddPaymentResult?.ErrorMessage !== undefined) {
+      throw new EzidebitAPIError(response[0].AddPaymentResult)
     }
 
     return formatResponse(response[0].AddPaymentResult)
@@ -123,19 +121,15 @@ export class EzidebitAPI {
 
   async schedulePayment(schedule: PaymentScheduleDTO): Promise<IEzidebitAPIResponse> {
     await this.ensureClient()
-    let response
-    try {
-      response = await this.nonPCISoapClient!.CreateScheduleAsync({
-        ...{
-          DigitalKey: this.config.digitalKey,
-        },
-        ...schedule,
-      })
-    } catch (error) {
-      return Promise.reject(error)
-    }
+
+    const response = await this.nonPCISoapClient!.CreateScheduleAsync({
+      ...{
+        DigitalKey: this.config.digitalKey,
+      },
+      ...schedule,
+    })
     if (response[0]?.CreateScheduleResult.ErrorMessage !== undefined) {
-      return Promise.reject(new EzidebitAPIError(response[0]?.CreateScheduleResult))
+      throw new EzidebitAPIError(response[0]?.CreateScheduleResult)
     }
 
     return formatResponse(response[0].CreateScheduleResult)

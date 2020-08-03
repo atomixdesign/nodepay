@@ -1,6 +1,4 @@
 import {
-  IsNotEmpty,
-  IsAlphanumeric,
   MaxLength,
   IsOptional,
   IsEmail,
@@ -14,19 +12,17 @@ import {
   ErrorType,
   ErrorFactory,
 } from '@atomixdesign/nodepay-core/validation'
-import { PaywayCustomer } from '../../types'
+import { PaywayAddress } from '../../types'
 
 /** @internal */
-export class CustomerDTO {
-  constructor(customer: PaywayCustomer) {
-    this.customerNumber = customer.customerId
-    this.singleUseTokenId = customer.singleUseTokenId
-    this.merchantId = customer.merchantId
-    this.bankAccountId = customer.bankAccountId
-
-    this.customerName = `${customer.firstName ?? ''} ${customer.lastName ?? ''}`
+export class AddressDTO {
+  constructor(customer: PaywayAddress) {
+    this.customerName = (customer.firstName || customer.lastName) ?
+      `${customer.firstName ?? ''} ${customer.lastName ?? ''}`
+      :
+      undefined
     this.emailAddress = customer.emailAddress
-    this.sendEmailReceipts = customer.sendEmailReceipts ?? false
+    this.sendEmailReceipts = customer.sendEmailReceipts
     this.phoneNumber = customer.phoneNumber
     this.street1 = customer.address1
     this.street2 = customer.address2
@@ -34,32 +30,6 @@ export class CustomerDTO {
     this.state = customer.region
     this.postalCode = customer.postCode
   }
-
-  // * customerNumber
-  @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'customerNumber')
-  })
-  @IsAlphanumeric('en-US', {
-    message: ErrorFactory.getErrorMessage(ErrorType.AlphanumRequired, 'customerNumber')
-  })
-  @MaxLength(20, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'customerNumber')
-  })
-  customerNumber: string;
-
-  // * singleUseTokenId
-  @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'singleUseTokenId')
-  })
-  singleUseTokenId: string;
-
-  // * merchantId
-  @IsOptional()
-  merchantId: string | undefined;
-
-  // * bankAccountId
-  @IsOptional()
-  bankAccountId: string | undefined;
 
   // * customerName
   @IsOptional()
@@ -80,7 +50,7 @@ export class CustomerDTO {
 
   // * sendEmailReceipts
   @IsOptional()
-  sendEmailReceipts: boolean;
+  sendEmailReceipts: boolean | undefined;
 
   // * phoneNumber
   @IsOptional()

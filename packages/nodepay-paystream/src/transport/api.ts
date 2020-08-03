@@ -1,6 +1,6 @@
 import { Service, Inject, Container } from 'typedi'
 import { AxiosInstance } from 'axios'
-import { IPaystreamConfig } from '../types'
+import { PaystreamConfig } from '../types'
 import {
   HttpClientFactory,
 } from '@atomixdesign/nodepay-core/network'
@@ -21,7 +21,7 @@ export class PaystreamAPI {
   constructor(
     @Inject('http.client') httpClientFactory: HttpClientFactory
   ) {
-    const config: IPaystreamConfig = Container.get('paystream.config')
+    const config: PaystreamConfig = Container.get('paystream.config')
 
     this.httpClient = httpClientFactory.create({
       baseURL: config.apiRoot,
@@ -32,23 +32,20 @@ export class PaystreamAPI {
     })
   }
 
-  private async _process(endpoint: string, payload: any): Promise<IPaystreamAPIResponse> {
+  private async _request(method: 'post' | 'put', endpoint: string, payload: any): Promise<IPaystreamAPIResponse> {
     let response
     try {
       response = await this.httpClient!.request({
-        method: 'post',
+        method,
         url: endpoint,
         data: payload,
       })
     } catch (error) {
-      return Promise.reject({
-        messages: error?.response?.data?.errors?.toString(),
-        originalError: error,
-      })
+      throw new Error(error?.response?.data?.errors?.toString())
     }
 
     if (!response.data.successful) {
-      return Promise.reject(response?.data?.errors?.toString())
+      throw new Error(response?.data?.errors?.toString())
     }
 
     return {
@@ -59,23 +56,35 @@ export class PaystreamAPI {
     }
   }
 
+  private async _post(endpoint: string, payload: any): Promise<IPaystreamAPIResponse> {
+    return this._request('post', endpoint, payload)
+  }
+
+  private async _put(endpoint: string, payload: any): Promise<IPaystreamAPIResponse> {
+    return this._request('put', endpoint, payload)
+  }
+
   async getCCtoken(creditCard: CreditCardDTO): Promise<IPaystreamAPIResponse> {
-    return this._process('/credit_cards', creditCard)
+    return this._post('/credit_cards', creditCard)
   }
 
   async addCustomer(customer: CustomerDTO): Promise<IPaystreamAPIResponse> {
-    return this._process('/customers', customer)
+    return this._post('/customers', customer)
+  }
+
+  async updateCustomer(reference: string, customer: CustomerDTO): Promise<IPaystreamAPIResponse> {
+    return this._put(`/customers/${reference}.json`, customer)
   }
 
   async addPlan(plan: PlanDTO): Promise<IPaystreamAPIResponse> {
-    return this._process('/plans', plan)
+    return this._post('/plans', plan)
   }
 
   async addSubscription(subscription: SubscriptionDTO): Promise<IPaystreamAPIResponse> {
-    return this._process('/subscriptions', subscription)
+    return this._post('/subscriptions', subscription)
   }
 
   async placeCharge(charge: ChargeDTO): Promise<IPaystreamAPIResponse> {
-    return this._process('/purchases', charge)
+    return this._post('/purchases', charge)
   }
 }

@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@atomixdesign/nodepay-core": "^0.2.0",
+    "axios": "^0.19.2",
     "class-validator": "^0.12.2",
     "crypto-random-string": "^3.2.0",
     "ts-custom-error": "^3.1.1",

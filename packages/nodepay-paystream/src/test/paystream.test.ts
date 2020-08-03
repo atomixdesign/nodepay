@@ -1,23 +1,22 @@
 import { Container } from 'typedi'
-// import moment from 'moment'
 import cryptoRandomString from 'crypto-random-string'
 import { Paystream } from '../paystream'
 import { testAPI, IPaystreamAPIResponse } from '../transport'
-import { PaystreamPaymentFrequency, IPaystreamCharge } from '../types'
+import { PaystreamPaymentFrequency } from '../types'
 
 
 const fixtures = {
   customer: {
     firstName: 'John',
     lastName: 'Doe',
-    reference: cryptoRandomString({ length: 10 }),
+    reference: cryptoRandomString({ length: 32 }),
     emailAddress: 'mail@example.com',
     ipAddress: '169.254.169.254',
   },
   customerBad: {
     firstName: '',
     lastName: '',
-    reference: cryptoRandomString({ length: 10 }),
+    reference: cryptoRandomString({ length: 32 }),
     emailAddress: 'invalidEmail',
     ipAddress: 'invalidId',
   },
@@ -30,12 +29,12 @@ const fixtures = {
   },
   simpleCharge: {
     amountInCents: 1087,
-    orderNumber: cryptoRandomString({ length: 10 }),
+    orderNumber: cryptoRandomString({ length: 32 }),
     customerIp: '169.254.169.254',
   },
   simpleChargeBad: {
     amountInCents: -1,
-    orderNumber: cryptoRandomString({ length: 10 }),
+    orderNumber: cryptoRandomString({ length: 32 }),
     customerIp: 'incorrectIp',
   },
   subscription: {
@@ -43,7 +42,7 @@ const fixtures = {
     plan: 'planRef',
     frequency: PaystreamPaymentFrequency.Weekly,
     startDate: '2027-05-09',
-    reference: cryptoRandomString({ length: 10 }),
+    reference: cryptoRandomString({ length: 32 }),
     isActive: true
   },
   subscriptionBad: {
@@ -77,22 +76,18 @@ describe('test paystream gateway', () => {
   })
 
   test('it can be charged', async () => {
-    const onceOffCharge: IPaystreamCharge = {
-      ...fixtures.simpleCharge,
-      creditCard: fixtures.creditCard,
-    }
-    const response: IPaystreamAPIResponse = await gateway.charge(onceOffCharge)
+    const response: IPaystreamAPIResponse = await gateway.charge(
+      fixtures.simpleCharge,
+      fixtures.creditCard,
+    )
     expect(response?.status).toBe(200)
   })
 
   test('it reports errors if the charge format is not correct', async () => {
-    const onceOffChargeBad: IPaystreamCharge = {
-      ...fixtures.simpleCharge,
-      creditCard: fixtures.creditCard,
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const charge: IPaystreamAPIResponse = await gateway.charge(onceOffChargeBad).catch(error => {
+    await gateway.charge(
+      fixtures.simpleChargeBad,
+      fixtures.creditCard,
+    ).catch(error => {
       expect(typeof error).toBe('object')
       return error
     })
@@ -105,9 +100,8 @@ describe('test paystream gateway', () => {
     expect(response?.status).toBe(200)
   })
 
-  test('it reports errors if the subscription is incorrect', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const charge: IPaystreamAPIResponse = await gateway.chargeRecurring(
+  test('it reports errors if the subscription format is incorrect', async () => {
+    await gateway.chargeRecurring(
       fixtures.subscriptionBad
     ).catch(error => {
       expect(typeof error).toBe('object')
@@ -122,13 +116,20 @@ describe('test paystream gateway', () => {
     expect(response?.status).toBe(200)
   })
 
-  test('it reports errors if the customer info is incorrect', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const charge: IPaystreamAPIResponse = await gateway.addCustomer(
+  test('it reports errors if the customer format is incorrect', async () => {
+    await gateway.addCustomer(
       fixtures.customerBad
     ).catch(error => {
       expect(typeof error).toBe('object')
       return error
     })
+  })
+
+  test('it can update a customer', async () => {
+    const customer: IPaystreamAPIResponse = await gateway.updateCustomer(
+      '123456789',
+      fixtures.customer
+    )
+    expect(customer.statusText).toBe('OK')
   })
 })

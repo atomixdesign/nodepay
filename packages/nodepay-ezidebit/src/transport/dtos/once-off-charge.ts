@@ -10,9 +10,10 @@ import {
 import {
   ErrorType,
   ErrorFactory,
-} from '@atomixdesign/nodepay-core/validation/errors'
+} from '@atomixdesign/nodepay-core/validation'
 import { IEzidebitCreditCardCharge } from '../../types'
 
+/** @internal */
 export class OnceOffChargeDTO {
   constructor(charge: IEzidebitCreditCardCharge) {
     this.CreditCardNumber = charge.CreditCardNumber

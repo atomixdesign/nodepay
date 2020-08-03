@@ -1,3 +1,6 @@
+import { ICreditCard } from '@atomixdesign/nodepay-core/types'
+
+/** @internal */
 export interface IEzidebitBaseCreditCard {
   CreditCardNumber: string
   CreditCardExpiryMonth: string
@@ -5,10 +8,22 @@ export interface IEzidebitBaseCreditCard {
   NameOnCreditCard: string
 }
 
-export interface IEzidebitCreditCard extends IEzidebitBaseCreditCard {
+export class EzidebitCreditCard implements ICreditCard {
+  constructor(
+    public cardNumber: string,
+    public expiryDateMonth: string,
+    public expiryDateYear: string,
+    public CCV: string,
+    public cardHolderName: string,
+  ) {}
+}
+
+/** @internal */
+export interface IEzidebitInternalCreditCard extends IEzidebitBaseCreditCard {
   CreditCardCCV: string
 }
 
+/** @internal */
 export interface IEzidebitNewCreditCard extends IEzidebitBaseCreditCard {
   EziDebitCustomerID: string
   Reactivate: string

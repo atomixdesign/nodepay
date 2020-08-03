@@ -1,6 +1,6 @@
 import { Service } from 'typedi'
 import { Client, createClientAsync } from 'soap'
-import { parseString } from 'xml2js'
+// import { parseString } from 'xml2js'
 import util from 'util'
 import { NetworkClientAsyncFactory } from './types/network-client-factory'
 
@@ -24,7 +24,7 @@ export class SoapClientFactory extends NetworkClientAsyncFactory<Client> {
       soapClient = await createClientAsync(`${config.apiRoot}?singleWsdl`, {
         preserveWhitespace: true
       })
-      soapClient.on('request', (xml: string) => {
+      /* soapClient.on('request', (xml: string) => {
         // console.dirxml(xml)
         parseString(xml, this.parseResponse)
       })
@@ -33,7 +33,7 @@ export class SoapClientFactory extends NetworkClientAsyncFactory<Client> {
       })
       soapClient.on('soapError', (soapError) => {
         parseString(soapError, this.parseResponse)
-      })
+      }) */
 
       return soapClient
     }

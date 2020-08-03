@@ -1,7 +1,11 @@
-export type IEzidebitConfig = {
-    clientId: string
-    digitalKey: string
-    publicKey: string
-    apiRoot: string
-    nonPCIApiRoot: string
-  }
+export class EzidebitConfig {
+  [key: string]: string | undefined
+
+  constructor(
+    public readonly clientId: string,
+    public readonly digitalKey: string,
+    public readonly publicKey: string,
+    public readonly apiRoot: string,
+    public readonly nonPCIApiRoot: string,
+  ) {}
+}
