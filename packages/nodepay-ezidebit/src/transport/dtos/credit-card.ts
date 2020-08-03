@@ -2,6 +2,7 @@ import { IsNotEmpty, IsCreditCard, MaxLength, Length, IsNumberString, IsIn } fro
 import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation'
 import { IEzidebitNewCreditCard } from '../../types'
 
+/** @internal */
 export class CreditCardDTO {
   constructor(creditCard: IEzidebitNewCreditCard) {
     if (creditCard.YourSystemReference === undefined)

@@ -10,16 +10,23 @@ import {
 import {
   EzidebitConfig,
   EzidebitDayOfWeek,
-  IEzidebitCharge,
+  EzidebitCharge,
   EzidebitPaymentSchedule,
-  IEzidebitDirectDebit,
+  EzidebitDirectDebit,
   EzidebitCustomer,
   IEzidebitInternalCustomer,
   EzidebitCreditCard,
   EzidebitCustomerDetails,
+  IEzidebitInternalCustomerDetails,
 } from './types'
 import { EzidebitAPI as Transport, IEzidebitAPIResponse } from './transport'
-import { OnceOffChargeDTO, PaymentDTO, PaymentScheduleDTO, CustomerDTO } from './transport/dtos'
+import {
+  OnceOffChargeDTO,
+  PaymentDTO,
+  PaymentScheduleDTO,
+  CustomerDTO,
+  CustomerDetailsDTO,
+} from './transport/dtos'
 
 export class Ezidebit extends BaseGateway<EzidebitConfig> implements
   DirectDebit,
@@ -87,14 +94,41 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
   }
 
   async updateCustomer(
-    _reference: string,
-    _customerDetails: EzidebitCustomerDetails,
-  ): Promise<IEzidebitAPIResponse | undefined> {
-    return
+    reference: string,
+    customerDetails: EzidebitCustomerDetails,
+  ): Promise<IEzidebitAPIResponse> {
+    const detailsObject: { [index:string] : any } = {
+      YourSystemReference: reference,
+      NewYourSystemReference: reference,
+      YourGeneralReference: customerDetails.generalReference,
+      LastName: customerDetails.lastName,
+      FirstName: customerDetails.firstName,
+      AddressLine1: customerDetails.address1,
+      AddressLine2: customerDetails.address2,
+      AddressSuburb: customerDetails.suburb,
+      AddressState: customerDetails.region,
+      AddressPostCode: customerDetails.postCode,
+      EmailAddress: customerDetails.emailAddress,
+      MobilePhoneNumber: customerDetails.phoneNumber,
+      SmsPaymentReminder: customerDetails.smsPaymentReminder,
+      SmsFailedNotification: customerDetails.smsFailedNotification,
+      SmsExpiredCard: customerDetails.smsExpiredCard,
+      Username: customerDetails.username,
+    }
+
+    await validateOrReject(new CustomerDetailsDTO(detailsObject as IEzidebitInternalCustomerDetails))
+    for(const key of Object.keys(detailsObject)) {
+      if (detailsObject[key] === undefined) {
+        detailsObject[key] = ''
+      }
+    }
+    return await this.api.updateCustomer(
+      new CustomerDetailsDTO(detailsObject as IEzidebitInternalCustomerDetails)
+    )
   }
 
   async charge(
-    onceOffCharge: IEzidebitCharge,
+    onceOffCharge: EzidebitCharge,
     creditCard: EzidebitCreditCard,
   ): Promise<IEzidebitAPIResponse> {
     const chargeObject = {
@@ -138,7 +172,7 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
   }
 
   async directDebit(
-    directDebit: IEzidebitDirectDebit,
+    directDebit: EzidebitDirectDebit,
   ): Promise<IEzidebitAPIResponse> {
     const paymentObject = {
       EziDebitCustomerID: directDebit.ezidebitCustomerId ?? '',

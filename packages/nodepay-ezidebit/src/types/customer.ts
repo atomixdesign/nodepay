@@ -15,8 +15,7 @@ export interface IEzidebitBaseAccount {
 }
 
 /** @internal */
-export interface IEzidebitInternalCustomer extends IEzidebitBaseAccount {
-  ContractStartDate: string
+export interface IEzidebitCustomerAddress {
   AddressLine1?: string
   AddressLine2?: string
   AddressSuburb?: string
@@ -24,6 +23,17 @@ export interface IEzidebitInternalCustomer extends IEzidebitBaseAccount {
   AddressPostCode?: string
 }
 
+/** @internal */
+export interface IEzidebitInternalCustomer extends IEzidebitBaseAccount, IEzidebitCustomerAddress {
+  ContractStartDate: string
+}
+
+/** @internal */
+export interface IEzidebitInternalCustomerDetails extends IEzidebitBaseAccount, IEzidebitCustomerAddress {
+  NewYourSystemReference: string
+}
+
+/** @internal */
 export interface IEzidebitCustomerBase extends ICustomerDetails {
   customerId?: string
   generalReference?: string
@@ -37,28 +47,26 @@ export interface IEzidebitCustomerBase extends ICustomerDetails {
 export class EzidebitCustomer implements IEzidebitCustomerBase {
   constructor(
     public readonly customerId: string,
-    public readonly generalReference: string,
     public readonly contractStartDate: string,
     public readonly lastName: string,
-    public readonly firstName: string,
-    public readonly address1: string,
-    public readonly address2: string,
-    public readonly suburb: string,
-    public readonly postCode: string,
-    public readonly region: string,
-    public readonly emailAddress: string,
-    public readonly phoneNumber: string,
     public readonly smsPaymentReminder: 'YES' | 'NO',
     public readonly smsFailedNotification: 'YES' | 'NO',
     public readonly smsExpiredCard: 'YES' | 'NO',
-    public readonly username: string,
+    public readonly generalReference?: string,
+    public readonly firstName?: string,
+    public readonly address1?: string,
+    public readonly address2?: string,
+    public readonly suburb?: string,
+    public readonly postCode?: string,
+    public readonly region?: string,
+    public readonly emailAddress?: string,
+    public readonly phoneNumber?: string,
+    public readonly username?: string,
   ) {}
 }
 
 export class EzidebitCustomerDetails implements IEzidebitCustomerBase {
   constructor(
-    public readonly customerId: string,
-    public readonly newCustomerId: string,
     public readonly generalReference: string,
     public readonly lastName: string,
     public readonly firstName: string,

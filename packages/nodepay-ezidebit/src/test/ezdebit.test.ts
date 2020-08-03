@@ -49,6 +49,22 @@ const fixtures = {
     keepManualPayments: 'NO' as const,
     username: 'jdoe',
   },
+  customerDetails: {
+    generalReference: '',
+    firstName: 'John',
+    lastName: 'Doe',
+    address1: 'address1',
+    address2: 'address2',
+    postCode: '2000',
+    suburb: 'suburb',
+    region: 'QLD',
+    emailAddress: 'test@example.com',
+    phoneNumber: '0400123456',
+    smsPaymentReminder: 'NO' as const,
+    smsExpiredCard: 'NO' as const,
+    smsFailedNotification: 'NO' as const,
+    username: 'jdoe'
+  }
 }
 
 describe('test ezidebit gateway', () => {
@@ -138,7 +154,18 @@ describe('test ezidebit gateway', () => {
       customerId: '123456789',
       contractStartDate: '2010-12-22',
       lastName: 'Doe',
+      smsPaymentReminder: 'NO',
+      smsExpiredCard: 'NO',
+      smsFailedNotification: 'NO',
     })
+    expect(response?.data.resultText).toBe('OK')
+  })
+
+  test('it can update a customer', async () => {
+    const response: IEzidebitAPIResponse = await gateway.updateCustomer(
+      '123456789',
+      fixtures.customerDetails,
+    )
     expect(response?.data.resultText).toBe('OK')
   })
 })

@@ -2,6 +2,7 @@ import { IsOptional, IsNumberString, MaxLength, IsNumber, IsNotEmpty, IsIn } fro
 import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation'
 import { IEzidebitInternalPaymentSchedule, EzidebitPaymentFrequency, EzidebitDayOfWeek } from '../../types'
 
+/** @internal */
 export class PaymentScheduleDTO {
   constructor(paymentSchedule: IEzidebitInternalPaymentSchedule) {
     if (paymentSchedule.YourSystemReference === undefined)

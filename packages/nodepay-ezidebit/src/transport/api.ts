@@ -11,6 +11,7 @@ import {
   OnceOffChargeDTO,
   PaymentDTO,
   PaymentScheduleDTO,
+  CustomerDetailsDTO,
 } from './dtos'
 import { EzidebitAPIError } from './api-error'
 
@@ -54,6 +55,20 @@ export class EzidebitAPI {
     }
 
     return formatResponse(response[0]?.AddCustomerResult)
+  }
+
+  async updateCustomer(customerDetails: CustomerDetailsDTO): Promise<IEzidebitAPIResponse> {
+    await this.ensureClient()
+
+    const response = await this.nonPCISoapClient!.EditCustomerDetailsAsync({
+      ...{ DigitalKey: this.config.digitalKey },
+      ...customerDetails,
+    })
+    if (response[0]?.EditCustomerDetailsResult?.ErrorMessage !== undefined) {
+      return Promise.reject(new EzidebitAPIError(response[0].EditCustomerDetailsResult))
+    }
+
+    return formatResponse(response[0]?.EditCustomerDetailsResult)
   }
 
   async addCustomerCC(

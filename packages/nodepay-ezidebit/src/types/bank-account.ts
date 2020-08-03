@@ -1,3 +1,4 @@
+/** @internal */
 export interface IEzidebitBankAccount {
   BankAccountName: string
   BankAccountBSB: string

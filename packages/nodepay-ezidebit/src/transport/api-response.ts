@@ -1,6 +1,7 @@
 import { IBaseResponse } from '@atomixdesign/nodepay-core/network'
 
-export interface IEzidebitResponse {
+/** @internal */
+export interface IEzidebitInternalResponse {
   Data: Record<string, unknown>
   Error: number
   ErrorMessage: string
@@ -10,7 +11,8 @@ export interface IEzidebitAPIResponse extends IBaseResponse{
   data: Record<string, unknown>
 }
 
-export const formatResponse = function(payload: IEzidebitResponse): IEzidebitAPIResponse{
+/** @internal */
+export const formatResponse = function(payload: IEzidebitInternalResponse): IEzidebitAPIResponse{
   const dataHash = typeof payload.Data === 'string' ? payload.Data : payload.Data.toString()
 
   return {

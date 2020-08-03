@@ -15,6 +15,7 @@ import {
 } from '@atomixdesign/nodepay-core/validation'
 import { IEzidebitBaseDebit } from '../../types'
 
+/** @internal */
 export class BaseDebitDTO {
   constructor(baseDebit: IEzidebitBaseDebit) {
     this.YourSystemReference = baseDebit.YourSystemReference

@@ -1,5 +1,6 @@
 export * from './credit-card'
 export * from './customer'
+export * from './customer-details'
 export * from './once-off-charge'
 export * from './payment'
 export * from './payment-schedule'

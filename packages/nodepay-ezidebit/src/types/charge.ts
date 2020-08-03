@@ -2,11 +2,16 @@ import { IBaseCharge } from '@atomixdesign/nodepay-core/types'
 import { IEzidebitInternalCreditCard } from './credit-card'
 import { IEzidebitBasePayment, IEzidebitCustomerName } from './payment'
 
+/** @internal */
 export interface IEzidebitCreditCardCharge extends
   IEzidebitInternalCreditCard,
   IEzidebitBasePayment,
   IEzidebitCustomerName {}
 
-export interface IEzidebitCharge extends IBaseCharge {
-  customerName?: string
+export class EzidebitCharge implements IBaseCharge {
+  constructor(
+    public readonly orderNumber: string,
+    public readonly amountInCents: number,
+    public readonly customerName?: string,
+  ) {}
 }
