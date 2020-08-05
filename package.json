@@ -10,7 +10,8 @@
     "clean": "shx rm -R packages/**/build packages/**/tsconfig.tsbuildinfo",
     "cli": "node utils/nodepay-cli",
     "build:docs": "lerna run build:docs --no-bail",
-    "lint": "lerna run lint"
+    "lint": "lerna run lint",
+    "publish:dev": "lerna publish --registry http://localhost:4873"
   },
   "devDependencies": {
     "@types/inquirer": "^6.5.0",
