@@ -10,12 +10,25 @@ export class PaystreamAddress {
   ) {}
 }
 
-export class PaystreamCustomer implements ICustomerDetails{
+export interface PaystreamCustomer extends ICustomerDetails {
+  firstName: string
+  lastName: string
+  reference: string
+  emailAddress: string
+  ipAddress: string
+}
+
+export class PaystreamCustomerDetails implements PaystreamCustomer, PaystreamAddress {
   constructor(
     public readonly firstName: string,
     public readonly lastName: string,
     public readonly reference: string,
     public readonly emailAddress: string,
     public readonly ipAddress: string,
+    public readonly address: string,
+    public readonly city: string,
+    public readonly state: string,
+    public readonly postcode: string,
+    public readonly country: string,
   ) {}
 }

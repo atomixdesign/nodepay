@@ -89,6 +89,22 @@ export class Payway extends BaseGateway<PaywayConfig> implements
     return await this.api.updateCustomerDetails(reference, addressObject)
   }
 
+  async directDebit(
+    directDebitCharge: PaywayDirectDebit,
+  ): Promise<IPaywayAPIResponse> {
+    const chargeObject = new ChargeDTO({
+      customerId: directDebitCharge.customerId,
+      orderNumber: directDebitCharge.paymentReference,
+      principalAmount: directDebitCharge.amountInCents / 100,
+      customerIpAddress: directDebitCharge?.customerIpAddress,
+      merchantId: directDebitCharge?.merchantId,
+      // bankAccountId,
+    })
+
+    await validateOrReject(chargeObject)
+    return await this.api.placeDirectCharge(chargeObject)
+  }
+
   async charge(
     onceOffCharge: PaywayCharge,
     creditCard?: PaywayCreditCard,
@@ -128,21 +144,5 @@ export class Payway extends BaseGateway<PaywayConfig> implements
 
     await validateOrReject(scheduleObject)
     return await this.api.schedulePayment(paymentSchedule.customerId, scheduleObject)
-  }
-
-  async directDebit(
-    directDebitOrder: PaywayDirectDebit,
-  ): Promise<IPaywayAPIResponse> {
-    const chargeObject = new ChargeDTO({
-      customerId: directDebitOrder.customerId,
-      orderNumber: directDebitOrder.paymentReference,
-      principalAmount: directDebitOrder.amountInCents / 100,
-      customerIpAddress: directDebitOrder?.customerIpAddress,
-      merchantId: directDebitOrder?.merchantId,
-      // bankAccountId,
-    })
-
-    await validateOrReject(chargeObject)
-    return await this.api.placeDirectCharge(chargeObject)
   }
 }

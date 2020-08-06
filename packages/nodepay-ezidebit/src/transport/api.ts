@@ -6,6 +6,7 @@ import { EzidebitConfig } from '../types'
 import { SoapClientFactory } from '@atomixdesign/nodepay-core/network'
 import { IEzidebitAPIResponse, formatResponse } from './api-response'
 import {
+  BankAccountDTO,
   CreditCardDTO,
   CustomerDTO,
   OnceOffChargeDTO,
@@ -71,7 +72,7 @@ export class EzidebitAPI {
     return formatResponse(response[0]?.EditCustomerDetailsResult)
   }
 
-  async addCustomerCC(
+  async addCustomerCreditCard(
     creditCard: CreditCardDTO,
   ): Promise<IEzidebitAPIResponse> {
     await this.ensureClient()
@@ -87,6 +88,24 @@ export class EzidebitAPI {
     }
 
     return formatResponse(response[0]?.EditCustomerCreditCardResult)
+  }
+
+  async addCustomerBankAccount(
+    bankAccount: BankAccountDTO,
+  ): Promise<IEzidebitAPIResponse> {
+    await this.ensureClient()
+
+    const response = await this.soapClient!.EditCustomerBankAccountAsync({
+      ...{
+        DigitalKey: this.config.digitalKey,
+      },
+      ...bankAccount,
+    })
+    if (response[0]?.EditCustomerBankAccountResult?.ErrorMessage !== undefined) {
+      throw new EzidebitAPIError(response[0].EditCustomerBankAccountResult)
+    }
+
+    return formatResponse(response[0]?.EditCustomerBankAccountResult)
   }
 
   async placeCharge(charge: OnceOffChargeDTO): Promise<IEzidebitAPIResponse> {

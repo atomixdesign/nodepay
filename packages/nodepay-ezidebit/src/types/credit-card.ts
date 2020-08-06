@@ -26,7 +26,7 @@ export interface IEzidebitInternalCreditCard extends IEzidebitBaseCreditCard {
 /** @internal */
 export interface IEzidebitNewCreditCard extends IEzidebitBaseCreditCard {
   EziDebitCustomerID: string
-  Reactivate: string
+  Reactivate?: string
   YourSystemReference: string
   Username: string
 }

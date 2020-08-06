@@ -7,13 +7,13 @@ export class CreditCardDTO {
   constructor(creditCard: IEzidebitNewCreditCard) {
     if (creditCard.YourSystemReference === undefined)
       this.EziDebitCustomerID = creditCard.EziDebitCustomerID
+    if (creditCard.EziDebitCustomerID === undefined)
+      this.YourSystemReference = creditCard.YourSystemReference
     this.CreditCardNumber = creditCard.CreditCardNumber
     this.CreditCardExpiryMonth = creditCard.CreditCardExpiryMonth
     this.CreditCardExpiryYear = creditCard.CreditCardExpiryYear
     this.NameOnCreditCard = creditCard.NameOnCreditCard
-    this.Reactivate = creditCard.Reactivate
-    if (creditCard.EziDebitCustomerID === undefined)
-      this.YourSystemReference = creditCard.YourSystemReference
+    this.Reactivate = creditCard.Reactivate ?? 'YES'
     this.Username = creditCard.Username
   }
   // * EziDebitCustomerID

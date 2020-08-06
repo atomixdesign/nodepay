@@ -53,6 +53,13 @@ const fixtures = {
     reference: '',
     isActive: true
   },
+  address: {
+    address: 'Address',
+    city: 'Adelaide',
+    state: 'SA',
+    postcode: '5799',
+    country: 'Australia',
+  },
 }
 
 describe('test paystream gateway', () => {
@@ -111,14 +118,14 @@ describe('test paystream gateway', () => {
 
   test('it can create a customer', async () => {
     const response: IPaystreamAPIResponse = await gateway.addCustomer(
-      fixtures.customer
+      { ...fixtures.customer, ...fixtures.address }
     )
     expect(response?.status).toBe(200)
   })
 
   test('it reports errors if the customer format is incorrect', async () => {
     await gateway.addCustomer(
-      fixtures.customerBad
+      { ...fixtures.customer, ...fixtures.address }
     ).catch(error => {
       expect(typeof error).toBe('object')
       return error
@@ -128,7 +135,7 @@ describe('test paystream gateway', () => {
   test('it can update a customer', async () => {
     const customer: IPaystreamAPIResponse = await gateway.updateCustomer(
       '123456789',
-      fixtures.customer
+      { ...fixtures.customer, ...fixtures.address }
     )
     expect(customer.statusText).toBe('OK')
   })

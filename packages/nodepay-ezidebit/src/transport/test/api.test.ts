@@ -132,7 +132,7 @@ describe('test ezidebit api transport', () => {
         YourSystemReference: '',
         Username: customer.Username,
       }
-      creditCardUpdateData = await api.addCustomerCC(creditCardFixture)
+      creditCardUpdateData = await api.addCustomerCreditCard(creditCardFixture)
       creditCardUpdateResult = creditCardUpdateData.data[0] as string
     }
 
@@ -161,7 +161,7 @@ describe('test ezidebit api transport', () => {
         YourSystemReference: '',
         Username: customer.Username,
       }
-      creditCardUpdateData = await api.addCustomerCC(creditCardFixture)
+      creditCardUpdateData = await api.addCustomerCreditCard(creditCardFixture)
       creditCardUpdateResult = creditCardUpdateData.data[0] as string
       if (creditCardUpdateResult === 'S') {
         const payment = {
@@ -199,7 +199,7 @@ describe('test ezidebit api transport', () => {
         YourSystemReference: '',
         Username: customer.Username,
       }
-      creditCardUpdateData = await api.addCustomerCC(creditCardFixture)
+      creditCardUpdateData = await api.addCustomerCreditCard(creditCardFixture)
       creditCardUpdateResult = creditCardUpdateData.data[0] as string
       if (creditCardUpdateResult === 'S') {
         const paymentSchedule = {
