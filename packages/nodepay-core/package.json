@@ -1,6 +1,6 @@
 {
   "name": "@atomixdesign/nodepay-core",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "license": "MIT",
@@ -16,7 +16,7 @@
     "test": "jest --coverage",
     "test:watch": "test --watch",
     "lint": "eslint ./src",
-    "build:docs": "typedoc --options ../../typedoc.json --tsconfig",
+    "build:docs": "typedoc --options ../../typedoc.json --tsconfig ./tsconfig.json --publicPath nodepay-core/",
     "version:patch": "npm version patch --git-tag-version -m '🔖 v%s' -s",
     "version:minor": "npm version minor --git-tag-version -m '🔖 v%s' -s",
     "version:major": "npm version major --git-tag-version -m '🔖 v%s' -s"
@@ -40,5 +40,6 @@
     "soap": "^0.32.0",
     "typedi": "^0.8.0",
     "xml2js": "^0.4.23"
-  }
+  },
+  "gitHead": "88e2c5df78f61acaee22e4ed67224cdf14ead302"
 }

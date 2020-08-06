@@ -18,6 +18,9 @@ import {
   EzidebitCreditCard,
   EzidebitCustomerDetails,
   IEzidebitInternalCustomerDetails,
+  IEzidebitNewCreditCard,
+  EzidebitBankAccount,
+  IEzidebitNewBankAccount,
 } from './types'
 import { EzidebitAPI as Transport, IEzidebitAPIResponse } from './transport'
 import {
@@ -26,6 +29,8 @@ import {
   PaymentScheduleDTO,
   CustomerDTO,
   CustomerDetailsDTO,
+  CreditCardDTO,
+  BankAccountDTO,
 } from './transport/dtos'
 
 export class Ezidebit extends BaseGateway<EzidebitConfig> implements
@@ -62,11 +67,13 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
 
   async addCustomer(
     customer: EzidebitCustomer,
+    creditCard?: EzidebitCreditCard,
+    bankAccount?: EzidebitBankAccount,
   ): Promise<IEzidebitAPIResponse> {
     const customerObject: { [index:string] : any } = {
-      YourSystemReference: customer.customerId ?? '',
+      YourSystemReference: customer.customerId,
       YourGeneralReference: customer.generalReference,
-      LastName: customer.lastName ?? '',
+      LastName: customer.lastName,
       FirstName: customer.firstName,
       AddressLine1: customer.address1,
       AddressLine2: customer.address2,
@@ -79,7 +86,6 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
       SmsPaymentReminder: customer.smsPaymentReminder ?? 'YES',
       SmsFailedNotification: customer.smsFailedNotification ?? 'YES',
       SmsExpiredCard: customer.smsExpiredCard ?? 'YES',
-      Username: customer.username,
     }
 
     await validateOrReject(new CustomerDTO(customerObject as IEzidebitInternalCustomer))
@@ -88,14 +94,52 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
         customerObject[key] = ''
       }
     }
-    return await this.api.addCustomer(
+    const result = await this.api.addCustomer(
       new CustomerDTO(customerObject as IEzidebitInternalCustomer)
     )
+
+    // TODO: Decouple
+    try {
+      if (creditCard !== undefined) {
+        const creditCardObject = {
+          EziDebitCustomerID: '',
+          YourSystemReference: customer.customerId,
+          CreditCardNumber: creditCard.cardNumber,
+          CreditCardExpiryMonth: creditCard.expiryDateMonth,
+          CreditCardExpiryYear: creditCard.expiryDateYear,
+          NameOnCreditCard: creditCard.cardHolderName,
+        }
+        const creditCardDTO: CreditCardDTO = new CreditCardDTO(creditCardObject as IEzidebitNewCreditCard)
+        await validateOrReject(creditCardDTO)
+
+        await this.api.addCustomerCreditCard(creditCardDTO)
+      }
+
+      if (bankAccount !== undefined) {
+        const bankAccountObject = {
+          EziDebitCustomerID: '',
+          YourSystemReference: customer.customerId,
+          BankAccountName: bankAccount.accountName,
+          BankAccountBSB: bankAccount.BSBNumber,
+          BankAccountNumber: bankAccount.accountNumber,
+        }
+        const bankAccountDTO: BankAccountDTO = new BankAccountDTO(bankAccountObject as IEzidebitNewBankAccount)
+        await validateOrReject(bankAccountDTO)
+
+        await this.api.addCustomerBankAccount(bankAccountDTO)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+
+    return result
   }
 
   async updateCustomer(
     reference: string,
     customerDetails: EzidebitCustomerDetails,
+    creditCard?: EzidebitCreditCard,
+    bankAccount?: EzidebitBankAccount,
   ): Promise<IEzidebitAPIResponse> {
     const detailsObject: { [index:string] : any } = {
       YourSystemReference: reference,
@@ -122,9 +166,62 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
         detailsObject[key] = ''
       }
     }
-    return await this.api.updateCustomer(
+
+    const result = await this.api.updateCustomer(
       new CustomerDetailsDTO(detailsObject as IEzidebitInternalCustomerDetails)
     )
+
+    // TODO: Decouple
+    try {
+      if (creditCard !== undefined) {
+        const creditCardObject = {
+          EziDebitCustomerID: '',
+          YourSystemReference: reference,
+          CreditCardNumber: creditCard.cardNumber,
+          CreditCardExpiryMonth: creditCard.expiryDateMonth,
+          CreditCardExpiryYear: creditCard.expiryDateYear,
+          NameOnCreditCard: creditCard.cardHolderName,
+        }
+        const creditCardDTO: CreditCardDTO = new CreditCardDTO(creditCardObject as IEzidebitNewCreditCard)
+        await validateOrReject(creditCardDTO)
+
+        await this.api.addCustomerCreditCard(creditCardDTO)
+      }
+
+      if (bankAccount !== undefined) {
+        const bankAccountObject = {
+          EziDebitCustomerID: '',
+          YourSystemReference: reference,
+          BankAccountName: bankAccount.accountName,
+          BankAccountBSB: bankAccount.BSBNumber,
+          BankAccountNumber: bankAccount.accountNumber,
+        }
+        const bankAccountDTO: BankAccountDTO = new BankAccountDTO(bankAccountObject as IEzidebitNewBankAccount)
+        await validateOrReject(bankAccountDTO)
+
+        await this.api.addCustomerBankAccount(bankAccountDTO)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+
+    return result
+  }
+
+  async directDebit(
+    directDebitCharge: EzidebitDirectDebit,
+  ): Promise<IEzidebitAPIResponse> {
+    const paymentObject = {
+      EziDebitCustomerID: directDebitCharge.ezidebitCustomerId ?? '',
+      YourSystemReference: directDebitCharge.customerId,
+      DebitDate: directDebitCharge.debitDate ?? '',
+      PaymentAmountInCents: directDebitCharge.amountInCents,
+      PaymentReference: directDebitCharge.paymentReference,
+      Username: directDebitCharge.username ?? '',
+    }
+
+    await validateOrReject(new PaymentDTO(paymentObject))
+    return await this.api.placeDirectCharge(paymentObject)
   }
 
   async charge(
@@ -169,21 +266,5 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
 
     await validateOrReject(new PaymentScheduleDTO(scheduleObject))
     return await this.api.schedulePayment(scheduleObject)
-  }
-
-  async directDebit(
-    directDebit: EzidebitDirectDebit,
-  ): Promise<IEzidebitAPIResponse> {
-    const paymentObject = {
-      EziDebitCustomerID: directDebit.ezidebitCustomerId ?? '',
-      YourSystemReference: directDebit.customerId,
-      DebitDate: directDebit.debitDate ?? '',
-      PaymentAmountInCents: directDebit.amountInCents,
-      PaymentReference: directDebit.paymentReference,
-      Username: directDebit.username ?? '',
-    }
-
-    await validateOrReject(new PaymentDTO(paymentObject))
-    return await this.api.placeDirectCharge(paymentObject)
   }
 }

@@ -13,6 +13,7 @@ import {
   PaystreamSubscription,
   PaystreamCreditCard,
   PaystreamAddress,
+  PaystreamCustomerDetails,
 } from './types'
 import { IPaystreamAPIResponse } from './transport'
 import { ChargeDTO, CustomerDTO, SubscriptionDTO } from './transport/dtos'
@@ -48,33 +49,30 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
   }
 
   async addCustomer(
-    customerDetails: PaystreamCustomer,
+    customerDetails: PaystreamCustomerDetails,
     creditCard?: PaystreamCreditCard,
-    address?: PaystreamAddress,
   ): Promise<IPaystreamAPIResponse> {
     const customerObject = new CustomerDTO(
-      customerDetails,
+      customerDetails as PaystreamCustomer,
       creditCard,
-      address,
+      customerDetails as PaystreamAddress,
     )
+
     await validateOrReject(customerObject)
     return await this.api.addCustomer(customerObject)
   }
 
   async updateCustomer(
     reference: string,
-    customerDetails: PaystreamCustomer,
-    creditCard?: PaystreamCreditCard,
-    address?: PaystreamAddress,
+    customerDetails: PaystreamCustomerDetails,
   ): Promise<IPaystreamAPIResponse> {
     const customerObject = new CustomerDTO(
-      customerDetails,
+      customerDetails as PaystreamCustomer,
+      // TODO: Fix expiry format issue on credit card update.
+      // Probably expecting full ISO date as string.
       undefined,
-      address,
+      customerDetails as PaystreamAddress,
     )
-
-    // TODO: Verify expiry format issue on update. Update probably expecting full ISO date as string.
-    if (creditCard !== undefined) console.warn('Credit card information for a customer cannot be updated with Paystream')
 
     await validateOrReject(customerObject)
     return await this.api.updateCustomer(reference, customerObject)

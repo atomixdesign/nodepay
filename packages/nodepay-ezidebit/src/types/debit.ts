@@ -1,4 +1,4 @@
-import { IEzidebitBankAccount } from './bank-account'
+import { IEzidebitNewBankAccount } from './bank-account'
 import { IEzidebitBaseAccount } from './customer'
 import { IEzidebitBasePayment } from './payment'
 import { IEzidebitBaseCreditCard } from './credit-card'
@@ -27,7 +27,9 @@ export interface IEzidebitBaseDebit extends IEzidebitBaseAccount, IEzidebitInter
 export interface IEzidebitCreditCardDebit extends IEzidebitBaseDebit, IEzidebitBaseCreditCard {}
 
 /** @internal */
-export interface IEzidebitBankAccountDebit extends IEzidebitBaseDebit, IEzidebitBankAccount {}
+export interface IEzidebitBankAccountDebit extends IEzidebitBaseDebit, IEzidebitNewBankAccount {
+  Username: string
+}
 
 /** @internal */
 export interface IEzidebitDirectDebitPayment extends IEzidebitInternalDebit {
