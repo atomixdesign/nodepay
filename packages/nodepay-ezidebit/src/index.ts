@@ -1,4 +1,4 @@
-export * from './ezidebit'
+export { Ezidebit as Strategy } from './ezidebit'
 
 export {
   EzidebitPaymentFrequency,
