@@ -102,6 +102,7 @@ Options:
 ```
 
 **yarn docs**
+
 Generate and aggregate documentation for all packages.
 
 **yarn build:docs**
