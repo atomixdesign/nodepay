@@ -1,4 +1,4 @@
-import { EzidebitBankAccount, IEzidebitNewBankAccount } from './bank-account'
+import { IEzidebitNewBankAccount } from './bank-account'
 import { IEzidebitBaseAccount } from './customer'
 import { IEzidebitBasePayment } from './payment'
 import { IEzidebitBaseCreditCard } from './credit-card'
