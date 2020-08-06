@@ -25,7 +25,7 @@ const config = new Config({
     apiRoot: ...,
     nonPCIApiRoot: ...,
 })
-const ezidebitStrategy = new Strategy(config) 
+const ezidebitStrategy = new Strategy(config)
 const gateway = new Context(ezidebitStrategy)
 
 const creditCard = new CreditCard({
@@ -100,6 +100,9 @@ Options:
   --version  Show version number                                      [boolean]
   --help     Show help                                                [boolean]
 ```
+
+**yarn docs**
+Generate and aggregate documentation for all packages.
 
 **yarn build:docs**
 

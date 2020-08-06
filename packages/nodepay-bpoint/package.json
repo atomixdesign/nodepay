@@ -16,7 +16,7 @@
     "test": "jest --coverage",
     "test:watch": "test --watch",
     "lint": "eslint ./src",
-    "build:docs": "typedoc --options ../../typedoc.json --tsconfig ./tsconfig.tsdoc.json",
+    "build:docs": "typedoc --options ../../typedoc.json --tsconfig ./tsconfig.tsdoc.json --publicPath nodepay-bpoint/",
     "version:patch": "npm version patch --git-tag-version -m '🔖 v%s' -s",
     "version:minor": "npm version minor --git-tag-version -m '🔖 v%s' -s",
     "version:major": "npm version major --git-tag-version -m '🔖 v%s' -s"
