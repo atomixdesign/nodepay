@@ -44,5 +44,6 @@
     "qs": "^6.9.4",
     "typedi": "^0.8.0",
     "uuid": "^8.2.0"
-  }
+  },
+  "gitHead": "88e2c5df78f61acaee22e4ed67224cdf14ead302"
 }

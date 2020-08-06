@@ -40,5 +40,6 @@
     "axios": "^0.19.2",
     "class-validator": "^0.12.2",
     "typedi": "^0.8.0"
-  }
+  },
+  "gitHead": "88e2c5df78f61acaee22e4ed67224cdf14ead302"
 }
