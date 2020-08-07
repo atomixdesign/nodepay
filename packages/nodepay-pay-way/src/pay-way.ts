@@ -15,6 +15,7 @@ import {
   PaywayPaymentSchedule,
   PaywayCreditCard,
   PaywayAddress,
+  PaywayBankAccount,
 } from './types'
 import { PaywayAPI, IPaywayAPIResponse } from './transport'
 import {
@@ -23,6 +24,8 @@ import {
   CreditCardDTO,
   CustomerDTO,
   AddressDTO,
+  PaymentDetailsDTO,
+  BankAccountDTO,
 } from './transport/dtos'
 
 
@@ -36,6 +39,8 @@ export class Payway extends BaseGateway<PaywayConfig> implements
 
   protected get baseConfig(): PaywayConfig {
     return {
+      bankAccountId: '',
+      merchantId: '',
       secretKey: '',
       publishableKey: '',
       apiRoot: '',
@@ -59,18 +64,71 @@ export class Payway extends BaseGateway<PaywayConfig> implements
 
   async addCustomer(
     customerDetails: PaywayCustomer,
+    creditCard?: PaywayCreditCard,
+    bankAccount?: PaywayBankAccount,
   ): Promise<IPaywayAPIResponse> {
     const customerObject = new CustomerDTO({
       ...customerDetails,
     })
 
     await validateOrReject(customerObject)
-    return await this.api.addCustomer(customerObject)
+    const result = await this.api.addCustomer(customerObject)
+
+    try {
+      if (creditCard !== undefined) {
+        const creditCardObject = new CreditCardDTO({
+          ...creditCard,
+        })
+
+        await validateOrReject(creditCardObject)
+        const ccResponse = await this.api.getCCtoken(creditCardObject)
+        const token = ccResponse?.data?.singleUseTokenId
+
+        const paymentDetailsObject = new PaymentDetailsDTO({
+          singleUseTokenId: token,
+          merchantId: this.config.merchantId,
+        })
+        await validateOrReject(paymentDetailsObject)
+
+        await this.api.updateCustomerPayment(
+          customerDetails.customerId,
+          paymentDetailsObject,
+        )
+      }
+
+      if (bankAccount !== undefined) {
+        const bankAccountObject = new BankAccountDTO({
+          ...bankAccount,
+        })
+
+        await validateOrReject(bankAccountObject)
+        const bankAccountResponse = await this.api.getBankAccountToken(bankAccountObject)
+        const token = bankAccountResponse?.data?.singleUseTokenId
+
+        const paymentDetailsObject = new PaymentDetailsDTO({
+          singleUseTokenId: token,
+          bankAccountId: this.config.bankAccountId,
+        })
+        await validateOrReject(paymentDetailsObject)
+
+        await this.api.updateCustomerPayment(
+          customerDetails.customerId,
+          paymentDetailsObject,
+        )
+      }
+
+    } catch (error) {
+      console.error(error)
+    }
+
+    return result
   }
 
   async updateCustomer(
     reference: string,
     customerDetails: PaywayAddress,
+    creditCard?: PaywayCreditCard,
+    bankAccount?: PaywayBankAccount,
   ): Promise<IPaywayAPIResponse> {
     const addressObject = new AddressDTO({
       firstName: customerDetails.firstName,
@@ -86,7 +144,56 @@ export class Payway extends BaseGateway<PaywayConfig> implements
     })
 
     await validateOrReject(addressObject)
-    return await this.api.updateCustomerDetails(reference, addressObject)
+    const result = await this.api.updateCustomerDetails(reference, addressObject)
+
+    try {
+      if (creditCard !== undefined) {
+        const creditCardObject = new CreditCardDTO({
+          ...creditCard,
+        })
+
+        await validateOrReject(creditCardObject)
+        const ccResponse = await this.api.getCCtoken(creditCardObject)
+        const token = ccResponse?.data?.singleUseTokenId
+
+        const paymentDetailsObject = new PaymentDetailsDTO({
+          singleUseTokenId: token,
+          merchantId: this.config.merchantId,
+        })
+        await validateOrReject(paymentDetailsObject)
+
+        await this.api.updateCustomerPayment(
+          reference,
+          paymentDetailsObject,
+        )
+      }
+
+      if (bankAccount !== undefined) {
+        const bankAccountObject = new BankAccountDTO({
+          ...bankAccount,
+        })
+
+        await validateOrReject(bankAccountObject)
+        const bankAccountResponse = await this.api.getBankAccountToken(bankAccountObject)
+        const token = bankAccountResponse?.data?.singleUseTokenId
+
+        const paymentDetailsObject = new PaymentDetailsDTO({
+          singleUseTokenId: token,
+          bankAccountId: this.config.bankAccountId,
+        })
+        await validateOrReject(paymentDetailsObject)
+
+        await this.api.updateCustomerPayment(
+          reference,
+          paymentDetailsObject,
+        )
+      }
+
+    } catch (error) {
+      console.error(error)
+    }
+
+    return result
   }
 
   async directDebit(

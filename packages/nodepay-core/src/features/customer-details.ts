@@ -16,5 +16,5 @@ export interface CustomerDetails {
     creditCard?: ICreditCard,
     bankAccount?: IBankAccount,
   ): Promise<unknown>
-  // TODO: add setter methods for creditCard, bankAccount alone.
+  // TODO: add overloads/setter methods for creditCard, bankAccount alone.
 }
