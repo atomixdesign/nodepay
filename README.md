@@ -105,10 +105,6 @@ Options:
 
 Generate and aggregate documentation for all packages.
 
-**yarn build:docs**
-
-Build docs for each package using *tsdoc.*
-
 **yarn lint**
 
 Run lint for each package.

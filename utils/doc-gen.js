@@ -7,7 +7,7 @@ const glob = require('glob')
 
 function generateDocs() {
   console.log('Generating package docs')
-  execSync('yarn run build:docs', (err, stdout /*, stderr */) => {
+  execSync('yarn docs:prebuild', (err, stdout /*, stderr */) => {
     if (err) {
       throw new Error(err)
       process.exit(1)
@@ -48,7 +48,7 @@ async function aggregate() {
 }
 
 function makeNavbar(packageList) {
-  console.log('Generating sidebar')
+  console.log('Generating navbar')
   content = ''
 
   packageList.forEach(packageName => {
@@ -66,7 +66,7 @@ function makeNavbar(packageList) {
 
 function docsify() {
   console.log('Docsifying')
-  execSync('docsify init ./docs', (err, stdout, stderr) => {
+  execSync('yarn docs:init', (err, stdout, stderr) => {
     if (err) {
       throw new Error(err)
       process.exit(1)
