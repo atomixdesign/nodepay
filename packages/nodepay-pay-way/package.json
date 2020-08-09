@@ -1,6 +1,6 @@
 {
   "name": "@atomixdesign/nodepay-pay-way",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "license": "MIT",
@@ -35,7 +35,7 @@
     "typescript": "^3.9.3"
   },
   "dependencies": {
-    "@atomixdesign/nodepay-core": "^0.4.3",
+    "@atomixdesign/nodepay-core": "^0.4.4",
     "@types/qs": "^6.9.3",
     "@types/uuid": "^8.0.0",
     "axios": "^0.19.2",
