@@ -16,7 +16,7 @@
     "docs:init": "docsify init ./docs",
     "lint": "lerna run lint",
     "prepublishOnly": "yarn build && yarn test && yarn lint",
-    "publish:dev": "yarn prepublishOnly && lerna publish --registry http://localhost:4873"
+    "publish:dev": "lerna publish --registry http://localhost:4873"
   },
   "devDependencies": {
     "@types/inquirer": "^6.5.0",
