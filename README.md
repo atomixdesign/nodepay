@@ -77,13 +77,21 @@ Runs full tests (unit and api integration) asynchronously against each api. Env 
 
 Removes all build artifacts and all dependencies. Effectively resets the monorepo to clean slate.
 
-**yarn clean:artifacts**
-
-Clean build artifacts and dependencies, but leave compiled outputs (build files and caches).
-
 **yarn clean**
 
-Clean compiled outputs.
+Clean compiled outputs + artifacts.
+
+  - _yarn clean:deps_
+
+    Remove node_modules at top-level and in all nodepay packages.
+
+  - _yarn clean:artifacts_
+
+    Clean build artifacts and dependencies, but leave compiled outputs (build files and caches).
+
+  - _yarn clean:build_
+
+    Clean compiled outputs.
 
 **yarn cli**
 
@@ -111,4 +119,4 @@ Run lint for each package.
 
 **yarn publish:dev**
 
-Publish packages. For use with [verdaccio.](https://verdaccio.org/)
+Publish packages locally. For use with sinopia, [verdaccio](https://verdaccio.org/) or a local repo.
