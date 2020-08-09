@@ -1,4 +1,5 @@
 import 'reflect-metadata'
+export * from './types'
 export * from './nodepay'
 export * from './gateways'
 export * from './context'
