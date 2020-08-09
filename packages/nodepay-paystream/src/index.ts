@@ -1,4 +1,4 @@
-export * from './paystream'
+export { Paystream as Strategy } from './paystream'
 
 export {
   PaystreamPaymentFrequency,
