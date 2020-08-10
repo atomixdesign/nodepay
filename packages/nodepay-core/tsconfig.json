@@ -9,9 +9,9 @@
   "paths": {
     "nodepay-core": ["./build/index"],
     "nodepay-core/gateways": ["./build/gateways/index"],
-    "nodepay-core/network": ["./build/gateways/network"],
-    "nodepay-core/types": ["./build/gateways/types"],
-    "nodepay-core/validation": ["./build/gateways/validation"],
+    "nodepay-core/network": ["./build/network/index"],
+    "nodepay-core/types": ["./build/types/index"],
+    "nodepay-core/validation": ["./build/validation/index"],
   },
   "include": ["./src/**/*.ts"],
   "exclude": [
