@@ -1,4 +1,4 @@
-import { IBaseResponse } from '@atomixdesign/nodepay-core/network'
+import { IBaseResponse } from '@atomixdesign/nodepay-core/build/network'
 
 /** @internal */
 export interface IEzidebitInternalResponse {

@@ -1,5 +1,5 @@
 import { IsNotEmpty } from 'class-validator'
-import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation'
+import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/validation'
 import { PaystreamPaymentFrequency, PaystreamSubscription } from '../../types'
 
 /** @internal */

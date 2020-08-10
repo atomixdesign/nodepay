@@ -5,7 +5,7 @@ import qs from 'qs'
 import { PaywayConfig } from '../types'
 import {
   HttpClientFactory,
-} from '@atomixdesign/nodepay-core/network'
+} from '@atomixdesign/nodepay-core/build/network'
 import { IPaywayAPIResponse } from './api-response'
 import {
   BankAccountDTO,

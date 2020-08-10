@@ -1,4 +1,4 @@
-import { IBaseCharge } from '@atomixdesign/nodepay-core/types'
+import { IBaseCharge } from '@atomixdesign/nodepay-core/build/types'
 
 /** @internal */
 export interface IPaywayInternalCharge {

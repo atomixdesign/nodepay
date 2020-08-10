@@ -3,7 +3,7 @@ import { AxiosInstance } from 'axios'
 import {
   HttpClientFactory,
   IBaseResponse,
-} from '@atomixdesign/nodepay-core/network'
+} from '@atomixdesign/nodepay-core/build/network'
 import { BPOINTConfig } from '../types'
 import { ChargeDTO, CustomerDTO } from './dtos'
 import { BPOINTAPIError } from './api-error'
