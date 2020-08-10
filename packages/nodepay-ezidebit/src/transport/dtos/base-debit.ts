@@ -12,7 +12,7 @@ import {
 import {
   ErrorType,
   ErrorFactory,
-} from '@atomixdesign/nodepay-core/validation'
+} from '@atomixdesign/nodepay-core/build/validation'
 import { IEzidebitBaseDebit } from '../../types'
 
 /** @internal */

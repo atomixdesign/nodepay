@@ -9,7 +9,7 @@ export interface IEzidebitNewBankAccount {
   Username: string
 }
 
-import { IBankAccount } from '@atomixdesign/nodepay-core/types'
+import { IBankAccount } from '@atomixdesign/nodepay-core/build/types'
 
 export class EzidebitBankAccount implements IBankAccount {
   constructor(

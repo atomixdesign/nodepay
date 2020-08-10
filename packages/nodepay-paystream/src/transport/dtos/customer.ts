@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsEmail, IsIP, ValidateNested } from 'class-validator'
-import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation'
+import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/validation'
 
 import { PaystreamCustomer, PaystreamCreditCard, PaystreamAddress } from '../../types'
 import { CreditCardDTO } from './credit-card'

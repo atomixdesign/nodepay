@@ -1,6 +1,6 @@
 {
   "name": "@atomixdesign/nodepay-ezidebit",
-  "version": "0.4.4",
+  "version": "0.4.7",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "license": "MIT",
@@ -35,11 +35,11 @@
     "typescript": "^3.9.3"
   },
   "dependencies": {
-    "@atomixdesign/nodepay-core": "^0.4.4",
+    "@atomixdesign/nodepay-core": "^0.4.7",
     "class-validator": "^0.12.2",
     "soap": "^0.32.0",
     "ts-custom-error": "^3.1.1",
     "typedi": "^0.8.0"
   },
-  "gitHead": "a1758f54f6cd6c19042cf4e60e99e460ab294195"
+  "gitHead": "3e7674271e5b60f90ffb670e90155124cb4e5e5b"
 }

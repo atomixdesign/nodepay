@@ -11,6 +11,7 @@ module.exports = {
   ],
   verbose: true,
   moduleNameMapper: {
+    '^@atomixdesign/(nodepay-core/build)/(.*)$': '<rootDir>/../nodepay-core/src/$2',
     '^@atomixdesign/(nodepay-[a-z]+)/(.*)$': '<rootDir>/../$1/src/$2'
   },
   testTimeout: 60000

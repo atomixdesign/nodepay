@@ -3,8 +3,8 @@ import { IsNotEmpty, Length, IsNumberString } from 'class-validator'
 import {
   ErrorType,
   ErrorFactory,
-} from '@atomixdesign/nodepay-core/validation'
-import { IBankAccount } from '@atomixdesign/nodepay-core/types'
+} from '@atomixdesign/nodepay-core/build/validation'
+import { IBankAccount } from '@atomixdesign/nodepay-core/build/types'
 
 /** @internal */
 export class BankAccountDTO {

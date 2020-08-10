@@ -1,4 +1,4 @@
-import { IBaseCharge } from '@atomixdesign/nodepay-core/types'
+import { IBaseCharge } from '@atomixdesign/nodepay-core/build/types'
 import { BPOINTCurrency } from './currencies'
 
 export enum BPOINTActionType {

@@ -2,7 +2,7 @@ import { IEzidebitNewBankAccount } from './bank-account'
 import { IEzidebitBaseAccount } from './customer'
 import { IEzidebitBasePayment } from './payment'
 import { IEzidebitBaseCreditCard } from './credit-card'
-import { IDirectDebit } from '@atomixdesign/nodepay-core/types'
+import { IDirectDebit } from '@atomixdesign/nodepay-core/build/types'
 
 /** @internal */
 export interface IEzidebitInternalDebit extends IEzidebitBasePayment {

@@ -1,4 +1,4 @@
-import { ICustomerDetails } from '@atomixdesign/nodepay-core/types'
+import { ICustomerDetails } from '@atomixdesign/nodepay-core/build/types'
 import { BPOINTCreditCard } from './credit-card'
 import { BPOINTBankAccount } from './bank-account'
 

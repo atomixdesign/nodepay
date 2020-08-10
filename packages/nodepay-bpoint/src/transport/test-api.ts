@@ -1,4 +1,4 @@
-import { IBaseResponse } from '@atomixdesign/nodepay-core/network'
+import { IBaseResponse } from '@atomixdesign/nodepay-core/build/network'
 import { ChargeDTO, CustomerDTO } from './dtos'
 
 /** @internal */

@@ -1,5 +1,5 @@
 import { IsNotEmpty, MaxLength, IsNumberString, IsIn } from 'class-validator'
-import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation'
+import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/validation'
 import { IEzidebitNewBankAccount } from '../../types'
 
 /** @internal */
