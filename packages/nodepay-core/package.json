@@ -1,7 +1,7 @@
 {
   "name": "@atomixdesign/nodepay-core",
   "version": "0.4.8",
-  "main": "build",
+  "main": "build/index",
   "types": "build/index.d.ts",
   "license": "MIT",
   "publishConfig": {
