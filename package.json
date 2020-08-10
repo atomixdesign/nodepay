@@ -8,7 +8,7 @@
     "reset": "concurrently \"yarn --silent clean:deps\" \"yarn --silent clean:build\" \"yarn --silent clean:artifacts\"",
     "clean:deps": "shx rm -R node_modules packages/**/node_modules",
     "clean:artifacts": "shx rm -R packages/**/coverage packages/**/docs",
-    "clean:build": "shx rm -R packages/**/build packages/**/tsconfig.tsbuildinfo",
+    "clean:build": "shx rm -R packages/**/build packages/**/**.tsbuildinfo",
     "clean": "concurrently \"yarn --silent clean:build\" \"yarn --silent clean:artifacts\"",
     "cli": "node utils/nodepay-cli",
     "docs": "node utils/doc-gen && yarn clean:artifacts",
