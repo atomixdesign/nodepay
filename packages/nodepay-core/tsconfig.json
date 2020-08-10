@@ -6,13 +6,6 @@
     "rootDir": "./src",                         /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
     "composite": true
   },
-  "paths": {
-    "nodepay-core": ["./build/index"],
-    "nodepay-core/gateways": ["./build/gateways/index"],
-    "nodepay-core/network": ["./build/network/index"],
-    "nodepay-core/types": ["./build/types/index"],
-    "nodepay-core/validation": ["./build/validation/index"],
-  },
   "include": ["./src/**/*.ts"],
   "exclude": [
     "node_modules",
