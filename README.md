@@ -8,8 +8,7 @@ A payment gateway abstraction layer written in Typescript, taking inspiration fr
 [Omnipay](https://omnipay.thephpleague.com/) & [Active Merchant](http://activemerchant.org/)
 
 
-
-## How to Use
+## Getting Started
 
 The API follows the Strategy Pattern, where each gateway connector provides its own way to fulfill an API (`addCustomer`, `updateCustomer`,  `charge`, etc).
 
@@ -18,8 +17,8 @@ import { Context } from '@atomixdesign/nodepay'
 import { Strategy, Config, Customer, CreditCard } from '@atomixdesign/nodepay-ezidebit'
 
 const config = new Config({
-	// Add your own values obtained from the gateway here ->
-	clientId: ...,
+  // Add your own values obtained from the gateway here ->
+  clientId: ...,
     digitalKey: ...,
     publicKey: ...,
     apiRoot: ...,
@@ -29,8 +28,8 @@ const ezidebitStrategy = new Strategy(config)
 const gateway = new Context(ezidebitStrategy)
 
 const creditCard = new CreditCard({
-    /* /!\ CAUTION. When using card details this way,
-	/* You need to make sure that your program complies with PCI requirements.
+    /* CAUTION: When using card details this way,
+	/* you need to make sure that your program meets PCI requirements.
 	/* Find out more: https://bit.ly/2PvyxGM */
 	cardNumber: ...,
     expiryDateMonth: ...,
@@ -40,7 +39,7 @@ const creditCard = new CreditCard({
 })
 
 const customer = new Customer({
-    customerId: ..., 		// Generate for use with your own system
+    customerId: ...,        // Generate for use with your own system
     contractStartDate: ..., // yyyy-MM-dd, see Ezidebit: https://bit.ly/3ibuZWo
     lastName: ...,
     ...
@@ -50,7 +49,7 @@ const customer = new Customer({
 gateway.addCustomer(customer, creditCard /*, bankAccount */)
 
 const onceOffCharge = new Charge({
-	orderNumber: ...,
+  orderNumber: ...,
     amountInCents: ...,
     customerName: ...,
 })
@@ -59,6 +58,9 @@ const onceOffCharge = new Charge({
 gateway.charge(onceOffCharge, creditCard)
 ```
 
+## Reference
+
+See [https://nodepay.netlify.app/#/](https://nodepay.netlify.app/#/)
 
 
 ## Tooling
