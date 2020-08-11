@@ -8,8 +8,21 @@
     "access": "public"
   },
   "engines": {
-    "node": "12"
+    "node": ">=12"
   },
+  "author": {
+    "name": "Mauro Colella",
+    "url": "https://mauro-colella.com"
+  },
+  "contributors": [
+    {
+      "name": "Jack Hillman"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/atomixdesign/nodepay/issues"
+  },
+  "homepage": "https://github.com/atomixdesign/nodepay",
   "scripts": {
     "build": "tsc --p ./tsconfig.build.json",
     "start": "ts-node-dev --project tsconfig.build.json --respawn src/index.ts",

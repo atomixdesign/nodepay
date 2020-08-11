@@ -1,6 +1,21 @@
 {
   "name": "@atomixdesign/nodepay",
-  "private": true,
+  "description": "A payment gateway abstraction layer written in Typescript, taking inspiration from Omnipay & Active Merchant",
+  "private": false,
+  "author": {
+    "name": "Mauro Colella",
+    "url": "https://mauro-colella.com"
+  },
+  "contributors": [
+    {
+      "name": "Jack Hillman"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/atomixdesign/nodepay/issues"
+  },
+  "homepage": "https://github.com/atomixdesign/nodepay",
+  "license" : "MIT",
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "build": "lerna run build --no-bail",
