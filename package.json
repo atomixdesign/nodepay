@@ -1,14 +1,18 @@
 {
   "name": "@atomixdesign/nodepay",
   "description": "A payment gateway abstraction layer written in Typescript, taking inspiration from Omnipay & Active Merchant",
-  "private": false,
+  "private": true,
   "author": {
-    "name": "Mauro Colella",
-    "url": "https://mauro-colella.com"
+    "name": "Atomix",
+    "url": "https://www.atomix.com.au"
   },
   "contributors": [
     {
       "name": "Jack Hillman"
+    },
+    {
+      "name": "Mauro Colella",
+      "url": "https://mauro-colella.com"
     }
   ],
   "bugs": {
