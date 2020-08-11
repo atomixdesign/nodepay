@@ -34,7 +34,7 @@
     "docs:prebuild": "lerna run build:docs --no-bail",
     "docs:init": "docsify init ./docs",
     "lint": "lerna run lint",
-    "prepublishOnly": "yarn build && yarn test && yarn lint",
+    "prepublishOnly": "yarn clean && yarn build && yarn test && yarn lint",
     "publish:dev": "lerna publish --registry http://localhost:4873"
   },
   "devDependencies": {
