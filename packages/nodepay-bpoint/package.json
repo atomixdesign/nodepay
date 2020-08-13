@@ -1,6 +1,6 @@
 {
   "name": "@atomixdesign/nodepay-bpoint",
-  "version": "0.4.7",
+  "version": "0.4.14",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "license": "MIT",
@@ -8,8 +8,25 @@
     "access": "public"
   },
   "engines": {
-    "node": "12"
+    "node": ">=12"
   },
+  "author": {
+    "name": "Atomix",
+    "url": "https://www.atomix.com.au"
+  },
+  "contributors": [
+    {
+      "name": "Jack Hillman"
+    },
+    {
+      "name": "Mauro Colella",
+      "url": "https://mauro-colella.com"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/atomixdesign/nodepay/issues"
+  },
+  "homepage": "https://github.com/atomixdesign/nodepay",
   "scripts": {
     "build": "tsc --p ./tsconfig.build.json",
     "start": "ts-node-dev --project tsconfig.build.json --respawn src/index.ts",
@@ -35,7 +52,7 @@
     "typescript": "^3.9.3"
   },
   "dependencies": {
-    "@atomixdesign/nodepay-core": "^0.4.7",
+    "@atomixdesign/nodepay-core": "^0.4.14",
     "axios": "^0.19.2",
     "class-validator": "^0.12.2",
     "crypto-random-string": "^3.2.0",
