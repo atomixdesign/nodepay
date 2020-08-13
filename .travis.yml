@@ -38,4 +38,4 @@ deploy:
     script: "yarn run lerna publish from-package"
     skip_cleanup: true
     on:
-      branch: release
+      branch: master
