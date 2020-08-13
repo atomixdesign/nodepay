@@ -35,7 +35,7 @@ deploy:
     on:
       tags: true
   - provider: script
-    script: "yarn run lerna publish from-package --force-publish"
+    script: "yarn run lerna publish from-package --yes"
     skip_cleanup: true
     on:
       branch: master
