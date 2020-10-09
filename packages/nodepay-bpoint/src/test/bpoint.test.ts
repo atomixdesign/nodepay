@@ -1,7 +1,7 @@
 import { Container } from 'typedi'
 import { IBaseResponse } from '@atomixdesign/nodepay-core/build/network'
 import { BPOINT } from '../bpoint'
-import { testAPI } from '../transport'
+import { BPOINTAPI, testAPI } from '../transport'
 
 const fixtures = {
   creditCard: {
@@ -32,7 +32,7 @@ describe('test bpoint gateway', () => {
   let gateway: BPOINT
 
   beforeAll(() => {
-    Container.set('bpoint.api', new testAPI())
+    Container.set(BPOINTAPI, new testAPI())
   })
 
   beforeEach(() => {

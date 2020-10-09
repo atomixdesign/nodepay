@@ -51,7 +51,7 @@ export class Payway extends BaseGateway<PaywayConfig> implements
   constructor(config?: Partial<PaywayConfig>) {
     super(config)
     Container.set('payway.config', config)
-    this.api = Container.get('payway.api')
+    this.api = Container.get(PaywayAPI)
   }
 
   get name(): string {

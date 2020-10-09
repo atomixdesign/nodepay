@@ -1,7 +1,7 @@
 import { Container } from 'typedi'
 import moment from 'moment'
 import { Payway } from '../pay-way'
-import { testAPI, IPaywayAPIResponse } from '../transport'
+import { PaywayAPI, testAPI, IPaywayAPIResponse } from '../transport'
 import { PaywayPaymentFrequency } from '../types'
 
 const fixtures = {
@@ -43,7 +43,7 @@ describe('test payway gateway', () => {
   let gateway: Payway
 
   beforeAll(() => {
-    Container.set('payway.api', new testAPI())
+    Container.set(PaywayAPI, new testAPI())
   })
 
   beforeEach(() => {

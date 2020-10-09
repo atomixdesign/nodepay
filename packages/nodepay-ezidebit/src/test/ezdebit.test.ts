@@ -1,6 +1,6 @@
 import { Container } from 'typedi'
 import { Ezidebit } from '../ezidebit'
-import { testAPI, IEzidebitAPIResponse } from '../transport'
+import { EzidebitAPI, testAPI, IEzidebitAPIResponse } from '../transport'
 import { EzidebitPaymentFrequency, EzidebitDayOfWeek } from '../types'
 
 const fixtures = {
@@ -71,7 +71,7 @@ describe('test ezidebit gateway', () => {
   let gateway: Ezidebit
 
   beforeAll(() => {
-    Container.set('ezidebit.api', new testAPI())
+    Container.set(EzidebitAPI, new testAPI())
   })
 
   beforeEach(() => {
