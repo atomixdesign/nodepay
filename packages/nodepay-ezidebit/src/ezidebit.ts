@@ -221,7 +221,7 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
     }
 
     await validateOrReject(new PaymentDTO(paymentObject))
-    return await this.api.placeDirectCharge(paymentObject)
+    return this.api.placeDirectCharge(paymentObject)
   }
 
   async charge(
@@ -240,7 +240,7 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
     }
 
     await validateOrReject(new OnceOffChargeDTO(chargeObject))
-    return await this.api.placeCharge(chargeObject)
+    return this.api.placeCharge(chargeObject)
   }
 
   async chargeRecurring(
@@ -265,6 +265,6 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
     }
 
     await validateOrReject(new PaymentScheduleDTO(scheduleObject))
-    return await this.api.schedulePayment(scheduleObject)
+    return this.api.schedulePayment(scheduleObject)
   }
 }

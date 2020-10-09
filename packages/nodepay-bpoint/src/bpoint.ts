@@ -73,7 +73,7 @@ export class BPOINT extends BaseGateway<BPOINTConfig> implements
 
     const chargeDTO = new ChargeDTO(chargeObject, creditCard)
     await validateOrReject(chargeDTO)
-    return await this.api.placeCharge(chargeDTO)
+    return this.api.placeCharge(chargeDTO)
   }
 
   async addCustomer(
@@ -100,7 +100,7 @@ export class BPOINT extends BaseGateway<BPOINTConfig> implements
       bankAccount,
     )
     await validateOrReject(customerDTO)
-    return await this.api.addCustomer(customerDTO)
+    return this.api.addCustomer(customerDTO)
   }
 
   async updateCustomer(
@@ -128,7 +128,7 @@ export class BPOINT extends BaseGateway<BPOINTConfig> implements
       bankAccount,
     )
     await validateOrReject(customerDTO)
-    return await this.api.updateCustomer(reference, customerDTO)
+    return this.api.updateCustomer(reference, customerDTO)
   }
 
   async charge(

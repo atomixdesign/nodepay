@@ -209,7 +209,7 @@ export class Payway extends BaseGateway<PaywayConfig> implements
     })
 
     await validateOrReject(chargeObject)
-    return await this.api.placeDirectCharge(chargeObject)
+    return this.api.placeDirectCharge(chargeObject)
   }
 
   async charge(
@@ -233,7 +233,7 @@ export class Payway extends BaseGateway<PaywayConfig> implements
       const ccTokenResponse = await this.api.getCCtoken(creditCardObject)
       singleUseTokenId = ccTokenResponse.data.singleUseTokenId
     }
-    return await this.api.placeCharge(singleUseTokenId!, chargeObject)
+    return this.api.placeCharge(singleUseTokenId!, chargeObject)
   }
 
   async chargeRecurring(
@@ -250,6 +250,6 @@ export class Payway extends BaseGateway<PaywayConfig> implements
     })
 
     await validateOrReject(scheduleObject)
-    return await this.api.schedulePayment(paymentSchedule.customerId, scheduleObject)
+    return this.api.schedulePayment(paymentSchedule.customerId, scheduleObject)
   }
 }

@@ -59,7 +59,7 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
     )
 
     await validateOrReject(customerObject)
-    return await this.api.addCustomer(customerObject)
+    return this.api.addCustomer(customerObject)
   }
 
   async updateCustomer(
@@ -75,7 +75,7 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
     )
 
     await validateOrReject(customerObject)
-    return await this.api.updateCustomer(reference, customerObject)
+    return this.api.updateCustomer(reference, customerObject)
   }
 
   async charge(
@@ -87,7 +87,7 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
       creditCard,
     )
     await validateOrReject(chargeObject)
-    return await this.api.placeCharge(chargeObject)
+    return this.api.placeCharge(chargeObject)
   }
 
   async chargeRecurring(
@@ -95,6 +95,6 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
   ): Promise<IPaystreamAPIResponse> {
     const subscriptionObject = new SubscriptionDTO(subscription)
     await validateOrReject(subscriptionObject)
-    return await this.api.addSubscription(subscriptionObject)
+    return this.api.addSubscription(subscriptionObject)
   }
 }

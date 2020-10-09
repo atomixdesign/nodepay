@@ -44,7 +44,7 @@ async function aggregate() {
     ))
   })
 
-  return await Promise.all(copyPromises)
+  return Promise.all(copyPromises)
 }
 
 function makeNavbar(packageList) {
