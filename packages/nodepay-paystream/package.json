@@ -4,6 +4,18 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "license": "MIT",
+  "description": "Nodepay strategy for the Paystream payment gateway.",
+  "keywords": [
+    "nodepay",
+    "paystream",
+    "payment",
+    "gateway",
+    "credit card",
+    "direct debit",
+    "payroll",
+    "subscription",
+    "typescript"
+  ],
   "publishConfig": {
     "access": "public"
   },
@@ -32,7 +44,7 @@
     "start": "ts-node-dev --project tsconfig.build.json --respawn src/index.ts",
     "test": "jest --coverage",
     "test:watch": "test --watch",
-    "lint": "eslint ./src",
+    "lint": "eslint ./src --fix",
     "build:docs": "typedoc --options ../../typedoc.json --tsconfig ./tsconfig.tsdoc.json --publicPath nodepay-paystream/",
     "version:patch": "npm version patch --git-tag-version -m '🔖 v%s' -s",
     "version:minor": "npm version minor --git-tag-version -m '🔖 v%s' -s",

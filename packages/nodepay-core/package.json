@@ -4,6 +4,17 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "license": "MIT",
+  "description": "Nodepay core module.",
+  "keywords": [
+    "nodepay",
+    "payment",
+    "gateway",
+    "credit card",
+    "direct debit",
+    "payroll",
+    "subscription",
+    "typescript"
+  ],
   "publishConfig": {
     "access": "public"
   },
@@ -32,7 +43,7 @@
     "start": "ts-node-dev --project tsconfig.json --respawn src/index.ts",
     "test": "jest --coverage",
     "test:watch": "test --watch",
-    "lint": "eslint ./src",
+    "lint": "eslint ./src --fix",
     "build:docs": "typedoc --options ../../typedoc.json --tsconfig ./tsconfig.json --publicPath nodepay-core/",
     "version:patch": "npm version patch --git-tag-version -m '🔖 v%s' -s",
     "version:minor": "npm version minor --git-tag-version -m '🔖 v%s' -s",

@@ -4,6 +4,19 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "license": "MIT",
+  "description": "Nodepay strategy for the WestPac PayWay payment gateway.",
+  "keywords": [
+    "nodepay",
+    "westpac",
+    "payway",
+    "payment",
+    "gateway",
+    "credit card",
+    "direct debit",
+    "payroll",
+    "subscription",
+    "typescript"
+  ],
   "publishConfig": {
     "access": "public"
   },
@@ -32,7 +45,7 @@
     "start": "ts-node-dev --project tsconfig.build.json --respawn src/index.ts",
     "test": "jest --coverage",
     "test:watch": "test --watch",
-    "lint": "eslint ./src",
+    "lint": "eslint ./src --fix",
     "build:docs": "typedoc --options ../../typedoc.json --tsconfig ./tsconfig.tsdoc.json --publicPath nodepay-pay-way/",
     "version:patch": "npm version patch --git-tag-version -m '🔖 v%s' -s",
     "version:minor": "npm version minor --git-tag-version -m '🔖 v%s' -s",
