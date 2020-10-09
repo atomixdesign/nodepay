@@ -4,6 +4,18 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "license": "MIT",
+  "description": "Nodepay strategy for the Paystream payment gateway.",
+  "keywords": [
+    "nodepay",
+    "paystream",
+    "payment",
+    "gateway",
+    "credit card",
+    "direct debit",
+    "payroll",
+    "subscription",
+    "typescript"
+  ],
   "publishConfig": {
     "access": "public"
   },

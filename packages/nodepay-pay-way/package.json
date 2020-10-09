@@ -4,6 +4,19 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "license": "MIT",
+  "description": "Nodepay strategy for the WestPac PayWay payment gateway.",
+  "keywords": [
+    "nodepay",
+    "westpac",
+    "payway",
+    "payment",
+    "gateway",
+    "credit card",
+    "direct debit",
+    "payroll",
+    "subscription",
+    "typescript"
+  ],
   "publishConfig": {
     "access": "public"
   },
