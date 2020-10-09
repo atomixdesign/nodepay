@@ -1,7 +1,7 @@
 import { Service } from 'typedi'
 import { Client, createClientAsync } from 'soap'
 // import { parseString } from 'xml2js'
-import util from 'util'
+import { inspect } from 'util'
 import { NetworkClientAsyncFactory } from './types/network-client-factory'
 
 /** @internal */
@@ -13,7 +13,7 @@ export class SoapClientFactory extends NetworkClientAsyncFactory<Client> {
     if (DEBUG) {
       if (parsingError) console.error(parsingError)
       /* eslint-disable unicorn/no-null */
-      else console.log(util.inspect(result, false, null))
+      else console.log(inspect(result, false, null))
     }
   }
 
