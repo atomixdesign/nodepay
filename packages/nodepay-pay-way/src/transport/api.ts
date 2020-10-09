@@ -100,7 +100,7 @@ export class PaywayAPI {
   }
 
   async addCustomer(customer: CustomerDTO): Promise<IPaywayAPIResponse> {
-    const payload = { ...customer }
+    const payload: any = { ...customer }
     delete payload.customerNumber
 
     return this._process({

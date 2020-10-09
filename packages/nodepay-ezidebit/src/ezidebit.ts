@@ -22,7 +22,7 @@ import {
   EzidebitBankAccount,
   IEzidebitNewBankAccount,
 } from './types'
-import { EzidebitAPI as Transport, IEzidebitAPIResponse } from './transport'
+import { EzidebitAPI, IEzidebitAPIResponse } from './transport'
 import {
   OnceOffChargeDTO,
   PaymentDTO,
@@ -39,7 +39,7 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
   RecurringPayment,
   CustomerDetails
 {
-  private api: Transport
+  private api: EzidebitAPI
 
   protected get baseConfig(): EzidebitConfig {
     return {
@@ -54,7 +54,7 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
   constructor(config?: Partial<EzidebitConfig>) {
     super(config)
     Container.set('ezidebit.config', config)
-    this.api = Container.get('ezidebit.api')
+    this.api = Container.get(EzidebitAPI)
   }
 
   get name(): string {

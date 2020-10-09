@@ -43,7 +43,7 @@ export class BPOINT extends BaseGateway<BPOINTConfig> implements
   constructor(config?: Partial<BPOINTConfig>) {
     super(config)
     Container.set('bpoint.config', config)
-    this.api = Container.get('bpoint.api')
+    this.api = Container.get(BPOINTAPI)
   }
 
   get name(): string {

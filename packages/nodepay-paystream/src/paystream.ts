@@ -37,7 +37,7 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
   constructor(config?: Partial<PaystreamConfig>) {
     super(config)
     Container.set('paystream.config', config)
-    this.api = Container.get('paystream.api')
+    this.api = Container.get(PaystreamAPI)
   }
 
   get name(): string {

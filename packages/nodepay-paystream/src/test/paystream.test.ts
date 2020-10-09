@@ -1,7 +1,7 @@
 import { Container } from 'typedi'
 import cryptoRandomString from 'crypto-random-string'
 import { Paystream } from '../paystream'
-import { testAPI, IPaystreamAPIResponse } from '../transport'
+import { PaystreamAPI, testAPI, IPaystreamAPIResponse } from '../transport'
 import { PaystreamPaymentFrequency } from '../types'
 
 
@@ -66,7 +66,7 @@ describe('test paystream gateway', () => {
   let gateway: Paystream
 
   beforeAll(() => {
-    Container.set('paystream.api', new testAPI())
+    Container.set(PaystreamAPI, new testAPI())
   })
 
   beforeEach(() => {
