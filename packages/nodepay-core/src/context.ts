@@ -30,8 +30,8 @@ export class Context implements
   }
 
   private dispatch(methodName: string, arguments_: any) {
-    if (_hasOwnProperty(this.gateway, methodName)) {
-      return this.gateway[methodName](...arguments_)
+    if (_hasOwnProperty(this.gateway.__proto__, methodName)) {
+      return this.gateway.__proto__[methodName](...arguments_)
     }
 
     throw new Error(`Method not implemented: ${methodName}, class ${this.gateway.constructor.name}`)
