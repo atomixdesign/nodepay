@@ -13,6 +13,9 @@ import {
 } from './types'
 import { IBaseResponse } from './network'
 
+import debug from 'debug'
+const log = debug('nodepay:core')
+
 const _hasOwnProperty = (object: any, methodName: string) => {
   return Object.prototype.hasOwnProperty.call(object, methodName)
 }
@@ -42,6 +45,10 @@ export class Context implements
     creditCard?: ICreditCard | undefined,
     bankAccount?: IBankAccount | undefined,
   ): Promise<IBaseResponse> {
+    log(`calling addCustomer on ${this.gateway.constructor.name}`)
+    log({ customerDetails })
+    log({ creditCard })
+    log({ bankAccount })
     return this.dispatch('addCustomer', {
       customerDetails,
       creditCard,
@@ -54,6 +61,11 @@ export class Context implements
     creditCard?: ICreditCard | undefined,
     bankAccount?: IBankAccount | undefined,
   ): Promise<IBaseResponse> {
+    log(`calling updateCustomer on ${this.gateway.constructor.name}`)
+    log({ reference })
+    log({ customerDetails })
+    log({ creditCard })
+    log({ bankAccount })
     return this.dispatch('updateCustomer', {
       reference,
       customerDetails,
@@ -62,6 +74,8 @@ export class Context implements
     })
   }
   directDebit(directDebitCharge: IDirectDebit): Promise<IBaseResponse> {
+    log(`calling directDebit on ${this.gateway.constructor.name}`)
+    log({ directDebitCharge })
     return this.dispatch('directDebit', {
       directDebitCharge,
     })
@@ -70,17 +84,19 @@ export class Context implements
     onceOffCharge: IBaseCharge,
     creditCard?: ICreditCard | undefined,
   ): Promise<IBaseResponse> {
+    log(`calling charge on ${this.gateway.constructor.name}`)
+    log({ onceOffCharge })
+    log({ creditCard })
     return this.dispatch('charge', {
       onceOffCharge,
       creditCard,
     })
   }
   chargeRecurring(...arguments_: unknown[]): Promise<unknown> {
+    log(`calling chargeRecurring on ${this.gateway.constructor.name}`)
+    log({ arguments_ })
     return this.dispatch('chargeRecurring', {
       ...arguments_
     })
   }
-
-
-
 }

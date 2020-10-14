@@ -7,6 +7,9 @@ import axios, {
 } from 'axios'
 import { NetworkClientFactory } from './types/network-client-factory'
 
+import debug from 'debug'
+const log = debug('nodepay:core')
+
 @Service('http.client')
 export class HttpClientFactory extends NetworkClientFactory<AxiosInstance> {
   create(config?: Partial<AxiosRequestConfig>): AxiosInstance{
@@ -14,9 +17,12 @@ export class HttpClientFactory extends NetworkClientFactory<AxiosInstance> {
 
     httpClient.interceptors.request.use(function (config: AxiosRequestConfig) {
       // TODO: Allow custom interceptor callbacks.
+
+      log({ config })
       return config
     }, function (error: AxiosError) {
       // Do something with request error
+      log({ error })
       return Promise.reject(error)
     })
 
