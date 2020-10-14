@@ -34,7 +34,7 @@ export class Context implements
 
   private dispatch(methodName: string, arguments_: any) {
     if (_hasOwnProperty(this.gateway.__proto__, methodName)) {
-      return this.gateway.__proto__[methodName].call(this.gateway, Object.values(arguments_))
+      return this.gateway.__proto__[methodName].apply(this.gateway, Object.values(arguments_))
     }
 
     throw new Error(`Method not implemented: ${methodName}, class ${this.gateway.constructor.name}`)
