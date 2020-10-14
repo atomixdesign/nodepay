@@ -94,6 +94,7 @@ export class Payway extends BaseGateway<PaywayConfig> implements
     const customerObject = new CustomerDTO({
       ...customerDetails,
       singleUseTokenId: singleUseTokenId ?? customerDetails.singleUseTokenId,
+      // TODO: deprecate merchantId and bankAccountId in params
       merchantId: this.config.merchantId,
       bankAccountId: this.config.bankAccountId,
     })
@@ -182,8 +183,6 @@ export class Payway extends BaseGateway<PaywayConfig> implements
       orderNumber: directDebitCharge.paymentReference,
       principalAmount: directDebitCharge.amountInCents / 100,
       customerIpAddress: directDebitCharge?.customerIpAddress,
-      merchantId: directDebitCharge?.merchantId,
-      // bankAccountId,
     })
 
     await validateOrReject(chargeObject)
@@ -199,7 +198,6 @@ export class Payway extends BaseGateway<PaywayConfig> implements
       principalAmount: onceOffCharge.amountInCents / 100,
       orderNumber: onceOffCharge.orderNumber,
       customerIpAddress: onceOffCharge?.customerIpAddress,
-      merchantId: onceOffCharge?.merchantId,
     })
     let singleUseTokenId = onceOffCharge?.singleUseTokenId
 
