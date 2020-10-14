@@ -1,6 +1,6 @@
 {
   "name": "@atomixdesign/nodepay-bpoint",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "license": "MIT",
@@ -64,7 +64,7 @@
     "typescript": "^3.9.3"
   },
   "dependencies": {
-    "@atomixdesign/nodepay-core": "^0.5.1",
+    "@atomixdesign/nodepay-core": "^0.5.2",
     "@types/debug": "^4.1.5",
     "axios": "^0.19.2",
     "class-validator": "^0.12.2",
