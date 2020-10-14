@@ -94,6 +94,8 @@ export class Payway extends BaseGateway<PaywayConfig> implements
     const customerObject = new CustomerDTO({
       ...customerDetails,
       singleUseTokenId: singleUseTokenId ?? customerDetails.singleUseTokenId,
+      merchantId: this.config.merchantId,
+      bankAccountId: this.config.bankAccountId,
     })
 
     await validateOrReject(customerObject)
