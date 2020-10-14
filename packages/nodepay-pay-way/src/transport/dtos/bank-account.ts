@@ -8,9 +8,14 @@ import {
 } from '@atomixdesign/nodepay-core/build/validation'
 import { PaywayBankAccount } from '../../types'
 
+import debug from 'debug'
+const log = debug('nodepay:pay-way')
+
 /** @internal */
 export class BankAccountDTO {
   constructor(bankAccount: PaywayBankAccount) {
+    log(`building ${this.constructor.name}`)
+    log({ bankAccount })
     this.paymentMethod = 'bankAccount'
     this.bsb = bankAccount.BSBNumber
     this.accountNumber = bankAccount.accountNumber

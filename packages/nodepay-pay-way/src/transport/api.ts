@@ -17,6 +17,9 @@ import {
   PaymentDetailsDTO,
 } from './dtos'
 
+import debug from 'debug'
+const log = debug('nodepay:pay-way')
+
 @Service('payway.api')
 export class PaywayAPI {
   private idempotencyKey: string

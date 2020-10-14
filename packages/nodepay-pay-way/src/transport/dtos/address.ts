@@ -14,9 +14,14 @@ import {
 } from '@atomixdesign/nodepay-core/build/validation'
 import { PaywayAddress } from '../../types'
 
+import debug from 'debug'
+const log = debug('nodepay:pay-way')
+
 /** @internal */
 export class AddressDTO {
   constructor(customer: PaywayAddress) {
+    log(`building ${this.constructor.name}`)
+    log({ customer })
     this.customerName = (customer.firstName || customer.lastName) ?
       `${customer.firstName ?? ''} ${customer.lastName ?? ''}`
       :
