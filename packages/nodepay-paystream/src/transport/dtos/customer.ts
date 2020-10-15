@@ -4,6 +4,7 @@ import {
   IsIP,
   ValidateNested,
   IsOptional,
+  ValidateIf,
 } from 'class-validator'
 import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/validation'
 
@@ -65,10 +66,12 @@ export class CustomerDTO {
     })
   readonly ipAddress: string;
 
+  @ValidateIf(o => Boolean(o))
   @ValidateNested()
   @IsOptional()
   readonly card?: CreditCardDTO;
 
+  @ValidateIf(o => Boolean(o))
   @ValidateNested()
   @IsOptional()
   readonly address?: AddressDTO;

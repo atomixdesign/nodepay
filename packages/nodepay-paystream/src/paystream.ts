@@ -71,7 +71,7 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     console.log(require('util').inspect(customerObject, { depth: 6 }))
 
-    await validateOrReject(customerObject, { skipMissingProperties: true })
+    await validateOrReject(customerObject)
     return this.api.addCustomer(customerObject)
   }
 
