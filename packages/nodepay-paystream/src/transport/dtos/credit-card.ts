@@ -1,7 +1,7 @@
 import {
   IsNotEmpty,
   Length,
-  IsNumberString,
+  // IsNumberString,
   IsCreditCard,
 } from 'class-validator'
 
