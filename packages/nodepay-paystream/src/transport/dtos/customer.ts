@@ -66,12 +66,18 @@ export class CustomerDTO {
     })
   readonly ipAddress: string;
 
-  @ValidateIf(o => Boolean(o))
+  @ValidateIf(o => {
+    console.log({ o })
+    return Boolean(o)
+  })
   @ValidateNested()
   @IsOptional()
   readonly card?: CreditCardDTO;
 
-  @ValidateIf(o => Boolean(o))
+  @ValidateIf(o => {
+    console.log({ o })
+    return Boolean(o)
+  })
   @ValidateNested()
   @IsOptional()
   readonly address?: AddressDTO;
