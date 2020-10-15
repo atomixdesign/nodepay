@@ -1,6 +1,6 @@
 {
   "name": "@atomixdesign/nodepay-bpoint",
-  "version": "0.5.19",
+  "version": "0.5.21",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "license": "MIT",
