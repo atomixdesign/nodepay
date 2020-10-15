@@ -29,41 +29,41 @@ export class CustomerDTO {
   }
 
   // * first_name
-  @IsNotEmpty({
+  /* @IsNotEmpty({
     message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'first_name')
-  })
+  }) */
   readonly first_name: string;
 
   // * last_name
-  @IsNotEmpty({
+  /* @IsNotEmpty({
     message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'last_name')
-  })
+  }) */
   readonly last_name: string;
 
   // * reference
-  @IsNotEmpty({
+  /* @IsNotEmpty({
     message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'reference')
-  })
+  }) */
   readonly reference: string;
 
   // * email
-  @IsEmail(undefined, {
+  /* @IsEmail(undefined, {
     message: ErrorFactory.getErrorMessage(ErrorType.NotAnEmail, 'email')
-  })
+  }) */
   readonly email: string;
 
   // * ipAddress
-  @IsIP('4',
+  /* @IsIP('4',
     {
       message: ErrorFactory.getErrorMessage(ErrorType.NotAValidIP, 'ipAddress')
-    })
+    }) */
   readonly ipAddress: string;
 
   @ValidateNested()
   @IsOptional()
-  readonly card: CreditCardDTO | undefined;
+  readonly card?: CreditCardDTO;
 
   @ValidateNested()
   @IsOptional()
-  readonly address: AddressDTO | undefined;
+  readonly address?: AddressDTO;
 }
