@@ -10,9 +10,14 @@ import {
 
 import { IPaystreamInternalPlan } from '../../types'
 
+import debug from 'debug'
+const log = debug('nodepay:paystream')
+
 /** @internal */
 export class PlanDTO {
   constructor(plan: IPaystreamInternalPlan) {
+    log(`building ${this.constructor.name}`)
+    log({ plan })
     this.name = plan.name
     this.amount = plan.amount
     this.reference = plan.reference

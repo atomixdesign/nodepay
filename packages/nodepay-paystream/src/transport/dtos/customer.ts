@@ -5,6 +5,9 @@ import { PaystreamCustomer, PaystreamCreditCard, PaystreamAddress } from '../../
 import { CreditCardDTO } from './credit-card'
 import { AddressDTO } from './address'
 
+import debug from 'debug'
+const log = debug('nodepay:paystream')
+
 /** @internal */
 export class CustomerDTO {
   constructor(
@@ -12,6 +15,8 @@ export class CustomerDTO {
     creditCard?: PaystreamCreditCard,
     address?: PaystreamAddress,
   ) {
+    log(`building ${this.constructor.name}`)
+    log({ customer })
     this.first_name = customer.firstName
     this.last_name = customer.lastName
     this.reference = customer.reference

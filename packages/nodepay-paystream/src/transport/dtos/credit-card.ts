@@ -11,9 +11,14 @@ import {
 } from '@atomixdesign/nodepay-core/build/validation'
 import { PaystreamCreditCard } from '../../types'
 
+import debug from 'debug'
+const log = debug('nodepay:paystream')
+
 /** @internal */
 export class CreditCardDTO {
   constructor(creditCard: PaystreamCreditCard) {
+    log(`building ${this.constructor.name}`)
+    log({ creditCard })
     this.card_number = creditCard.cardNumber
     this.card_holder = creditCard.cardHolderName
     this.cvv = creditCard.CCV

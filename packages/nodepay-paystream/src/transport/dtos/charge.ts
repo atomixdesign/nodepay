@@ -15,12 +15,17 @@ import {
 
 import { PaystreamCharge, PaystreamCreditCard } from '../../types'
 
+import debug from 'debug'
+const log = debug('nodepay:paystream')
+
 /** @internal */
 export class ChargeDTO {
   constructor(
     charge: PaystreamCharge,
     creditCard?: PaystreamCreditCard,
   ) {
+    log(`building ${this.constructor.name}`)
+    log({ charge })
     this.amount = charge.amountInCents
     this.reference = charge.orderNumber
     this.customer_ip = charge.customerIp
