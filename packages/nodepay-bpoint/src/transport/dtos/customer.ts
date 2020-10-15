@@ -17,6 +17,9 @@ import {
 import { CreditCardDTO } from './credit-card'
 import { BankAccountDTO } from './bank-account'
 
+import debug from 'debug'
+const log = debug('nodepay:bpoint')
+
 /** @internal */
 export class CustomerDTO {
   constructor(
@@ -24,6 +27,8 @@ export class CustomerDTO {
     creditCard?: BPOINTCreditCard,
     bankAccount?: BPOINTBankAccount,
   ) {
+    log(`building ${this.constructor.name}`)
+    log({ customer })
     this.CardDetails = creditCard && new CreditCardDTO(creditCard)
     this.BankAccountDetails = bankAccount && new BankAccountDTO(bankAccount)
     this.Crn1 = customer.Crn1

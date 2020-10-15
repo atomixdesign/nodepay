@@ -9,9 +9,14 @@ import {
 import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/validation'
 import { BPOINTCreditCard } from '../../types'
 
+import debug from 'debug'
+const log = debug('nodepay:bpoint')
+
 /** @internal */
 export class CreditCardDTO {
   constructor(creditCard: BPOINTCreditCard) {
+    log(`building ${this.constructor.name}`)
+    log({ creditCard })
     this.CardHolderName = creditCard.cardHolderName
     this.CardNumber = creditCard.cardNumber
     this.Cvn = creditCard.CCV

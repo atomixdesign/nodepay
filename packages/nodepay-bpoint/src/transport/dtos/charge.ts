@@ -21,12 +21,17 @@ import {
 } from '../../types'
 import { CreditCardDTO } from './credit-card'
 
+import debug from 'debug'
+const log = debug('nodepay:bpoint')
+
 /** @internal */
 export class ChargeDTO {
   constructor(
     charge: IBPOINTInternalCharge,
     creditCard: BPOINTCreditCard,
   ) {
+    log(`building ${this.constructor.name}`)
+    log({ charge })
     this.Action = BPOINTActionType.payment
     this.Amount = charge.Amount
     this.CardDetails = new CreditCardDTO(creditCard)

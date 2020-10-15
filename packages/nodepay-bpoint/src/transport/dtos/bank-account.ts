@@ -6,9 +6,14 @@ import {
 } from '@atomixdesign/nodepay-core/build/validation'
 import { IBankAccount } from '@atomixdesign/nodepay-core/build/types'
 
+import debug from 'debug'
+const log = debug('nodepay:bpoint')
+
 /** @internal */
 export class BankAccountDTO {
   constructor(bankAccount: IBankAccount) {
+    log(`building ${this.constructor.name}`)
+    log({ bankAccount })
     this.AccountName = bankAccount.accountName
     this.AccountNumber = bankAccount.accountNumber
     this.BSBNumber = bankAccount.BSBNumber
