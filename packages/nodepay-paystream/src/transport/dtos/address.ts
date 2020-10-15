@@ -21,30 +21,30 @@ export class AddressDTO {
   @IsNotEmpty({
     message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'address')
   })
-  readonly address: string;
+  readonly address?: string;
 
   // * city
   @IsNotEmpty({
     message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'city')
   })
-  readonly city: string;
+  readonly city?: string;
 
   // * state
   @IsNotEmpty({
     message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'state')
   })
-  readonly state: string;
+  readonly state?: string;
 
   // * postcode
   // TODO: render locale-aware. Default is 'Australia'.
   @IsPostalCode('AU', {
     message: ErrorFactory.getErrorMessage(ErrorType.NotAPostalCode, 'postcode')
   })
-  readonly postcode: string;
+  readonly postcode?: string;
 
   // * country
   @IsNotEmpty({
     message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'country')
   })
-  readonly country: string;
+  readonly country?: string;
 }
