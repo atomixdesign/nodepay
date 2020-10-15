@@ -72,9 +72,6 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
     console.log(require('util').inspect(customerObject, { depth: 6 }))
 
     await validateOrReject(customerObject)
-
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    console.log(require('util').inspect(customerObject, { depth: 6 }))
     return this.api.addCustomer(customerObject)
   }
 
