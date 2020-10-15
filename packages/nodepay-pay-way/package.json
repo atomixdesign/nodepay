@@ -1,6 +1,6 @@
 {
   "name": "@atomixdesign/nodepay-pay-way",
-  "version": "0.5.20",
+  "version": "0.5.21",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "license": "MIT",
