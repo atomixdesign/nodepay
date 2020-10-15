@@ -1,7 +1,7 @@
 import {
   IsNotEmpty,
   Length,
-  // IsNumberString,
+  IsNumberString,
   IsCreditCard,
 } from 'class-validator'
 
@@ -44,9 +44,9 @@ export class CreditCardDTO {
   @Length(3, 4, {
     message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'cvv')
   })
-  /* @IsNumberString(undefined, {
+  @IsNumberString(undefined, {
     message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'cvv')
-  }) */
+  })
   readonly cvv: string;
 
   // * card_expiry

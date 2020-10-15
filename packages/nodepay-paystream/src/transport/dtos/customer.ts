@@ -47,9 +47,9 @@ export class CustomerDTO {
   readonly reference: string;
 
   // * email
-  @IsEmail(undefined, {
+  /* @IsEmail(undefined, {
     message: ErrorFactory.getErrorMessage(ErrorType.NotAnEmail, 'email')
-  })
+  }) */
   readonly email: string;
 
   // * ipAddress
@@ -59,11 +59,11 @@ export class CustomerDTO {
     })
   readonly ipAddress: string;
 
-  @ValidateNested()
+  // @ValidateNested()
   @IsOptional()
   readonly card?: CreditCardDTO;
 
-  @ValidateNested()
+  // @ValidateNested()
   @IsOptional()
   readonly address?: AddressDTO;
 }
