@@ -1,6 +1,6 @@
 {
   "name": "@atomixdesign/nodepay-ezidebit",
-  "version": "0.5.19",
+  "version": "0.5.20",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "license": "MIT",
