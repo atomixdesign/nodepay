@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsEmail, IsIP, ValidateNested } from 'class-validator'
+import { IsNotEmpty, IsEmail, IsIP, ValidateNested, IsOptional } from 'class-validator'
 import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/validation'
 
 import { PaystreamCustomer, PaystreamCreditCard, PaystreamAddress } from '../../types'
@@ -60,8 +60,10 @@ export class CustomerDTO {
   readonly ipAddress: string;
 
   @ValidateNested()
+  @IsOptional()
   readonly card: CreditCardDTO | undefined;
 
   @ValidateNested()
+  @IsOptional()
   readonly address: AddressDTO | undefined;
 }
