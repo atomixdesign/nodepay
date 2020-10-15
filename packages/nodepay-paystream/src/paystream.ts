@@ -9,10 +9,8 @@ import {
 import {
   PaystreamConfig,
   PaystreamCharge,
-  PaystreamCustomer,
   PaystreamSubscription,
   PaystreamCreditCard,
-  PaystreamAddress,
   PaystreamCustomerDetails,
 } from './types'
 import { IPaystreamAPIResponse } from './transport'
@@ -53,15 +51,30 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
     creditCard?: PaystreamCreditCard,
   ): Promise<IPaystreamAPIResponse> {
     const customerObject = new CustomerDTO(
-      customerDetails as PaystreamCustomer,
+      {
+        firstName: customerDetails.firstName,
+        lastName: customerDetails.lastName,
+        reference: customerDetails.reference,
+        emailAddress: customerDetails.emailAddress,
+        ipAddress: customerDetails.ipAddress,
+      },
       creditCard,
-      customerDetails as PaystreamAddress,
+      {
+        address: `${customerDetails.address1}${customerDetails.address2 ? ' ' + customerDetails.address2 : ''}`.trim(),
+        city: customerDetails.city,
+        state: customerDetails.state,
+        postcode: customerDetails.postCode,
+        country: customerDetails.country,
+      }
     )
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     console.log(require('util').inspect(customerObject, { depth: 6 }))
 
     await validateOrReject(customerObject)
+
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    console.log(require('util').inspect(customerObject, { depth: 6 }))
     return this.api.addCustomer(customerObject)
   }
 
@@ -70,11 +83,21 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
     customerDetails: PaystreamCustomerDetails,
   ): Promise<IPaystreamAPIResponse> {
     const customerObject = new CustomerDTO(
-      customerDetails as PaystreamCustomer,
-      // TODO: Fix expiry format issue on credit card update.
-      // Probably expecting full ISO date as string.
+      {
+        firstName: customerDetails.firstName,
+        lastName: customerDetails.lastName,
+        reference: customerDetails.reference,
+        emailAddress: customerDetails.emailAddress,
+        ipAddress: customerDetails.ipAddress,
+      },
       undefined,
-      customerDetails as PaystreamAddress,
+      {
+        address: `${customerDetails.address1}${customerDetails.address2 ? ' ' + customerDetails.address2 : ''}`.trim(),
+        city: customerDetails.city,
+        state: customerDetails.state,
+        postcode: customerDetails.postCode,
+        country: customerDetails.country,
+      }
     )
 
     await validateOrReject(customerObject)
