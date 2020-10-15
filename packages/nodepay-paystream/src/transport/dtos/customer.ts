@@ -1,6 +1,6 @@
 import {
   IsNotEmpty,
-  // IsEmail,
+  IsEmail,
   IsIP,
   ValidateNested,
   IsOptional,
