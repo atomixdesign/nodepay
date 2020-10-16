@@ -67,7 +67,7 @@ export class CustomerDTO {
   readonly ipAddress?: string;
 
   // TODO: troubleshoot @ValidateNested
-  @ValidateNested()
+  // @ValidateNested()
   readonly card?: CreditCardDTO;
 
   // @ValidateNested()
