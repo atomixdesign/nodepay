@@ -1,6 +1,6 @@
 {
   "name": "@atomixdesign/nodepay-paystream",
-  "version": "0.5.31",
+  "version": "0.5.32",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "license": "MIT",
@@ -65,7 +65,7 @@
     "typescript": "^3.9.3"
   },
   "dependencies": {
-    "@atomixdesign/nodepay-core": "^0.5.31",
+    "@atomixdesign/nodepay-core": "^0.5.32",
     "@types/debug": "^4.1.5",
     "axios": "^0.19.2",
     "class-validator": "^0.12.2",
