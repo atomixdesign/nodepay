@@ -5,22 +5,20 @@ import {
   Length,
   IsNumberString,
   IsIn,
-  ValidationOptions,
-  ValidateIf,
 } from 'class-validator'
+import { IsOptionalIfEmpty } from './IsOptionalIfEmpty'
 import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/validation'
 import { IEzidebitNewCreditCard } from '../../types'
 import moment from 'moment'
 
-export function IsOptionalIfEmpty(validationOptions?: ValidationOptions): PropertyDecorator {
-  return ValidateIf((_object, value) => {
-    return value !== null && value !== undefined && value !== ''
-  }, validationOptions)
-}
+import debug from 'debug'
+const log = debug('nodepay:ezidebit')
 
 /** @internal */
 export class CreditCardDTO {
   constructor(creditCard: IEzidebitNewCreditCard) {
+    log(`building ${this.constructor.name}`)
+    log({ creditCard })
     if (!creditCard.YourSystemReference)
       this.EziDebitCustomerID = creditCard.EziDebitCustomerID
     if (!creditCard.EziDebitCustomerID)

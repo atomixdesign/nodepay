@@ -2,12 +2,17 @@ import { IsOptional, IsNumberString, MaxLength, IsNotEmpty, IsNumber } from 'cla
 import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/validation'
 import { IEzidebitDirectDebitPayment } from '../../types'
 
+import debug from 'debug'
+const log = debug('nodepay:ezidebit')
+
 /** @internal */
 export class PaymentDTO {
   constructor(payment: IEzidebitDirectDebitPayment) {
-    if (payment.YourSystemReference === undefined)
+    log(`building ${this.constructor.name}`)
+    log({ payment })
+    if (!payment.YourSystemReference)
       this.EziDebitCustomerID = payment.EziDebitCustomerID
-    if (payment.EziDebitCustomerID === undefined)
+    if (!payment.EziDebitCustomerID)
       this.YourSystemReference = payment.YourSystemReference
     this.DebitDate = payment.DebitDate
     this.PaymentAmountInCents = payment.PaymentAmountInCents

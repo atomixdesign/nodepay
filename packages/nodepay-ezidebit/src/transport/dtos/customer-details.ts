@@ -14,9 +14,14 @@ import {
 } from '@atomixdesign/nodepay-core/build/validation'
 import { IEzidebitInternalCustomerDetails } from '../../types'
 
+import debug from 'debug'
+const log = debug('nodepay:ezidebit')
+
 /** @internal */
 export class CustomerDetailsDTO {
   constructor(customerDetails: IEzidebitInternalCustomerDetails) {
+    log(`building ${this.constructor.name}`)
+    log({ customerDetails })
     this.YourSystemReference = customerDetails.YourSystemReference
     this.NewYourSystemReference = customerDetails.NewYourSystemReference
     this.YourGeneralReference = customerDetails.YourGeneralReference

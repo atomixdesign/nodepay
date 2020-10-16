@@ -14,10 +14,15 @@ import {
 } from '@atomixdesign/nodepay-core/build/validation'
 import { IEzidebitCreditCardDebit } from '../../types'
 
+import debug from 'debug'
+const log = debug('nodepay:ezidebit')
+
 /** @internal */
 export class CardDebitDTO extends BaseDebitDTO {
   constructor(cardDebit: IEzidebitCreditCardDebit) {
     super(cardDebit)
+    log(`building ${this.constructor.name}`)
+    log({ cardDebit })
     this.NameOnCreditCard = cardDebit.NameOnCreditCard
     this.CreditCardNumber = cardDebit.CreditCardNumber
     this.CreditCardExpiryMonth = cardDebit.CreditCardExpiryMonth
