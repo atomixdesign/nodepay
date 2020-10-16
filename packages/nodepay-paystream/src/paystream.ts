@@ -50,6 +50,10 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
     customerDetails: PaystreamCustomerDetails,
     creditCard?: PaystreamCreditCard,
   ): Promise<IPaystreamAPIResponse> {
+    const address =
+      `${customerDetails.address1 ? ' ' + customerDetails.address1 : ''}
+      ${customerDetails.address2 ? ' ' + customerDetails.address2 : ''}`.trim()
+
     const customerObject = new CustomerDTO(
       {
         firstName: customerDetails.firstName,
@@ -60,7 +64,7 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
       },
       creditCard,
       {
-        address: `${customerDetails.address1}${customerDetails.address2 ? ' ' + customerDetails.address2 : ''}`.trim(),
+        address,
         city: customerDetails.city,
         state: customerDetails.state,
         postcode: customerDetails.postCode,
@@ -76,6 +80,10 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
     reference: string,
     customerDetails: PaystreamCustomerDetails,
   ): Promise<IPaystreamAPIResponse> {
+    const address =
+      `${customerDetails.address1 ? ' ' + customerDetails.address1 : ''}
+      ${customerDetails.address2 ? ' ' + customerDetails.address2 : ''}`.trim()
+
     const customerObject = new CustomerDTO(
       {
         firstName: customerDetails.firstName,
@@ -86,7 +94,7 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
       },
       undefined,
       {
-        address: `${customerDetails.address1}${customerDetails.address2 ? ' ' + customerDetails.address2 : ''}`.trim(),
+        address,
         city: customerDetails.city,
         state: customerDetails.state,
         postcode: customerDetails.postCode,
