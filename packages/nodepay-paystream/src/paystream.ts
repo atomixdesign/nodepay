@@ -50,9 +50,9 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
     customerDetails: PaystreamCustomerDetails,
     creditCard?: PaystreamCreditCard,
   ): Promise<IPaystreamAPIResponse> {
-    const address =
-      `${customerDetails.address1 ? ' ' + customerDetails.address1 : ''}
-      ${customerDetails.address2 ? ' ' + customerDetails.address2 : ''}`.trim()
+    const address = customerDetails.address1 ?
+      `${customerDetails.address1}
+      ${customerDetails.address2 ? ' ' + customerDetails.address2 : ''}`.trim() : customerDetails.address1
 
     const customerObject = new CustomerDTO(
       {
@@ -80,9 +80,9 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
     reference: string,
     customerDetails: PaystreamCustomerDetails,
   ): Promise<IPaystreamAPIResponse> {
-    const address =
-      `${customerDetails.address1 ? ' ' + customerDetails.address1 : ''}
-      ${customerDetails.address2 ? ' ' + customerDetails.address2 : ''}`.trim()
+    const address = customerDetails.address1 ?
+      `${customerDetails.address1}
+      ${customerDetails.address2 ? ' ' + customerDetails.address2 : ''}`.trim() : customerDetails.address1
 
     const customerObject = new CustomerDTO(
       {

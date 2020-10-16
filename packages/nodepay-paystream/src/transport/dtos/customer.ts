@@ -33,7 +33,7 @@ export class CustomerDTO {
       this.card = new CreditCardDTO(creditCard)
       validateSync(this.card as CreditCardDTO)
     }
-    if (address !== undefined) {
+    if (address !== undefined &&! Object.values(address).every(entry => entry === undefined)) {
       this.address = new AddressDTO(address)
       validateSync(this.address)
     }
