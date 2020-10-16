@@ -70,6 +70,7 @@
     "axios": "^0.19.2",
     "class-validator": "^0.12.2",
     "debug": "^4.2.0",
+    "moment": "^2.29.1",
     "typedi": "^0.8.0"
   },
   "gitHead": "3e7674271e5b60f90ffb670e90155124cb4e5e5b"

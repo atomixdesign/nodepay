@@ -12,6 +12,8 @@ import {
 import { PaystreamCreditCard } from '../../types'
 
 import debug from 'debug'
+import moment from 'moment'
+
 const log = debug('nodepay:paystream')
 
 /** @internal */
@@ -22,7 +24,7 @@ export class CreditCardDTO {
     this.card_number = creditCard.cardNumber
     this.card_holder = creditCard.cardHolderName
     this.cvv = creditCard.CCV
-    this.card_expiry = `${creditCard.expiryDateMonth}/${creditCard.expiryDateYear}`
+    this.card_expiry = `${creditCard.expiryDateMonth}/${moment(creditCard.expiryDateYear, 'YYYY').year()}`
   }
 
   // * card_number
