@@ -3,7 +3,7 @@ import {
   IsEmail,
   IsIP,
   IsOptional,
-  ValidateNested,
+  // ValidateNested,
 } from 'class-validator'
 import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/validation'
 
