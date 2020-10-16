@@ -59,11 +59,12 @@ export class CustomerDTO {
   readonly email: string;
 
   // * ipAddress
+  @IsOptional()
   @IsIP('4',
     {
       message: ErrorFactory.getErrorMessage(ErrorType.NotAValidIP, 'ipAddress')
     })
-  readonly ipAddress: string;
+  readonly ipAddress?: string;
 
   // TODO: troubleshoot @ValidateNested
   @ValidateNested()
