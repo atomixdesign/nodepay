@@ -54,7 +54,7 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
       {
         firstName: customerDetails.firstName,
         lastName: customerDetails.lastName,
-        reference: customerDetails.reference,
+        reference: customerDetails.reference ?? customerDetails.customerId,
         emailAddress: customerDetails.emailAddress,
         ipAddress: customerDetails.ipAddress,
       },
@@ -80,7 +80,7 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
       {
         firstName: customerDetails.firstName,
         lastName: customerDetails.lastName,
-        reference: customerDetails.reference,
+        reference: customerDetails.reference ?? customerDetails.customerId,
         emailAddress: customerDetails.emailAddress,
         ipAddress: customerDetails.ipAddress,
       },

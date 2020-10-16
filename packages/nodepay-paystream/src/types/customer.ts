@@ -16,6 +16,7 @@ export interface PaystreamCustomer extends ICustomerDetails {
   reference: string
   emailAddress: string
   ipAddress: string
+  customerId?: string
 }
 
 export class PaystreamCustomerDetails implements PaystreamCustomer {
@@ -30,6 +31,7 @@ export class PaystreamCustomerDetails implements PaystreamCustomer {
     public readonly state: string,
     public readonly postCode: string,
     public readonly country: string,
+    public readonly customerId?: string,
     public readonly address2?: string,
   ) {}
 }
