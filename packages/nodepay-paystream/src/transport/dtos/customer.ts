@@ -3,6 +3,7 @@ import {
   IsEmail,
   IsIP,
   IsOptional,
+  validateSync,
   // ValidateNested,
 } from 'class-validator'
 import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/validation'
@@ -28,10 +29,14 @@ export class CustomerDTO {
     this.reference = customer.reference
     this.email = customer.emailAddress
     this.ipAddress = customer.ipAddress
-    if (creditCard !== undefined)
+    if (creditCard !== undefined) {
       this.card = new CreditCardDTO(creditCard)
-    if (address !== undefined)
+      validateSync(this.card as CreditCardDTO)
+    }
+    if (address !== undefined) {
       this.address = new AddressDTO(address)
+      validateSync(this.address)
+    }
   }
 
   // * first_name
