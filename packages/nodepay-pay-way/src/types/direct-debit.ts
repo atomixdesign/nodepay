@@ -6,6 +6,5 @@ export class PaywayDirectDebit implements IDirectDebit {
     public readonly paymentReference: string,
     public readonly amountInCents: number,
     public readonly customerIpAddress?: string,
-    public readonly merchantId?: string,
   ) {}
 }

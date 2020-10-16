@@ -1,9 +1,19 @@
-import { IsNotEmpty, IsEmail, IsIP, ValidateNested } from 'class-validator'
+import {
+  IsNotEmpty,
+  IsEmail,
+  IsIP,
+  IsOptional,
+  validateSync,
+  // ValidateNested,
+} from 'class-validator'
 import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/validation'
 
 import { PaystreamCustomer, PaystreamCreditCard, PaystreamAddress } from '../../types'
 import { CreditCardDTO } from './credit-card'
 import { AddressDTO } from './address'
+
+import debug from 'debug'
+const log = debug('nodepay:paystream')
 
 /** @internal */
 export class CustomerDTO {
@@ -12,15 +22,21 @@ export class CustomerDTO {
     creditCard?: PaystreamCreditCard,
     address?: PaystreamAddress,
   ) {
+    log(`building ${this.constructor.name}`)
+    log({ customer })
     this.first_name = customer.firstName
     this.last_name = customer.lastName
     this.reference = customer.reference
     this.email = customer.emailAddress
     this.ipAddress = customer.ipAddress
-    if (creditCard !== undefined)
+    if (creditCard !== undefined) {
       this.card = new CreditCardDTO(creditCard)
-    if (address !== undefined)
+      validateSync(this.card as CreditCardDTO)
+    }
+    if (address !== undefined &&! Object.values(address).every(entry => entry === undefined)) {
       this.address = new AddressDTO(address)
+      validateSync(this.address)
+    }
   }
 
   // * first_name
@@ -48,15 +64,18 @@ export class CustomerDTO {
   readonly email: string;
 
   // * ipAddress
+  @IsOptional()
   @IsIP('4',
     {
       message: ErrorFactory.getErrorMessage(ErrorType.NotAValidIP, 'ipAddress')
     })
-  readonly ipAddress: string;
+  readonly ipAddress?: string;
 
-  @ValidateNested()
-  readonly card: CreditCardDTO | undefined;
+  // TODO: troubleshoot @ValidateNested
+  // @ValidateNested()
+  readonly card?: CreditCardDTO;
 
-  @ValidateNested()
-  readonly address: AddressDTO | undefined;
+  // @ValidateNested()
+  @IsOptional()
+  readonly address?: AddressDTO;
 }

@@ -9,9 +9,15 @@ import {
 } from '@atomixdesign/nodepay-core/build/validation'
 import { IPaywayInternalCustomerPaymentDetails } from '../../types'
 
+import debug from 'debug'
+const log = debug('nodepay:pay-way')
+
 /** @internal */
 export class PaymentDetailsDTO {
   constructor(customer: IPaywayInternalCustomerPaymentDetails) {
+    log(`building ${this.constructor.name}`)
+    log({ customer })
+
     this.singleUseTokenId = customer.singleUseTokenId
     this.merchantId = customer.merchantId
     this.bankAccountId = customer.bankAccountId

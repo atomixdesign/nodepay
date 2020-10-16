@@ -11,11 +11,17 @@ import {
 
 import { PaywayPaymentFrequency, IPaywayInternalPaymentSchedule } from '../../types'
 
+import debug from 'debug'
+const log = debug('nodepay:pay-way')
+
 /** @internal */
 export class PaymentScheduleDTO {
   constructor(
     paymentSchedule: IPaywayInternalPaymentSchedule
   ) {
+    log(`building ${this.constructor.name}`)
+    log({ paymentSchedule })
+
     this.frequency = paymentSchedule.frequency
     this.nextPaymentDate = paymentSchedule.nextPaymentDate
     this.regularPrincipalAmount = paymentSchedule.regularPrincipalAmount

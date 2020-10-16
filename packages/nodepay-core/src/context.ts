@@ -32,9 +32,17 @@ export class Context implements
     this.gateway = adapter
   }
 
+  public get name(): string {
+    return this.gateway.name
+  }
+
+  public get shortName(): string {
+    return this.gateway.shortName
+  }
+
   private dispatch(methodName: string, arguments_: any) {
     if (_hasOwnProperty(this.gateway.__proto__, methodName)) {
-      return this.gateway.__proto__[methodName](...arguments_)
+      return this.gateway.__proto__[methodName].apply(this.gateway, Object.values(arguments_))
     }
 
     throw new Error(`Method not implemented: ${methodName}, class ${this.gateway.constructor.name}`)

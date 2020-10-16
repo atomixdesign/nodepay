@@ -4,7 +4,6 @@ import { Paystream } from '../paystream'
 import { PaystreamAPI, testAPI, IPaystreamAPIResponse } from '../transport'
 import { PaystreamPaymentFrequency } from '../types'
 
-
 const fixtures = {
   customer: {
     firstName: 'John',
@@ -54,10 +53,10 @@ const fixtures = {
     isActive: true
   },
   address: {
-    address: 'Address',
+    address1: 'Address',
     city: 'Adelaide',
     state: 'SA',
-    postcode: '5799',
+    postCode: '5799',
     country: 'Australia',
   },
 }

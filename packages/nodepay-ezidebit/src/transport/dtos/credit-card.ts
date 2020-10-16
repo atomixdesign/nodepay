@@ -1,22 +1,37 @@
-import { IsNotEmpty, IsCreditCard, MaxLength, Length, IsNumberString, IsIn } from 'class-validator'
+import {
+  IsNotEmpty,
+  IsCreditCard,
+  MaxLength,
+  Length,
+  IsNumberString,
+  IsIn,
+} from 'class-validator'
+import { IsOptionalIfEmpty } from './IsOptionalIfEmpty'
 import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/validation'
 import { IEzidebitNewCreditCard } from '../../types'
+import moment from 'moment'
+
+import debug from 'debug'
+const log = debug('nodepay:ezidebit')
 
 /** @internal */
 export class CreditCardDTO {
   constructor(creditCard: IEzidebitNewCreditCard) {
-    if (creditCard.YourSystemReference === undefined)
+    log(`building ${this.constructor.name}`)
+    log({ creditCard })
+    if (!creditCard.YourSystemReference)
       this.EziDebitCustomerID = creditCard.EziDebitCustomerID
-    if (creditCard.EziDebitCustomerID === undefined)
+    if (!creditCard.EziDebitCustomerID)
       this.YourSystemReference = creditCard.YourSystemReference
     this.CreditCardNumber = creditCard.CreditCardNumber
     this.CreditCardExpiryMonth = creditCard.CreditCardExpiryMonth
-    this.CreditCardExpiryYear = creditCard.CreditCardExpiryYear
+    this.CreditCardExpiryYear = moment(creditCard.CreditCardExpiryYear, 'YYYY').year().toString()
     this.NameOnCreditCard = creditCard.NameOnCreditCard
     this.Reactivate = creditCard.Reactivate ?? 'YES'
-    this.Username = creditCard.Username
+    this.Username = creditCard.Username ?? ''
   }
   // * EziDebitCustomerID
+  @IsOptionalIfEmpty()
   @IsNumberString(undefined, {
     message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'EziDebitCustomerID')
   })

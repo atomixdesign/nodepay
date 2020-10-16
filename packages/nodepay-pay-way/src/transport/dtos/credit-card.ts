@@ -11,9 +11,14 @@ import {
 } from '@atomixdesign/nodepay-core/build/validation'
 import { PaywayCreditCard } from '../../types'
 
+import debug from 'debug'
+const log = debug('nodepay:pay-way')
+
 /** @internal */
 export class CreditCardDTO {
   constructor(creditCard: PaywayCreditCard) {
+    log(`building ${this.constructor.name}`)
+    log({ creditCard })
     this.paymentMethod = 'creditCard'
     this.cardNumber = creditCard.cardNumber
     this.cardholderName = creditCard.cardHolderName

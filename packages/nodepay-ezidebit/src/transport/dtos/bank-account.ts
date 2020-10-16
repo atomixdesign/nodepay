@@ -1,13 +1,19 @@
 import { IsNotEmpty, MaxLength, IsNumberString, IsIn } from 'class-validator'
 import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/validation'
 import { IEzidebitNewBankAccount } from '../../types'
+import { IsOptionalIfEmpty } from './IsOptionalIfEmpty'
+
+import debug from 'debug'
+const log = debug('nodepay:ezidebit')
 
 /** @internal */
 export class BankAccountDTO {
   constructor(bankAccount: IEzidebitNewBankAccount) {
-    if (bankAccount.YourSystemReference === undefined)
+    log(`building ${this.constructor.name}`)
+    log({ bankAccount })
+    if (!bankAccount.YourSystemReference)
       this.EziDebitCustomerID = bankAccount.EziDebitCustomerID
-    if (bankAccount.EziDebitCustomerID === undefined)
+    if (!bankAccount.EziDebitCustomerID)
       this.YourSystemReference = bankAccount.YourSystemReference
     this.BankAccountName = bankAccount.BankAccountName
     this.BankAccountBSB = bankAccount.BankAccountBSB
@@ -16,6 +22,7 @@ export class BankAccountDTO {
     this.Username = bankAccount.Username
   }
   // * EziDebitCustomerID
+  @IsOptionalIfEmpty()
   @IsNumberString(undefined, {
     message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'EziDebitCustomerID')
   })

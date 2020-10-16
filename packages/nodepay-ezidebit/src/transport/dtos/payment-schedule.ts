@@ -1,13 +1,19 @@
 import { IsOptional, IsNumberString, MaxLength, IsNumber, IsNotEmpty, IsIn } from 'class-validator'
+import { IsOptionalIfEmpty } from './IsOptionalIfEmpty'
 import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/validation'
 import { IEzidebitInternalPaymentSchedule, EzidebitPaymentFrequency, EzidebitDayOfWeek } from '../../types'
+
+import debug from 'debug'
+const log = debug('nodepay:ezidebit')
 
 /** @internal */
 export class PaymentScheduleDTO {
   constructor(paymentSchedule: IEzidebitInternalPaymentSchedule) {
-    if (paymentSchedule.YourSystemReference === undefined)
+    log(`building ${this.constructor.name}`)
+    log({ paymentSchedule })
+    if (!paymentSchedule.YourSystemReference)
       this.EziDebitCustomerID = paymentSchedule.EziDebitCustomerID
-    if (paymentSchedule.EziDebitCustomerID === undefined)
+    if (!paymentSchedule.EziDebitCustomerID)
       this.YourSystemReference = paymentSchedule.YourSystemReference
     this.ScheduleStartDate = paymentSchedule.ScheduleStartDate
     this.SchedulePeriodType = paymentSchedule.SchedulePeriodType
@@ -24,7 +30,7 @@ export class PaymentScheduleDTO {
     this.Username = paymentSchedule.Username
   }
   // * EziDebitCustomerID
-  @IsOptional()
+  @IsOptionalIfEmpty()
   @IsNumberString(undefined, {
     message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'EziDebitCustomerID')
   })

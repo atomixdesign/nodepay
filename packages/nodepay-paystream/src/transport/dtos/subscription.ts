@@ -2,9 +2,14 @@ import { IsNotEmpty } from 'class-validator'
 import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/validation'
 import { PaystreamPaymentFrequency, PaystreamSubscription } from '../../types'
 
+import debug from 'debug'
+const log = debug('nodepay:paystream')
+
 /** @internal */
 export class SubscriptionDTO {
   constructor(subscription: PaystreamSubscription) {
+    log(`building ${this.constructor.name}`)
+    log({ subscription })
     this.customer = subscription.customer
     this.plan = subscription.plan
     this.frequency = subscription.frequency

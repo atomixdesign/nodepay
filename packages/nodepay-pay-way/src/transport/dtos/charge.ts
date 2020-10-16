@@ -13,9 +13,14 @@ import {
 } from '@atomixdesign/nodepay-core/build/validation'
 import { IPaywayInternalCharge } from '../../types'
 
+import debug from 'debug'
+const log = debug('nodepay:pay-way')
+
 /** @internal */
 export class ChargeDTO {
   constructor(charge: IPaywayInternalCharge) {
+    log(`building ${this.constructor.name}`)
+    log({ charge })
     this.customerNumber = charge.customerId
     this.transactionType = 'payment'
     this.principalAmount = charge.principalAmount

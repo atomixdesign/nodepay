@@ -17,6 +17,7 @@ import {
   PaymentDetailsDTO,
 } from './dtos'
 
+
 @Service('payway.api')
 export class PaywayAPI {
   private idempotencyKey: string

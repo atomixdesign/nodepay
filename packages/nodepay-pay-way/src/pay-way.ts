@@ -67,12 +67,7 @@ export class Payway extends BaseGateway<PaywayConfig> implements
     creditCard?: PaywayCreditCard,
     bankAccount?: PaywayBankAccount,
   ): Promise<IPaywayAPIResponse> {
-    const customerObject = new CustomerDTO({
-      ...customerDetails,
-    })
-
-    await validateOrReject(customerObject)
-    const result = await this.api.addCustomer(customerObject)
+    let singleUseTokenId: string | undefined
 
     try {
       if (creditCard !== undefined) {
@@ -82,46 +77,30 @@ export class Payway extends BaseGateway<PaywayConfig> implements
 
         await validateOrReject(creditCardObject)
         const ccResponse = await this.api.getCCtoken(creditCardObject)
-        const token = ccResponse?.data?.singleUseTokenId
-
-        const paymentDetailsObject = new PaymentDetailsDTO({
-          singleUseTokenId: token,
-          merchantId: this.config.merchantId,
-        })
-        await validateOrReject(paymentDetailsObject)
-
-        await this.api.updateCustomerPayment(
-          customerDetails.customerId,
-          paymentDetailsObject,
-        )
-      }
-
-      if (bankAccount !== undefined) {
+        singleUseTokenId = ccResponse?.data?.singleUseTokenId
+      } else if (bankAccount !== undefined) {
         const bankAccountObject = new BankAccountDTO({
           ...bankAccount,
         })
 
         await validateOrReject(bankAccountObject)
         const bankAccountResponse = await this.api.getBankAccountToken(bankAccountObject)
-        const token = bankAccountResponse?.data?.singleUseTokenId
-
-        const paymentDetailsObject = new PaymentDetailsDTO({
-          singleUseTokenId: token,
-          bankAccountId: this.config.bankAccountId,
-        })
-        await validateOrReject(paymentDetailsObject)
-
-        await this.api.updateCustomerPayment(
-          customerDetails.customerId,
-          paymentDetailsObject,
-        )
+        singleUseTokenId = bankAccountResponse?.data?.singleUseTokenId
       }
-
     } catch (error) {
-      console.error(error)
+      throw new Error(error)
     }
 
-    return result
+    const customerObject = new CustomerDTO({
+      ...customerDetails,
+      singleUseTokenId: singleUseTokenId ?? customerDetails.singleUseTokenId,
+      // TODO: deprecate merchantId and bankAccountId in params
+      merchantId: this.config.merchantId,
+      bankAccountId: this.config.bankAccountId,
+    })
+
+    await validateOrReject(customerObject)
+    return this.api.addCustomer(customerObject)
   }
 
   async updateCustomer(
@@ -204,8 +183,6 @@ export class Payway extends BaseGateway<PaywayConfig> implements
       orderNumber: directDebitCharge.paymentReference,
       principalAmount: directDebitCharge.amountInCents / 100,
       customerIpAddress: directDebitCharge?.customerIpAddress,
-      merchantId: directDebitCharge?.merchantId,
-      // bankAccountId,
     })
 
     await validateOrReject(chargeObject)
@@ -221,7 +198,6 @@ export class Payway extends BaseGateway<PaywayConfig> implements
       principalAmount: onceOffCharge.amountInCents / 100,
       orderNumber: onceOffCharge.orderNumber,
       customerIpAddress: onceOffCharge?.customerIpAddress,
-      merchantId: onceOffCharge?.merchantId,
     })
     let singleUseTokenId = onceOffCharge?.singleUseTokenId
 
