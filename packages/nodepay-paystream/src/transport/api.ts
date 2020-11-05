@@ -32,7 +32,7 @@ export class PaystreamAPI {
     })
   }
 
-  private async _request(method: 'post' | 'put', endpoint: string, payload: any): Promise<IPaystreamAPIResponse> {
+  private async _request(method: 'get' | 'put' | 'post', endpoint: string, payload: any): Promise<IPaystreamAPIResponse> {
     let response
     try {
       response = await this.httpClient!.request({
@@ -56,12 +56,16 @@ export class PaystreamAPI {
     }
   }
 
-  private async _post(endpoint: string, payload: any): Promise<IPaystreamAPIResponse> {
-    return this._request('post', endpoint, payload)
+  private async _get(endpoint: string, payload?: any): Promise<IPaystreamAPIResponse> {
+    return this._request('get', endpoint, payload)
   }
 
   private async _put(endpoint: string, payload: any): Promise<IPaystreamAPIResponse> {
     return this._request('put', endpoint, payload)
+  }
+
+  private async _post(endpoint: string, payload: any): Promise<IPaystreamAPIResponse> {
+    return this._request('post', endpoint, payload)
   }
 
   async getCCtoken(creditCard: CreditCardDTO): Promise<IPaystreamAPIResponse> {
@@ -74,6 +78,10 @@ export class PaystreamAPI {
 
   async updateCustomer(reference: string, customer: CustomerDTO): Promise<IPaystreamAPIResponse> {
     return this._put(`/customers/${reference}.json`, customer)
+  }
+
+  async listPlans(): Promise<IPaystreamAPIResponse> {
+    return this._get('/plans')
   }
 
   async addPlan(plan: PlanDTO): Promise<IPaystreamAPIResponse> {

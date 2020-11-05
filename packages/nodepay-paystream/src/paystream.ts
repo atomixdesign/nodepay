@@ -125,4 +125,8 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
     await validateOrReject(subscriptionObject)
     return this.api.addSubscription(subscriptionObject)
   }
+
+  async listPlans(): Promise<IPaystreamAPIResponse> {
+    return this.api.listPlans()
+  }
 }
