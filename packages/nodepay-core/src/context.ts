@@ -123,7 +123,7 @@ export class Context implements
 function augmentWithNoSuchMethod(object: any) {
   return new Proxy(object, {
     get(target, p) {
-      if (p in target) {
+      if (p in target || p in new Promise(() => {})) {
         return target[p]
       } else if (typeof target.__noSuchMethod__ == 'function') {
         return function(...arguments_: any) {
