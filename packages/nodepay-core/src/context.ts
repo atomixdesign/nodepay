@@ -19,13 +19,16 @@ const log = debug('nodepay:core')
 const _hasOwnProperty = (object: any, methodName: string) => {
   return Object.prototype.hasOwnProperty.call(object, methodName)
 }
-class BaseContext implements
+export class Context implements
   CustomerDetails,
   DirectDebit,
   OnceOffPayment,
   RecurringPayment
 {
-  constructor(private gateway?: any) {}
+  [x: string]: any
+  constructor(private gateway?: any) {
+    return augmentWithNoSuchMethod(this)
+  }
 
   public use(adapter: any): void {
     this.gateway = adapter
@@ -130,5 +133,3 @@ function augmentWithNoSuchMethod(object: any) {
     }
   })
 }
-
-export const Context = augmentWithNoSuchMethod(BaseContext)
