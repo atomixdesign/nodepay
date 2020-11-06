@@ -12,9 +12,10 @@ import {
   PaystreamSubscription,
   PaystreamCreditCard,
   PaystreamCustomerDetails,
+  PaystreamPaymentPlan,
 } from './types'
 import { IPaystreamAPIResponse } from './transport'
-import { ChargeDTO, CustomerDTO, SubscriptionDTO } from './transport/dtos'
+import { ChargeDTO, CustomerDTO, PlanDTO, SubscriptionDTO } from './transport/dtos'
 import { PaystreamAPI } from './transport/api'
 
 export class Paystream extends BaseGateway<PaystreamConfig> implements
@@ -128,5 +129,11 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
 
   async listPlans(): Promise<IPaystreamAPIResponse> {
     return this.api.listPlans()
+  }
+
+  async createPlan(paymentPlan: PaystreamPaymentPlan): Promise<IPaystreamAPIResponse> {
+    const planObject = new PlanDTO(paymentPlan)
+    await validateOrReject(planObject)
+    return this.api.addPlan(planObject)
   }
 }
