@@ -10,7 +10,7 @@ export class SubscriptionDTO {
   constructor(subscription: PaystreamSubscription) {
     log(`building ${this.constructor.name}`)
     log({ subscription })
-    this.customer = subscription.customer
+    this.customer = subscription.customerId
     this.plan = subscription.plan
     this.frequency = subscription.frequency
     this.start_date = subscription.startDate
