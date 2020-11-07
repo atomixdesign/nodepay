@@ -56,7 +56,7 @@ const fixtures = {
     description: 'This is a test plan.',
   },
   subscription: {
-    customer: '',
+    customerId: '',
     plan: '',
     frequency: PaystreamPaymentFrequency.Weekly,
     startDate: '2027-05-09',
@@ -125,7 +125,7 @@ describe('test paystream api transport', () => {
     const customerResponse: IPaystreamAPIResponse = await api.addCustomer(customer)
 
     const subscriptionObject = fixtures.subscription
-    subscriptionObject.customer = customerResponse?.data?.id as string
+    subscriptionObject.customerId = customerResponse?.data?.id as string
     subscriptionObject.plan = planReference
 
     const subscription = new SubscriptionDTO(subscriptionObject)
