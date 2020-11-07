@@ -37,7 +37,7 @@ const fixtures = {
     customerIp: 'incorrectIp',
   },
   subscription: {
-    customer: 'customerRef',
+    customerId: 'customerRef',
     plan: 'planRef',
     frequency: PaystreamPaymentFrequency.Weekly,
     startDate: '2027-05-09',
@@ -45,7 +45,7 @@ const fixtures = {
     isActive: true
   },
   subscriptionBad: {
-    customer: '',
+    customerId: '',
     plan: '',
     frequency: PaystreamPaymentFrequency.Weekly,
     startDate: 'incorrectDate',
