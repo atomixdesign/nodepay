@@ -19,14 +19,16 @@ const log = debug('nodepay:core')
 const _hasOwnProperty = (object: any, methodName: string) => {
   return Object.prototype.hasOwnProperty.call(object, methodName)
 }
-
 export class Context implements
   CustomerDetails,
   DirectDebit,
   OnceOffPayment,
   RecurringPayment
 {
-  constructor(private gateway?: any) {}
+  [x: string]: any
+  constructor(private gateway?: any) {
+    return augmentWithNoSuchMethod(this)
+  }
 
   public use(adapter: any): void {
     this.gateway = adapter
@@ -107,4 +109,27 @@ export class Context implements
       ...arguments_
     })
   }
+
+  __noSuchMethod__(name: string, arguments_: any): any {
+    log('warning: no such method on standard interface')
+    log(`non-standard method ${name} called on ${this.gateway.constructor.name}`)
+    log('attempting dispatch')
+    return this.dispatch(name, {
+      ...arguments_,
+    })
+  }
+}
+
+function augmentWithNoSuchMethod(object: any) {
+  return new Proxy(object, {
+    get(target, p) {
+      if (p in target || p in new Promise(() => {})) {
+        return target[p]
+      } else if (typeof target.__noSuchMethod__ == 'function') {
+        return function(...arguments_: any) {
+          return target.__noSuchMethod__.call(target, p, arguments_)
+        }
+      }
+    }
+  })
 }

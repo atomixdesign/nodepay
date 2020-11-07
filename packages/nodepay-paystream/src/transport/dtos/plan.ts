@@ -8,14 +8,14 @@ import {
   ErrorFactory,
 } from '@atomixdesign/nodepay-core/build/validation'
 
-import { IPaystreamInternalPlan } from '../../types'
+import { PaystreamPaymentPlan } from '../../types'
 
 import debug from 'debug'
 const log = debug('nodepay:paystream')
 
 /** @internal */
 export class PlanDTO {
-  constructor(plan: IPaystreamInternalPlan) {
+  constructor(plan: PaystreamPaymentPlan) {
     log(`building ${this.constructor.name}`)
     log({ plan })
     this.name = plan.name
