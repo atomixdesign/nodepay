@@ -15,6 +15,7 @@ import {
 import { IEzidebitInternalCustomer } from '../../types'
 
 import debug from 'debug'
+import { IsOptionalIfEmpty } from './IsOptionalIfEmpty'
 const log = debug('nodepay:ezidebit')
 
 /** @internal */
@@ -66,42 +67,42 @@ export class CustomerDTO {
   LastName: string;
 
   // * FirstName
-  @IsOptional()
+  @IsOptionalIfEmpty()
   @MaxLength(30, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'FirstName')
   })
   FirstName: string | undefined;
 
   // * AddressLine1
-  @IsOptional()
+  @IsOptionalIfEmpty()
   @MaxLength(30, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'AddressLine1')
   })
   AddressLine1: string | undefined;
 
   // * AddressLine2
-  @IsOptional()
+  @IsOptionalIfEmpty()
   @MaxLength(30, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'AddressLine2')
   })
   AddressLine2: string | undefined;
 
   // * AddressSuburb
-  @IsOptional()
+  @IsOptionalIfEmpty()
   @MaxLength(20, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'AddressSuburb')
   })
   AddressSuburb: string | undefined;
 
   // * AddressState
-  @IsOptional()
+  @IsOptionalIfEmpty()
   @MaxLength(3, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'AddressState')
   })
   AddressState: string | undefined;
 
   // * AddressPostCode
-  @IsOptional()
+  @IsOptionalIfEmpty()
   @IsNumberString(undefined, {
     message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'AddressPostCode')
   })
@@ -111,7 +112,7 @@ export class CustomerDTO {
   AddressPostCode: string | undefined;
 
   // * EmailAddress
-  @IsOptional()
+  @IsOptionalIfEmpty()
   @MaxLength(255, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'EmailAddress')
   })
@@ -121,7 +122,7 @@ export class CustomerDTO {
   EmailAddress: string | undefined;
 
   // * MobilePhoneNumber
-  @IsOptional()
+  @IsOptionalIfEmpty()
   @MaxLength(10, {
     message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'MobilePhoneNumber')
   })
