@@ -1,5 +1,5 @@
 import { IFatzebraAPIResponse } from './api-response'
-import { CustomerDTO, ChargeDTO, SubscriptionDTO, } from './dtos'
+import { CustomerDTO, ChargeDTO, PaymentPlanDTO, } from './dtos'
 
 /** @internal */
 export const MockResponse = {
@@ -31,7 +31,7 @@ export class testAPI {
     return Promise.resolve(MockResponse)
   }
 
-  async addSubscription(_subscription: SubscriptionDTO): Promise<IFatzebraAPIResponse> {
+  async addPaymentPlan(_subscription: PaymentPlanDTO): Promise<IFatzebraAPIResponse> {
     return Promise.resolve(MockResponse)
   }
 }

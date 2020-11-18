@@ -9,13 +9,17 @@ import {
 import {
   FatzebraConfig,
   FatzebraCharge,
-  FatzebraSubscription,
+  FatzebraPaymentPlan,
   FatzebraCreditCard,
   FatzebraCustomerDetails,
-  FatzebraPaymentPlan,
+  FatzebraBankAccount,
 } from './types'
 import { IFatzebraAPIResponse } from './transport'
-import { ChargeDTO, CustomerDTO, PlanDTO, SubscriptionDTO } from './transport/dtos'
+import {
+  ChargeDTO,
+  CustomerDTO,
+  PaymentPlanDTO,
+} from './transport/dtos'
 import { FatzebraAPI } from './transport/api'
 
 export class Fatzebra extends BaseGateway<FatzebraConfig> implements
@@ -49,7 +53,8 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
 
   async addCustomer(
     customerDetails: FatzebraCustomerDetails,
-    creditCard?: FatzebraCreditCard,
+    creditCard?: FatzebraCreditCard | string,
+    bankAccount?: FatzebraBankAccount,
   ): Promise<IFatzebraAPIResponse> {
     const address = customerDetails.address1 ?
       `${customerDetails.address1}
@@ -64,6 +69,7 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
         ipAddress: customerDetails.ipAddress,
       },
       creditCard,
+      bankAccount,
       {
         address,
         city: customerDetails.city,
@@ -80,6 +86,8 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
   async updateCustomer(
     reference: string,
     customerDetails: FatzebraCustomerDetails,
+    creditCard?: FatzebraCreditCard | string,
+    bankAccount?: FatzebraBankAccount,
   ): Promise<IFatzebraAPIResponse> {
     const address = customerDetails.address1 ?
       `${customerDetails.address1}
@@ -93,7 +101,8 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
         emailAddress: customerDetails.emailAddress,
         ipAddress: customerDetails.ipAddress,
       },
-      undefined,
+      creditCard,
+      bankAccount,
       {
         address,
         city: customerDetails.city,
@@ -120,20 +129,19 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
   }
 
   async chargeRecurring(
-    subscription: FatzebraSubscription,
-  ): Promise<IFatzebraAPIResponse> {
-    const subscriptionObject = new SubscriptionDTO(subscription)
+    subscription: FatzebraPaymentPlan,
+  ): Promise<IFatzebraAPIResponse | undefined> {
+    const customerProfile = await this.api.getCustomer(subscription.customerId)
+    if (customerProfile?.data?.card_token) {
+      subscription.paymentMethod = 'Credit Card'
+    } else if (customerProfile?.data?.bank_account) {
+      subscription.paymentMethod = 'Direct Debit'
+    }
+
+    const subscriptionObject = new PaymentPlanDTO(subscription)
     await validateOrReject(subscriptionObject)
-    return this.api.addSubscription(subscriptionObject)
-  }
 
-  async listPlans(): Promise<IFatzebraAPIResponse> {
-    return this.api.listPlans()
-  }
-
-  async createPlan(paymentPlan: FatzebraPaymentPlan): Promise<IFatzebraAPIResponse> {
-    const planObject = new PlanDTO(paymentPlan)
-    await validateOrReject(planObject)
-    return this.api.addPlan(planObject)
+    return this.api.addPaymentPlan(subscriptionObject)
+    return
   }
 }

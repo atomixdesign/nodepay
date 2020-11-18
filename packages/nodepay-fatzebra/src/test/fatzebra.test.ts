@@ -99,7 +99,7 @@ describe('test fatzebra gateway', () => {
     })
   })
 
-  test('it can create a subscription', async () => {
+  /* test('it can create a subscription', async () => {
     const response: IFatzebraAPIResponse = await gateway.chargeRecurring(
       fixtures.subscription
     )
@@ -113,7 +113,7 @@ describe('test fatzebra gateway', () => {
       expect(typeof error).toBe('object')
       return error
     })
-  })
+  }) */
 
   test('it can create a customer', async () => {
     const response: IFatzebraAPIResponse = await gateway.addCustomer(

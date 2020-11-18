@@ -8,11 +8,10 @@ import { IFatzebraAPIResponse } from './api-response'
 import {
   ChargeDTO,
   CreditCardDTO,
-  PlanDTO,
   CustomerDTO,
   BankAccountDTO,
 } from './dtos'
-import { SubscriptionDTO } from './dtos/subscription'
+import { PaymentPlanDTO } from './dtos/payment-plan'
 
 @Service('fatzebra.api')
 export class FatzebraAPI {
@@ -77,6 +76,10 @@ export class FatzebraAPI {
     return this._post('/bank_accounts', bankAccount)
   }
 
+  async getCustomer(reference: string): Promise<IFatzebraAPIResponse> {
+    return this._get(`/customers/${reference}`)
+  }
+
   async addCustomer(customer: CustomerDTO): Promise<IFatzebraAPIResponse> {
     return this._post('/customers', customer)
   }
@@ -85,16 +88,8 @@ export class FatzebraAPI {
     return this._put(`/customers/${reference}.json`, customer)
   }
 
-  async listPlans(): Promise<IFatzebraAPIResponse> {
-    return this._get('/plans')
-  }
-
-  async addPlan(plan: PlanDTO): Promise<IFatzebraAPIResponse> {
-    return this._post('/plans', plan)
-  }
-
-  async addSubscription(subscription: SubscriptionDTO): Promise<IFatzebraAPIResponse> {
-    return this._post('/subscriptions', subscription)
+  async addPaymentPlan(subscription: PaymentPlanDTO): Promise<IFatzebraAPIResponse> {
+    return this._post('/payment_plans', subscription)
   }
 
   async placeCharge(charge: ChargeDTO): Promise<IFatzebraAPIResponse> {

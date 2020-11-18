@@ -7,6 +7,6 @@ export {
   FatzebraCharge as Charge,
   FatzebraCreditCard as CreditCard,
   FatzebraCustomer as Customer,
+  // FatzebraPaymentPlan as PaymentPlan,
   FatzebraPaymentPlan as PaymentPlan,
-  FatzebraSubscription as Subscription,
 } from './types'
