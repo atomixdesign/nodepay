@@ -9,8 +9,10 @@ import {
   CustomerDTO,
   // PaymentPlanDTO,
   BankAccountDTO,
+  PaymentPlanDTO,
 } from '../dtos'
 import { FatzebraPaymentFrequency } from '../../types'
+import { DirectDebitDTO } from '../dtos/direct-debit'
 
 const validCodes = [
   200,
@@ -49,19 +51,11 @@ const fixtures = {
     orderNumber: cryptoRandomString({ length: 32 }),
     customerIp: '169.254.169.254',
   },
-  plan: {
-    name: 'Test Plan',
-    amount: 1000,
-    reference: cryptoRandomString({ length: 32 }),
-    description: 'This is a test plan.',
-  },
   subscription: {
     customerId: '',
-    plan: '',
+    amountInCents: 1000,
     frequency: FatzebraPaymentFrequency.Weekly,
     startDate: '2027-05-09',
-    reference: cryptoRandomString({ length: 32 }),
-    isActive: true
   },
 }
 
@@ -100,7 +94,20 @@ describe('test fatzebra api transport', () => {
     expect(validCodes).toContain(response.status)
   })
 
-  test('it can add a customer', async () => {
+  test('it can add a customer with a credit card', async () => {
+    const customer = new CustomerDTO(
+      { ...fixtures.customer, ...{ reference: cryptoRandomString({ length: 32 }) } },
+      fixtures.creditCard,
+      fixtures.bankAccount1,
+      fixtures.address,
+    )
+
+    const response: IFatzebraAPIResponse = await api.addCustomer(customer)
+
+    expect(validCodes).toContain(response.status)
+  })
+
+  test('it can add a customer with a bank account', async () => {
     const customer = new CustomerDTO(
       { ...fixtures.customer, ...{ reference: cryptoRandomString({ length: 32 }) } },
       undefined, // fixtures.creditCard,
@@ -110,17 +117,10 @@ describe('test fatzebra api transport', () => {
 
     const response: IFatzebraAPIResponse = await api.addCustomer(customer)
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    // console.log(require('util').inspect({ customer, response }, { depth: 10 }))
-
     expect(validCodes).toContain(response.status)
   })
 
-  /* test('it can add a subscription', async () => {
-    const planReference = cryptoRandomString({ length: 32 })
-    const plan = new PlanDTO({ ...fixtures.plan, ...{ reference: planReference } })
-    await api.addPlan(plan)
-
+  test('it can add a subscription using a credit card', async () => {
     const customer = new CustomerDTO(
       { ...fixtures.customer, ...{ reference: cryptoRandomString({ length: 32 }) } },
       fixtures.creditCard,
@@ -129,15 +129,39 @@ describe('test fatzebra api transport', () => {
     )
     const customerResponse: IFatzebraAPIResponse = await api.addCustomer(customer)
 
-    const subscriptionObject = fixtures.subscription
-    subscriptionObject.customerId = customerResponse?.data?.id as string
-    subscriptionObject.plan = planReference
-
-    const subscription = new PaymentPlanDTO(subscriptionObject)
+    const subscription = new PaymentPlanDTO({
+      ...fixtures.subscription,
+      customerId: customerResponse?.data?.id,
+      paymentMethod: 'Credit Card',
+    })
     const response: IFatzebraAPIResponse = await api.addPaymentPlan(subscription)
 
     expect(validCodes).toContain(response.status)
-  }) */
+  })
+
+  test('it can add a subscription using a bank account', async () => {
+    const customer = new CustomerDTO(
+      {
+        ...fixtures.customer,
+        firstName: 'John',
+        ...{ reference: cryptoRandomString({ length: 32 }) },
+      },
+      undefined,
+      fixtures.bankAccount1,
+      fixtures.address,
+    )
+    const customerResponse: IFatzebraAPIResponse = await api.addCustomer(customer)
+
+    const subscription = new PaymentPlanDTO({
+      ...fixtures.subscription,
+      customerId: customerResponse?.data?.id,
+      paymentMethod: 'Direct Debit',
+    })
+    const response: IFatzebraAPIResponse = await api.addPaymentPlan(subscription)
+
+    expect(validCodes).toContain(response.status)
+  })
+
 
   test('it can retrieve a customer', async () => {
     const reference = cryptoRandomString({ length: 32 })
@@ -151,9 +175,6 @@ describe('test fatzebra api transport', () => {
     const id = customerResponse?.data?.id as string
 
     const customerProfile: IFatzebraAPIResponse = await api.getCustomer(id)
-
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    // console.log(require('util').inspect({ customerProfile }, { depth: 10 }))
 
     expect(validCodes).toContain(customerProfile.status)
   })

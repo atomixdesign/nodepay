@@ -38,19 +38,15 @@ const fixtures = {
   },
   subscription: {
     customerId: 'customerRef',
-    plan: 'planRef',
+    amountInCents: 1000,
     frequency: FatzebraPaymentFrequency.Weekly,
     startDate: '2027-05-09',
-    reference: cryptoRandomString({ length: 32 }),
-    isActive: true
   },
   subscriptionBad: {
     customerId: '',
-    plan: '',
+    amountInCents: -1,
     frequency: FatzebraPaymentFrequency.Weekly,
     startDate: 'incorrectDate',
-    reference: '',
-    isActive: true
   },
   address: {
     address1: 'Address',
@@ -99,7 +95,7 @@ describe('test fatzebra gateway', () => {
     })
   })
 
-  /* test('it can create a subscription', async () => {
+  test('it can create a subscription', async () => {
     const response: IFatzebraAPIResponse = await gateway.chargeRecurring(
       fixtures.subscription
     )
@@ -113,7 +109,7 @@ describe('test fatzebra gateway', () => {
       expect(typeof error).toBe('object')
       return error
     })
-  }) */
+  })
 
   test('it can create a customer', async () => {
     const response: IFatzebraAPIResponse = await gateway.addCustomer(

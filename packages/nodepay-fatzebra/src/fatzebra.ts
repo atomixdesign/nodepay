@@ -21,6 +21,7 @@ import {
   PaymentPlanDTO,
 } from './transport/dtos'
 import { FatzebraAPI } from './transport/api'
+import { DirectDebitDTO } from './transport/dtos/direct-debit'
 
 export class Fatzebra extends BaseGateway<FatzebraConfig> implements
   OnceOffPayment,
@@ -130,8 +131,9 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
 
   async chargeRecurring(
     subscription: FatzebraPaymentPlan,
-  ): Promise<IFatzebraAPIResponse | undefined> {
+  ): Promise<IFatzebraAPIResponse> {
     const customerProfile = await this.api.getCustomer(subscription.customerId)
+
     if (customerProfile?.data?.card_token) {
       subscription.paymentMethod = 'Credit Card'
     } else if (customerProfile?.data?.bank_account) {
@@ -142,6 +144,5 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
     await validateOrReject(subscriptionObject)
 
     return this.api.addPaymentPlan(subscriptionObject)
-    return
   }
 }

@@ -12,6 +12,7 @@ import {
   BankAccountDTO,
 } from './dtos'
 import { PaymentPlanDTO } from './dtos/payment-plan'
+import { DirectDebitDTO } from './dtos/direct-debit'
 
 @Service('fatzebra.api')
 export class FatzebraAPI {
@@ -86,6 +87,10 @@ export class FatzebraAPI {
 
   async updateCustomer(reference: string, customer: CustomerDTO): Promise<IFatzebraAPIResponse> {
     return this._put(`/customers/${reference}.json`, customer)
+  }
+
+  async addDirectDebit(directDebit: DirectDebitDTO): Promise<IFatzebraAPIResponse> {
+    return this._post('/direct_debits', directDebit)
   }
 
   async addPaymentPlan(subscription: PaymentPlanDTO): Promise<IFatzebraAPIResponse> {

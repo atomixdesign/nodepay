@@ -16,6 +16,10 @@ export const MockResponse = {
 export class testAPI {
   constructor() {}
 
+  async getCustomer(_customerId: string): Promise<IFatzebraAPIResponse> {
+    return Promise.resolve(MockResponse)
+  }
+
   async addCustomer(_customer: CustomerDTO): Promise<IFatzebraAPIResponse> {
     return Promise.resolve(MockResponse)
   }
