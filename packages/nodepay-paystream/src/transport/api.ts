@@ -10,6 +10,7 @@ import {
   CreditCardDTO,
   PlanDTO,
   CustomerDTO,
+  BankAccountDTO,
 } from './dtos'
 import { SubscriptionDTO } from './dtos/subscription'
 
@@ -70,6 +71,10 @@ export class PaystreamAPI {
 
   async getCCtoken(creditCard: CreditCardDTO): Promise<IPaystreamAPIResponse> {
     return this._post('/credit_cards', creditCard)
+  }
+
+  async getBankAccountToken(bankAccount: BankAccountDTO): Promise<IPaystreamAPIResponse> {
+    return this._post('/bank_accounts', bankAccount)
   }
 
   async addCustomer(customer: CustomerDTO): Promise<IPaystreamAPIResponse> {

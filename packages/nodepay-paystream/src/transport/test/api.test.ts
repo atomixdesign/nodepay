@@ -9,6 +9,7 @@ import {
   PlanDTO,
   CustomerDTO,
   SubscriptionDTO,
+  BankAccountDTO,
 } from '../dtos'
 import { PaystreamPaymentFrequency } from '../../types'
 
@@ -81,6 +82,12 @@ describe('test paystream api transport', () => {
   test('it retrieves a single use token for the credit card', async () => {
     const creditCard = new CreditCardDTO(fixtures.creditCard)
     const response: IPaystreamAPIResponse = await api.getCCtoken(creditCard)
+    expect(validCodes).toContain(response.status)
+  })
+
+  test('it retrieves a single use token for the bank account', async () => {
+    const bankAccount = new BankAccountDTO(fixtures.bankAccount1)
+    const response: IPaystreamAPIResponse = await api.getBankAccountToken(bankAccount)
     expect(validCodes).toContain(response.status)
   })
 
