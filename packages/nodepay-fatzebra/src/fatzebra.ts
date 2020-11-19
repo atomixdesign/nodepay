@@ -21,7 +21,6 @@ import {
   PaymentPlanDTO,
 } from './transport/dtos'
 import { FatzebraAPI } from './transport/api'
-import { DirectDebitDTO } from './transport/dtos/direct-debit'
 
 export class Fatzebra extends BaseGateway<FatzebraConfig> implements
   OnceOffPayment,

@@ -12,7 +12,6 @@ import {
   PaymentPlanDTO,
 } from '../dtos'
 import { FatzebraPaymentFrequency } from '../../types'
-import { DirectDebitDTO } from '../dtos/direct-debit'
 
 const validCodes = [
   200,
