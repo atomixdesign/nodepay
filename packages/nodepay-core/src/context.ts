@@ -26,9 +26,7 @@ export class Context implements
   RecurringPayment
 {
   [x: string]: any
-  constructor(private gateway?: any) {
-    return augmentWithNoSuchMethod(this)
-  }
+  constructor(private gateway?: any) {}
 
   public use(adapter: any): void {
     this.gateway = adapter
