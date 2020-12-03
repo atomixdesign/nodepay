@@ -1,7 +1,7 @@
 import { Container } from 'typedi'
 import cryptoRandomString from 'crypto-random-string'
 import { Fatzebra } from '../fatzebra'
-import { FatzebraAPI, testAPI, IFatzebraAPIResponse } from '../transport'
+import { /* FatzebraAPI, testAPI, */ IFatzebraAPIResponse } from '../transport'
 import { FatzebraConfig, FatzebraPaymentFrequency } from '../types'
 
 const fixtures = {
