@@ -1,4 +1,3 @@
-import { Container } from 'typedi'
 import cryptoRandomString from 'crypto-random-string'
 // import moment from 'moment'
 import { FatzebraAPI as FatzebraTransport } from '../api'
@@ -62,12 +61,13 @@ describe('test fatzebra api transport', () => {
   let api: FatzebraTransport
 
   beforeAll(() => {
-    Container.set('fatzebra.config', {
-      username: process.env['FATZEBRA_USERNAME']!,
-      apiKey: process.env['FATZEBRA_API_KEY']!,
-      apiRoot: process.env['FATZEBRA_API_ROOT']!,
-    })
-    api = Container.get(FatzebraTransport)
+    api = new FatzebraTransport(
+      {
+        username: process.env['FATZEBRA_USERNAME']!,
+        apiKey: process.env['FATZEBRA_API_KEY']!,
+        apiRoot: process.env['FATZEBRA_API_ROOT']!,
+      }
+    )
   })
 
   // See: https://www.payway.com.au/docs/net.html#test-card-numbers

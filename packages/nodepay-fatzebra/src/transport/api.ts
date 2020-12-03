@@ -1,4 +1,4 @@
-import { Service, Inject, Container } from 'typedi'
+import { Service } from 'typedi'
 import { AxiosInstance } from 'axios'
 import { FatzebraConfig } from '../types'
 import {
@@ -14,15 +14,15 @@ import {
 import { PaymentPlanDTO } from './dtos/payment-plan'
 import { DirectDebitDTO } from './dtos/direct-debit'
 
-@Service('fatzebra.api')
+@Service()
 export class FatzebraAPI {
 
   private httpClient: AxiosInstance
 
   constructor(
-    @Inject('http.client') httpClientFactory: HttpClientFactory
+    private config: FatzebraConfig,
   ) {
-    const config: FatzebraConfig = Container.get('fatzebra.config')
+    const httpClientFactory: HttpClientFactory = new HttpClientFactory()
 
     this.httpClient = httpClientFactory.create({
       baseURL: config.apiRoot,
