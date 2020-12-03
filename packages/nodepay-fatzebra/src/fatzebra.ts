@@ -1,4 +1,3 @@
-import { Container } from 'typedi'
 import { validateOrReject } from 'class-validator'
 import { BaseGateway } from '@atomixdesign/nodepay-core'
 import {
@@ -37,10 +36,9 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
     }
   }
 
-  constructor(config?: Partial<FatzebraConfig>) {
+  constructor(config: FatzebraConfig) {
     super(config)
-    Container.set('fatzebra.config', config)
-    this.api = Container.get(FatzebraAPI)
+    this.api = new FatzebraAPI(config)
   }
 
   get name(): string {
