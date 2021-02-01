@@ -23,7 +23,7 @@ export class EzidebitAPI {
 
   constructor(
     private config: EzidebitConfig,
-  ) { }
+  ) {}
 
   private async ensureClient(): Promise<void> {
     if (

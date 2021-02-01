@@ -37,7 +37,5 @@ export class EzidebitPaymentSchedule implements IPaymentSchedule {
     public readonly secondWeekOfMonth?: 'YES' | 'NO',
     public readonly thirdWeekOfMonth?: 'YES' | 'NO',
     public readonly fourthWeekOfMonth?: 'YES' | 'NO',
-  ) {
-
-  }
+  ) {}
 }

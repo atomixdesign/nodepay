@@ -64,10 +64,8 @@ export class PaywayAPI {
     const response = await this.httpClient!.request({
       url: '/api-keys/latest',
     })
-    if (response.status === 200) {
-      if (response?.data.key !== this.config.secretKey) {
-        console.error('Payway API key is about to expire. Please log in to your Payway admin and generate a new api key.')
-      }
+    if (response.status === 200 && response?.data.key !== this.config.secretKey) {
+      console.error('Payway API key is about to expire. Please log in to your Payway admin and generate a new api key.')
     }
     return {
       status: response.status,
