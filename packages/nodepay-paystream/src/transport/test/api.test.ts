@@ -1,4 +1,3 @@
-import { Container } from 'typedi'
 import cryptoRandomString from 'crypto-random-string'
 // import moment from 'moment'
 import { PaystreamAPI as PaystreamTransport } from '../api'
