@@ -60,7 +60,7 @@ export class AddressDTO {
   // * phoneNumber
   @IsOptional()
   // eslint-disable-next-line unicorn/no-null
-  @IsPhoneNumber(null, {
+  @IsPhoneNumber('AU', {
     message: ErrorFactory.getErrorMessage(ErrorType.NotAPhoneNumber, 'phoneNumber')
   })
   phoneNumber: string | undefined;

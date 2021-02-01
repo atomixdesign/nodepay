@@ -1,4 +1,4 @@
-import { Service, Inject, Container } from 'typedi'
+import { Service } from 'typedi'
 import { AxiosInstance } from 'axios'
 import {
   HttpClientFactory,
@@ -8,14 +8,15 @@ import { BPOINTConfig } from '../types'
 import { ChargeDTO, CustomerDTO } from './dtos'
 import { BPOINTAPIError } from './api-error'
 
-@Service('bpoint.api')
+@Service()
 export class BPOINTAPI {
   private httpClient: AxiosInstance
 
   constructor(
-    @Inject('http.client') httpClientFactory: HttpClientFactory
+    private config: BPOINTConfig,
   ) {
-    const config: BPOINTConfig = Container.get('bpoint.config')
+
+    const httpClientFactory: HttpClientFactory = new HttpClientFactory()
     const authHeader = this.encodeKey(`${config.username}|${config.merchantId}:${config.password}`)
 
     this.httpClient = httpClientFactory.create({

@@ -66,13 +66,14 @@ describe('test payway api transport', () => {
   let api: PayWayTransport
 
   beforeAll(() => {
-    Container.set('payway.config', {
+    api = new PayWayTransport({
       secretKey: process.env['PAYWAY_TEST_SECRET_KEY']!,
       publishableKey: process.env['PAYWAY_TEST_PUBLISHABLE_KEY']!,
       apiRoot: process.env['PAYWAY_API_ROOT']!,
-      responseType: 'json'
+      responseType: 'json',
+      bankAccountId: '00000000',
+      merchantId: '',
     })
-    api = Container.get(PayWayTransport)
   })
 
   afterAll(async () => {

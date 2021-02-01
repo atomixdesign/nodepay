@@ -70,12 +70,11 @@ describe('test paystream api transport', () => {
   let api: PaystreamTransport
 
   beforeAll(() => {
-    Container.set('paystream.config', {
+    api = new PaystreamTransport({
       username: process.env['PAYSTREAM_USERNAME']!,
       apiKey: process.env['PAYSTREAM_API_KEY']!,
       apiRoot: process.env['PAYSTREAM_API_ROOT']!,
     })
-    api = Container.get(PaystreamTransport)
   })
 
   // See: https://www.payway.com.au/docs/net.html#test-card-numbers

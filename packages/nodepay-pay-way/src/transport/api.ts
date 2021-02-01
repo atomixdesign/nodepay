@@ -1,4 +1,4 @@
-import { Service, Inject, Container } from 'typedi'
+import { Service } from 'typedi'
 import { AxiosInstance } from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import qs from 'qs'
@@ -18,7 +18,7 @@ import {
 } from './dtos'
 
 
-@Service('payway.api')
+@Service()
 export class PaywayAPI {
   private idempotencyKey: string
   private secretAuthHeader: string
@@ -27,9 +27,9 @@ export class PaywayAPI {
   private httpClient: AxiosInstance
 
   constructor(
-    @Inject('http.client') httpClientFactory: HttpClientFactory
+    private config: PaywayConfig
   ) {
-    const config: PaywayConfig = Container.get('payway.config')
+    const httpClientFactory: HttpClientFactory = new HttpClientFactory()
     this.idempotencyKey = uuidv4()
     this.secretAuthHeader = `Basic ${this.encodeKey(config.secretKey)}`
     this.publicAuthHeader = `Basic ${this.encodeKey(config.publishableKey)}`
@@ -61,12 +61,11 @@ export class PaywayAPI {
 
   // Verify key expiry/validity
   async verifyKey(): Promise<IPaywayAPIResponse> {
-    const config: PaywayConfig = Container.get('payway.config')
     const response = await this.httpClient!.request({
       url: '/api-keys/latest',
     })
     if (response.status === 200) {
-      if (response?.data.key !== config.secretKey) {
+      if (response?.data.key !== this.config.secretKey) {
         console.error('Payway API key is about to expire. Please log in to your Payway admin and generate a new api key.')
       }
     }
