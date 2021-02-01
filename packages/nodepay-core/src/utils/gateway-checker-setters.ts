@@ -45,9 +45,9 @@ export const isRecord = (gateway: GatewayArrayOrMapOrRecord): boolean => {
 export const gatewaysFromRecord = (gateways: GatewayRecord): GatewayMap => {
   const gatewayMap = new Map<string, Gateway>()
 
-  Object.keys(gateways).forEach((key) => {
+  for (const key of Object.keys(gateways)) {
     gatewayMap.set(key, gateways[key])
-  })
+  }
 
   return gatewayMap
 }

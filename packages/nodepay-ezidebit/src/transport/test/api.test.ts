@@ -68,14 +68,13 @@ describe('test ezidebit api transport', () => {
   let api: EzidebitTransport
 
   beforeAll(() => {
-    Container.set('ezidebit.config', {
+    api = new EzidebitTransport({
       clientId: process.env['EZIDEBIT_CLIENT_ID']!,
       digitalKey: process.env['EZIDEBIT_DIGITAL_KEY']!,
       publicKey: process.env['EZIDEBIT_PUBLIC_KEY']!,
       apiRoot: process.env['EZIDEBIT_API_ROOT']!,
       nonPCIApiRoot: process.env['EZIDEBIT_API_NONPCI_ROOT']!,
     })
-    api = Container.get(EzidebitTransport)
   })
 
   afterAll(async () => {
@@ -113,21 +112,23 @@ describe('test ezidebit api transport', () => {
   })
 
   test('it adds a credit card to a customer account', async () => {
-    const { customer } = fixtures
+    const { customer, simpleCharge } = fixtures
     customer.YourSystemReference = randomId(32)
     const customerResponse: IEzidebitAPIResponse = await api.addCustomer(customer)
 
     let creditCardUpdateData: IEzidebitAPIResponse
     let creditCardUpdateResult = ''
 
+    const { CreditCardNumber, CreditCardExpiryMonth, CreditCardExpiryYear, NameOnCreditCard } = simpleCharge
+
     if (customerResponse.data.CustomerRef !== undefined) {
       const EziDebitCustomerID = customerResponse.data.CustomerRef as string
       const creditCardFixture = {
         EziDebitCustomerID,
-        CreditCardNumber: fixtures.simpleCharge.CreditCardNumber,
-        CreditCardExpiryMonth: fixtures.simpleCharge.CreditCardExpiryMonth,
-        CreditCardExpiryYear: fixtures.simpleCharge.CreditCardExpiryYear,
-        NameOnCreditCard: fixtures.simpleCharge.NameOnCreditCard,
+        CreditCardNumber,
+        CreditCardExpiryMonth,
+        CreditCardExpiryYear,
+        NameOnCreditCard,
         Reactivate: 'YES',
         YourSystemReference: '',
         Username: customer.Username,
@@ -140,7 +141,7 @@ describe('test ezidebit api transport', () => {
   })
 
   test('it adds a credit card and direct payment to a customer account', async () => {
-    const { customer } = fixtures
+    const { customer, simpleCharge } = fixtures
     customer.YourSystemReference = randomId(32)
     const customerResponse: IEzidebitAPIResponse = await api.addCustomer(customer)
 
@@ -151,12 +152,14 @@ describe('test ezidebit api transport', () => {
 
     if (customerResponse.data.CustomerRef !== undefined) {
       const EziDebitCustomerID = customerResponse.data.CustomerRef as string
+      const { CreditCardNumber, CreditCardExpiryMonth, CreditCardExpiryYear, NameOnCreditCard } = simpleCharge
+
       const creditCardFixture = {
         EziDebitCustomerID,
-        CreditCardNumber: fixtures.simpleCharge.CreditCardNumber,
-        CreditCardExpiryMonth: fixtures.simpleCharge.CreditCardExpiryMonth,
-        CreditCardExpiryYear: fixtures.simpleCharge.CreditCardExpiryYear,
-        NameOnCreditCard: fixtures.simpleCharge.NameOnCreditCard,
+        CreditCardNumber,
+        CreditCardExpiryMonth,
+        CreditCardExpiryYear,
+        NameOnCreditCard,
         Reactivate: 'YES',
         YourSystemReference: '',
         Username: customer.Username,
@@ -177,7 +180,7 @@ describe('test ezidebit api transport', () => {
   })
 
   test('it adds a credit card and a payment schedule to a customer account', async () => {
-    const { customer } = fixtures
+    const { customer, simpleCharge } = fixtures
     customer.YourSystemReference = randomId(32)
     const customerResponse: IEzidebitAPIResponse = await api.addCustomer(customer)
 
@@ -189,12 +192,14 @@ describe('test ezidebit api transport', () => {
 
     if (customerResponse.data.CustomerRef !== undefined) {
       const EziDebitCustomerID = customerResponse.data.CustomerRef as string
+      const { CreditCardNumber, CreditCardExpiryMonth, CreditCardExpiryYear, NameOnCreditCard } = simpleCharge
+
       const creditCardFixture = {
         EziDebitCustomerID,
-        CreditCardNumber: fixtures.simpleCharge.CreditCardNumber,
-        CreditCardExpiryMonth: fixtures.simpleCharge.CreditCardExpiryMonth,
-        CreditCardExpiryYear: fixtures.simpleCharge.CreditCardExpiryYear,
-        NameOnCreditCard: fixtures.simpleCharge.NameOnCreditCard,
+        CreditCardNumber,
+        CreditCardExpiryMonth,
+        CreditCardExpiryYear,
+        NameOnCreditCard,
         Reactivate: 'YES',
         YourSystemReference: '',
         Username: customer.Username,

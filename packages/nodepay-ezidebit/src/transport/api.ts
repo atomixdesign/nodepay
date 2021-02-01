@@ -1,4 +1,4 @@
-import { Service, Inject } from 'typedi'
+import { Service } from 'typedi'
 import {
   Client as SoapClient,
 } from 'soap'
@@ -16,15 +16,14 @@ import {
 } from './dtos'
 import { EzidebitAPIError } from './api-error'
 
-@Service('ezidebit.api')
+@Service()
 export class EzidebitAPI {
   private soapClient: SoapClient | undefined
   private nonPCISoapClient: SoapClient | undefined
 
   constructor(
-    @Inject('ezidebit.config') private config: EzidebitConfig,
-    @Inject('soap.client') private soapClientFactory: SoapClientFactory
-  ) { }
+    private config: EzidebitConfig,
+  ) {}
 
   private async ensureClient(): Promise<void> {
     if (
@@ -32,8 +31,10 @@ export class EzidebitAPI {
       this.nonPCISoapClient !== undefined
     ) return
 
-    this.soapClient = await this.soapClientFactory!.createAsync(this.config)
-    this.nonPCISoapClient = await this.soapClientFactory!.createAsync({
+    const soapClientFactory: SoapClientFactory = new SoapClientFactory()
+
+    this.soapClient = await soapClientFactory.createAsync(this.config)
+    this.nonPCISoapClient = await soapClientFactory.createAsync({
       ...this.config,
       ...{ apiRoot: this.config.nonPCIApiRoot }
     })

@@ -66,13 +66,14 @@ describe('test payway api transport', () => {
   let api: PayWayTransport
 
   beforeAll(() => {
-    Container.set('payway.config', {
+    api = new PayWayTransport({
       secretKey: process.env['PAYWAY_TEST_SECRET_KEY']!,
       publishableKey: process.env['PAYWAY_TEST_PUBLISHABLE_KEY']!,
       apiRoot: process.env['PAYWAY_API_ROOT']!,
-      responseType: 'json'
+      responseType: 'json',
+      bankAccountId: '00000000',
+      merchantId: '',
     })
-    api = Container.get(PayWayTransport)
   })
 
   afterAll(async () => {
@@ -153,12 +154,12 @@ describe('test payway api transport', () => {
   test('it places a recurring charge using bank account', async () => {
     const bankAccount = new BankAccountDTO(fixtures.bankAccount1)
     const bankingResponse: IPaywayAPIResponse = await api.getBankAccountToken(bankAccount)
-    const { customerId } = fixtures.customerWithBanking
+    const { customerId, merchantId, bankAccountId } = fixtures.customerWithBanking
     const customer = new CustomerDTO({
       singleUseTokenId: bankingResponse?.data.singleUseTokenId,
       customerId,
-      merchantId: fixtures.customerWithBanking.merchantId,
-      bankAccountId: fixtures.customerWithBanking.bankAccountId,
+      merchantId,
+      bankAccountId,
     })
     await api.addCustomer(customer)
     const paymentSchedule = new PaymentScheduleDTO(fixtures.schedule)

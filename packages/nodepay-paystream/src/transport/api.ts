@@ -1,4 +1,4 @@
-import { Service, Inject, Container } from 'typedi'
+import { Service } from 'typedi'
 import { AxiosInstance } from 'axios'
 import { PaystreamConfig } from '../types'
 import {
@@ -14,15 +14,15 @@ import {
 } from './dtos'
 import { SubscriptionDTO } from './dtos/subscription'
 
-@Service('paystream.api')
+@Service()
 export class PaystreamAPI {
 
   private httpClient: AxiosInstance
 
   constructor(
-    @Inject('http.client') httpClientFactory: HttpClientFactory
+    private config: PaystreamConfig
   ) {
-    const config: PaystreamConfig = Container.get('paystream.config')
+    const httpClientFactory: HttpClientFactory = new HttpClientFactory()
 
     this.httpClient = httpClientFactory.create({
       baseURL: config.apiRoot,

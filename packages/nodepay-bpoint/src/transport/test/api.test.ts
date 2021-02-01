@@ -36,13 +36,12 @@ describe('test bpoint api transport', () => {
   let api: BpointTransport
 
   beforeAll(() => {
-    Container.set('bpoint.config', {
+    api = new BpointTransport({
       username: process.env['BPOINT_USERNAME']!,
       merchantId: process.env['BPOINT_MERCHANT_ID']!,
       password: process.env['BPOINT_PASSWORD']!,
       apiRoot: process.env['BPOINT_API_ROOT']!,
     })
-    api = Container.get(BpointTransport)
   })
 
   afterAll(async () => {
