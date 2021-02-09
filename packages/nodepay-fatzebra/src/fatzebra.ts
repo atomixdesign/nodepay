@@ -1,5 +1,6 @@
+import Container from 'typedi'
 import { validateOrReject } from 'class-validator'
-import { BaseGateway } from '@atomixdesign/nodepay-core'
+import { BaseGateway, SettingsManager } from '@atomixdesign/nodepay-core'
 import {
   OnceOffPayment,
   RecurringPayment,
@@ -28,6 +29,8 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
 {
   private api: FatzebraAPI
 
+  private settingsManager: SettingsManager
+
   protected get baseConfig(): FatzebraConfig {
     return {
       username: '',
@@ -39,6 +42,8 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
   constructor(config: FatzebraConfig) {
     super(config)
     this.api = new FatzebraAPI(config)
+
+    this.settingsManager = Container.get(SettingsManager)
   }
 
   get name(): string {
@@ -53,7 +58,7 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
     customerDetails: FatzebraCustomerDetails,
     creditCard?: FatzebraCreditCard | string,
     bankAccount?: FatzebraBankAccount,
-  ): Promise<IFatzebraAPIResponse> {
+  ): Promise<IFatzebraAPIResponse | CustomerDTO | FatzebraConfig> {
     const address = customerDetails.address1 ?
       `${customerDetails.address1}
       ${customerDetails.address2 ? ' ' + customerDetails.address2 : ''}`.trim() : customerDetails.address1
@@ -78,7 +83,16 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
     )
 
     await validateOrReject(customerObject)
-    return this.api.addCustomer(customerObject)
+
+    switch(this.settingsManager.runMode as string) {
+    case 'dry':
+      return this.config
+    case 'verbose':
+      return customerObject
+    case 'wet':
+    default:
+      return this.api.addCustomer(customerObject)
+    }
   }
 
   async updateCustomer(
@@ -86,7 +100,7 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
     customerDetails: FatzebraCustomerDetails,
     creditCard?: FatzebraCreditCard | string,
     bankAccount?: FatzebraBankAccount,
-  ): Promise<IFatzebraAPIResponse> {
+  ): Promise<IFatzebraAPIResponse | CustomerDTO | FatzebraConfig> {
     const address = customerDetails.address1 ?
       `${customerDetails.address1}
       ${customerDetails.address2 ? ' ' + customerDetails.address2 : ''}`.trim() : customerDetails.address1
@@ -111,24 +125,40 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
     )
 
     await validateOrReject(customerObject)
-    return this.api.updateCustomer(reference, customerObject)
+    switch(this.settingsManager.runMode as string) {
+    case 'dry':
+      return this.config
+    case 'verbose':
+      return customerObject
+    case 'wet':
+    default:
+      return this.api.updateCustomer(reference, customerObject)
+    }
   }
 
   async charge(
     onceOffCharge: FatzebraCharge,
     creditCard?: FatzebraCreditCard,
-  ): Promise<IFatzebraAPIResponse> {
+  ): Promise<IFatzebraAPIResponse | ChargeDTO | FatzebraConfig> {
     const chargeObject = new ChargeDTO(
       onceOffCharge,
       creditCard,
     )
     await validateOrReject(chargeObject)
-    return this.api.placeCharge(chargeObject)
+    switch(this.settingsManager.runMode as string) {
+    case 'dry':
+      return this.config
+    case 'verbose':
+      return chargeObject
+    case 'wet':
+    default:
+      return this.api.placeCharge(chargeObject)
+    }
   }
 
   async chargeRecurring(
     subscription: FatzebraPaymentPlan,
-  ): Promise<IFatzebraAPIResponse> {
+  ): Promise<IFatzebraAPIResponse | PaymentPlanDTO | FatzebraConfig> {
     const customerProfile = await this.api.getCustomer(subscription.customerId)
 
     if (customerProfile?.data?.card_token) {
@@ -138,8 +168,16 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
     }
 
     const subscriptionObject = new PaymentPlanDTO(subscription)
-    await validateOrReject(subscriptionObject)
 
-    return this.api.addPaymentPlan(subscriptionObject)
+    await validateOrReject(subscriptionObject)
+    switch(this.settingsManager.runMode as string) {
+    case 'dry':
+      return this.config
+    case 'verbose':
+      return subscriptionObject
+    case 'wet':
+    default:
+      return this.api.addPaymentPlan(subscriptionObject)
+    }
   }
 }
