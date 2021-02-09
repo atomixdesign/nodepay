@@ -84,7 +84,7 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
 
     await validateOrReject(customerObject)
 
-    switch(this.settingsManager.runMode as string) {
+    switch(this?.settingsManager?.runMode as string) {
     case 'dry':
       return this.config
     case 'verbose':
@@ -125,7 +125,7 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
     )
 
     await validateOrReject(customerObject)
-    switch(this.settingsManager.runMode as string) {
+    switch(this?.settingsManager?.runMode as string) {
     case 'dry':
       return this.config
     case 'verbose':
@@ -145,7 +145,7 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
       creditCard,
     )
     await validateOrReject(chargeObject)
-    switch(this.settingsManager.runMode as string) {
+    switch(this?.settingsManager?.runMode as string) {
     case 'dry':
       return this.config
     case 'verbose':
@@ -170,7 +170,7 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
     const subscriptionObject = new PaymentPlanDTO(subscription)
 
     await validateOrReject(subscriptionObject)
-    switch(this.settingsManager.runMode as string) {
+    switch(this?.settingsManager?.runMode as string) {
     case 'dry':
       return this.config
     case 'verbose':
