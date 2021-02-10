@@ -1,3 +1,4 @@
+import Container from 'typedi'
 import {
   CustomerDetails,
   DirectDebit,
@@ -16,7 +17,6 @@ import { IBaseResponse } from './network'
 import debug from 'debug'
 import { runMode, SettingsManager } from './settings'
 import { BaseGateway } from './gateways'
-import Container from 'typedi'
 const log = debug('nodepay:core')
 
 const _hasOwnProperty = (object: any, methodName: string) => {
