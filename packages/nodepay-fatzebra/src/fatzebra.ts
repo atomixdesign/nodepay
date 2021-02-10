@@ -43,7 +43,7 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
     super(config)
     this.api = new FatzebraAPI(config)
 
-    this.settingsManager = Container.get(SettingsManager)
+    this.settingsManager = Container.get('nodepay.settings')
   }
 
   get name(): string {
