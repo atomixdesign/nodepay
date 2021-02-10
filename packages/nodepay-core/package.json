@@ -1,6 +1,6 @@
 {
   "name": "@atomixdesign/nodepay-core",
-  "version": "0.10.0",
+  "version": "0.10.3",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "license": "MIT",
@@ -71,5 +71,5 @@
     "typedi": "^0.10.0",
     "xml2js": "^0.4.23"
   },
-  "gitHead": "3e7674271e5b60f90ffb670e90155124cb4e5e5b"
+  "gitHead": "7584fd196b30b7ca080661041dff1bbab18b46eb"
 }
