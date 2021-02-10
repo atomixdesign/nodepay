@@ -14,6 +14,9 @@ import {
 import { IBaseResponse } from './network'
 
 import debug from 'debug'
+import { runMode, SettingsManager } from './settings'
+import { BaseGateway } from './gateways'
+import Container from 'typedi'
 const log = debug('nodepay:core')
 
 const _hasOwnProperty = (object: any, methodName: string) => {
@@ -26,12 +29,20 @@ export class Context implements
   RecurringPayment
 {
   [x: string]: any
+
   constructor(private gateway?: any) {
+    Container.set(SettingsManager, new SettingsManager())
+
     return augmentWithNoSuchMethod(this)
   }
 
-  public use(adapter: any): void {
+  public use(adapter: BaseGateway): void {
     this.gateway = adapter
+  }
+
+  public setRunMode(runMode: string): void {
+    const settingsManager = Container.get(SettingsManager)
+    settingsManager.runMode = runMode as runMode
   }
 
   public get name(): string {

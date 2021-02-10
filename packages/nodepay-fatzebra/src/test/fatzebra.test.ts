@@ -78,10 +78,10 @@ describe.skip('test fatzebra gateway', () => {
   })
 
   test('it can be charged', async () => {
-    const response: IFatzebraAPIResponse = await gateway.charge(
+    const response: IFatzebraAPIResponse = (await gateway.charge(
       fixtures.simpleCharge,
       fixtures.creditCard,
-    )
+    )) as IFatzebraAPIResponse
     expect(response?.status).toBe(200)
   })
 
@@ -96,9 +96,9 @@ describe.skip('test fatzebra gateway', () => {
   })
 
   test('it can create a subscription', async () => {
-    const response: IFatzebraAPIResponse = await gateway.chargeRecurring(
+    const response: IFatzebraAPIResponse = (await gateway.chargeRecurring(
       fixtures.subscription
-    )
+    )) as IFatzebraAPIResponse
     expect(response?.status).toBe(200)
   })
 
@@ -112,9 +112,9 @@ describe.skip('test fatzebra gateway', () => {
   })
 
   test('it can create a customer', async () => {
-    const response: IFatzebraAPIResponse = await gateway.addCustomer(
+    const response: IFatzebraAPIResponse = (await gateway.addCustomer(
       { ...fixtures.customer, ...fixtures.address }
-    )
+    )) as IFatzebraAPIResponse
     expect(response?.status).toBe(200)
   })
 
@@ -128,10 +128,10 @@ describe.skip('test fatzebra gateway', () => {
   })
 
   test('it can update a customer', async () => {
-    const customer: IFatzebraAPIResponse = await gateway.updateCustomer(
+    const customer: IFatzebraAPIResponse = (await gateway.updateCustomer(
       '123456789',
       { ...fixtures.customer, ...fixtures.address }
-    )
+    )) as IFatzebraAPIResponse
     expect(customer.statusText).toBe('OK')
   })
 })
