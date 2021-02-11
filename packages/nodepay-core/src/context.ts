@@ -1,4 +1,4 @@
-import Container from 'typedi'
+import Container, { Service } from 'typedi'
 import {
   CustomerDetails,
   DirectDebit,
@@ -23,6 +23,7 @@ const _hasOwnProperty = (object: any, methodName: string) => {
   return Object.prototype.hasOwnProperty.call(object, methodName)
 }
 
+@Service()
 export class Context implements
   CustomerDetails,
   DirectDebit,
