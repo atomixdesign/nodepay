@@ -1,6 +1,5 @@
-import Container, { Service } from 'typedi'
 import { validateOrReject } from 'class-validator'
-import { BaseGateway, SettingsManager } from '@atomixdesign/nodepay-core'
+import { BaseGateway } from '@atomixdesign/nodepay-core'
 import {
   OnceOffPayment,
   RecurringPayment,
@@ -22,15 +21,12 @@ import {
 } from './transport/dtos'
 import { FatzebraAPI } from './transport/api'
 
-@Service()
 export class Fatzebra extends BaseGateway<FatzebraConfig> implements
   OnceOffPayment,
   RecurringPayment,
   CustomerDetails
 {
   private api: FatzebraAPI
-
-  private settingsManager: SettingsManager
 
   protected get baseConfig(): FatzebraConfig {
     return {
@@ -43,8 +39,6 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
   constructor(config: FatzebraConfig) {
     super(config)
     this.api = new FatzebraAPI(config)
-
-    this.settingsManager = Container.get(SettingsManager)
   }
 
   get name(): string {
