@@ -1,4 +1,3 @@
-import Container, { Service } from 'typedi'
 import {
   CustomerDetails,
   DirectDebit,
@@ -15,7 +14,6 @@ import {
 import { IBaseResponse } from './network'
 
 import debug from 'debug'
-import { runMode, SettingsManager } from './settings'
 import { BaseGateway } from './gateways'
 const log = debug('nodepay:core')
 
@@ -23,7 +21,6 @@ const _hasOwnProperty = (object: any, methodName: string) => {
   return Object.prototype.hasOwnProperty.call(object, methodName)
 }
 
-@Service()
 export class Context implements
   CustomerDetails,
   DirectDebit,
@@ -33,18 +30,11 @@ export class Context implements
   [x: string]: any
 
   constructor(private gateway?: any) {
-    Container.set(SettingsManager, new SettingsManager())
-
     return augmentWithNoSuchMethod(this)
   }
 
   public use(adapter: BaseGateway): void {
     this.gateway = adapter
-  }
-
-  public setRunMode(runMode: string): void {
-    const settingsManager = Container.get(SettingsManager)
-    settingsManager.runMode = runMode as runMode
   }
 
   public get name(): string {
