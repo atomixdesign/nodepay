@@ -7,7 +7,7 @@ import {
   IsIn,
 } from 'class-validator'
 import { IsOptionalIfEmpty } from './IsOptionalIfEmpty'
-import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation'
+import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/validation'
 import { IEzidebitNewCreditCard } from '../../types'
 import moment from 'moment'
 

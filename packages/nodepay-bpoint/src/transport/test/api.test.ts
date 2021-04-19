@@ -1,6 +1,6 @@
 import { Container } from 'typedi'
 import cryptoRandomString from 'crypto-random-string'
-import { IBaseResponse } from '@atomixdesign/nodepay-core/network'
+import { IBaseResponse } from '@atomixdesign/nodepay-core/build/network'
 import { BPOINTAPI as BpointTransport } from '../api'
 import { BPOINTActionType, BPOINTCurrency, BPOINTTransactionType, } from '../../types'
 import {

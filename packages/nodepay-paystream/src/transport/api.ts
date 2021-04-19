@@ -3,7 +3,7 @@ import { AxiosInstance } from 'axios'
 import { PaystreamConfig } from '../types'
 import {
   HttpClientFactory,
-} from '@atomixdesign/nodepay-core/network'
+} from '@atomixdesign/nodepay-core/build/network'
 import { IPaystreamAPIResponse } from './api-response'
 import {
   ChargeDTO,

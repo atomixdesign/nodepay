@@ -1,4 +1,4 @@
-import { ICreditCard } from '@atomixdesign/nodepay-core/types'
+import { ICreditCard } from '@atomixdesign/nodepay-core/build/types'
 
 export class BPOINTCreditCard implements ICreditCard {
   constructor(

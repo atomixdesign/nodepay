@@ -6,11 +6,11 @@ import {
   OnceOffPayment,
   RecurringPayment,
   CustomerDetails,
-} from '@atomixdesign/nodepay-core/features'
+} from '@atomixdesign/nodepay-core/build/features'
 import {
   IBankAccount,
-} from '@atomixdesign/nodepay-core/types'
-import { IBaseResponse } from '@atomixdesign/nodepay-core/network'
+} from '@atomixdesign/nodepay-core/build/types'
+import { IBaseResponse } from '@atomixdesign/nodepay-core/build/network'
 import {
   BPOINTConfig,
   BPOINTCustomer,

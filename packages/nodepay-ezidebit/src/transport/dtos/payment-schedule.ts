@@ -1,6 +1,6 @@
 import { IsOptional, IsNumberString, MaxLength, IsNumber, IsNotEmpty, IsIn } from 'class-validator'
 import { IsOptionalIfEmpty } from './IsOptionalIfEmpty'
-import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation'
+import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/validation'
 import { IEzidebitInternalPaymentSchedule, EzidebitPaymentFrequency, EzidebitDayOfWeek } from '../../types'
 
 import debug from 'debug'

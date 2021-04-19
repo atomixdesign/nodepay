@@ -6,7 +6,7 @@ import {
 import {
   ErrorType,
   ErrorFactory,
-} from '@atomixdesign/nodepay-core/validation'
+} from '@atomixdesign/nodepay-core/build/validation'
 import { IPaywayInternalCustomerPaymentDetails } from '../../types'
 
 import debug from 'debug'

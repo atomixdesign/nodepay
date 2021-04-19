@@ -8,7 +8,7 @@ import {
 import {
   ErrorType,
   ErrorFactory,
-} from '@atomixdesign/nodepay-core/validation'
+} from '@atomixdesign/nodepay-core/build/validation'
 import { FatzebraCreditCard } from '../../types'
 
 import debug from 'debug'

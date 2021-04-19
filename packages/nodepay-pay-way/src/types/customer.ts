@@ -1,4 +1,4 @@
-import { ICustomerDetails } from '@atomixdesign/nodepay-core/types'
+import { ICustomerDetails } from '@atomixdesign/nodepay-core/build/types'
 
 export class PaywayAddress implements ICustomerDetails {
   constructor(

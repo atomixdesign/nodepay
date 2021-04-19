@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsOptional } from 'class-validator'
-import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation'
+import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/validation'
 import { FatzebraPaymentFrequency, FatzebraPaymentPlan } from '../../types'
 
 import debug from 'debug'

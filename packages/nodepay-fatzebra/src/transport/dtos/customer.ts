@@ -6,7 +6,7 @@ import {
   validateSync,
   // ValidateNested,
 } from 'class-validator'
-import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation'
+import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/validation'
 
 import { FatzebraCustomer, FatzebraCreditCard, FatzebraAddress, FatzebraBankAccount } from '../../types'
 import { CreditCardDTO } from './credit-card'

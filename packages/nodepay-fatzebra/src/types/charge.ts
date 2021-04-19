@@ -1,4 +1,4 @@
-import { IBaseCharge } from '@atomixdesign/nodepay-core/types'
+import { IBaseCharge } from '@atomixdesign/nodepay-core/build/types'
 
 export class FatzebraCharge implements IBaseCharge {
   constructor(
@@ -6,6 +6,5 @@ export class FatzebraCharge implements IBaseCharge {
     public readonly amountInCents: number,
     public readonly customerIp: string,
     public readonly cardToken?: string,
-    public readonly capture: boolean = true,
   ) {}
 }

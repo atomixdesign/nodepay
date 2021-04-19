@@ -7,7 +7,6 @@ package/
 .env
 buildcache
 tsconfig.tsbuildinfo
-.verdaccio-db.json
 
 tags
 .DS_Store

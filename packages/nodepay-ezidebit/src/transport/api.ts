@@ -3,7 +3,7 @@ import {
   Client as SoapClient,
 } from 'soap'
 import { EzidebitConfig } from '../types'
-import { SoapClientFactory } from '@atomixdesign/nodepay-core/network'
+import { SoapClientFactory } from '@atomixdesign/nodepay-core/build/network'
 import { IEzidebitAPIResponse, formatResponse } from './api-response'
 import {
   BankAccountDTO,

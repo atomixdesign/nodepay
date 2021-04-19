@@ -1,4 +1,4 @@
-import { IBankAccount } from '@atomixdesign/nodepay-core/types'
+import { IBankAccount } from '@atomixdesign/nodepay-core/build/types'
 
 export class FatzebraBankAccount implements IBankAccount {
   constructor(
