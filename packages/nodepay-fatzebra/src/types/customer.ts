@@ -1,4 +1,4 @@
-import { ICustomerDetails } from '@atomixdesign/nodepay-core/types'
+import { ICustomerDetails } from '@atomixdesign/nodepay-core/src/types'
 
 export class FatzebraAddress {
   constructor(
