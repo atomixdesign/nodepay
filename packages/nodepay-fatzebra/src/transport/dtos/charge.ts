@@ -37,6 +37,7 @@ export class ChargeDTO {
       this.cvv = creditCard?.CCV
       this.card_expiry = `${creditCard?.expiryDateMonth}/${creditCard?.expiryDateYear}`
     }
+    this.capture = charge.capture
   }
 
   // * amount
@@ -97,4 +98,6 @@ export class ChargeDTO {
     message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'card_expiry')
   })
   readonly card_expiry: string | undefined;
+
+  readonly capture: boolean
 }

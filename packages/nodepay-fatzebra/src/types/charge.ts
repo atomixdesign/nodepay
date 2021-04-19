@@ -6,5 +6,6 @@ export class FatzebraCharge implements IBaseCharge {
     public readonly amountInCents: number,
     public readonly customerIp: string,
     public readonly cardToken?: string,
+    public readonly capture = true,
   ) {}
 }

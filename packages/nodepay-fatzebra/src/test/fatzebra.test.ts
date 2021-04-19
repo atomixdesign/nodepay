@@ -30,11 +30,13 @@ const fixtures = {
     amountInCents: 1087,
     orderNumber: cryptoRandomString({ length: 32 }),
     customerIp: '169.254.169.254',
+    capture: true,
   },
   simpleChargeBad: {
     amountInCents: -1,
     orderNumber: cryptoRandomString({ length: 32 }),
     customerIp: 'incorrectIp',
+    capture: true,
   },
   subscription: {
     customerId: 'customerRef',
