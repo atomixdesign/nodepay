@@ -48,6 +48,7 @@ const fixtures = {
     amountInCents: 1087,
     orderNumber: cryptoRandomString({ length: 32 }),
     customerIp: '169.254.169.254',
+    capture: true,
   },
   subscription: {
     customerId: '',
