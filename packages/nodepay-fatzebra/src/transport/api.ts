@@ -3,7 +3,7 @@ import { AxiosInstance } from 'axios'
 import { FatzebraConfig } from '../types'
 import {
   HttpClientFactory,
-} from '@atomixdesign/nodepay-core/build/network'
+} from '@atomixdesign/nodepay-core/network'
 import { IFatzebraAPIResponse } from './api-response'
 import {
   ChargeDTO,

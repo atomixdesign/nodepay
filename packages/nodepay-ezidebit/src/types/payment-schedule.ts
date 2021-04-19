@@ -1,5 +1,5 @@
 import { EzidebitDayOfWeek, EzidebitPaymentFrequency } from './payment-frequency'
-import { IPaymentSchedule } from '@atomixdesign/nodepay-core/build/types'
+import { IPaymentSchedule } from '@atomixdesign/nodepay-core/types'
 
 /** @internal */
 export interface IEzidebitInternalPaymentSchedule {

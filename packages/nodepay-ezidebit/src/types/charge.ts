@@ -1,4 +1,4 @@
-import { IBaseCharge } from '@atomixdesign/nodepay-core/build/types'
+import { IBaseCharge } from '@atomixdesign/nodepay-core/types'
 import { IEzidebitInternalCreditCard } from './credit-card'
 import { IEzidebitBasePayment, IEzidebitCustomerName } from './payment'
 

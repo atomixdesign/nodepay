@@ -1,4 +1,4 @@
-import { ICreditCard } from '@atomixdesign/nodepay-core/build/types'
+import { ICreditCard } from '@atomixdesign/nodepay-core/types'
 
 export class PaystreamCreditCard implements ICreditCard {
   constructor(

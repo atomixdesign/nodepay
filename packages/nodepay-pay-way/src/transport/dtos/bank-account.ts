@@ -5,7 +5,7 @@ import {
 import {
   ErrorType,
   ErrorFactory,
-} from '@atomixdesign/nodepay-core/build/validation'
+} from '@atomixdesign/nodepay-core/validation'
 import { PaywayBankAccount } from '../../types'
 
 import debug from 'debug'

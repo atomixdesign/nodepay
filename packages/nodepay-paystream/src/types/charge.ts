@@ -1,4 +1,4 @@
-import { IBaseCharge } from '@atomixdesign/nodepay-core/build/types'
+import { IBaseCharge } from '@atomixdesign/nodepay-core/types'
 
 export class PaystreamCharge implements IBaseCharge {
   constructor(

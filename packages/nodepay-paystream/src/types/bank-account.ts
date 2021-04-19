@@ -1,4 +1,4 @@
-import { IBankAccount } from '@atomixdesign/nodepay-core/build/types'
+import { IBankAccount } from '@atomixdesign/nodepay-core/types'
 
 export class PaystreamBankAccount implements IBankAccount {
   constructor(

@@ -1,4 +1,4 @@
-import { ICustomerDetails } from '@atomixdesign/nodepay-core/build/types'
+import { ICustomerDetails } from '@atomixdesign/nodepay-core/types'
 
 /** @internal */
 export interface IEzidebitBaseAccount {

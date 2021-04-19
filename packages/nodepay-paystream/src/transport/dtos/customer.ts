@@ -6,7 +6,7 @@ import {
   validateSync,
   // ValidateNested,
 } from 'class-validator'
-import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/validation'
+import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation'
 
 import { PaystreamCustomer, PaystreamCreditCard, PaystreamAddress } from '../../types'
 import { CreditCardDTO } from './credit-card'

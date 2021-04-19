@@ -1,4 +1,4 @@
-import { IPaymentSchedule } from '@atomixdesign/nodepay-core/build/types'
+import { IPaymentSchedule } from '@atomixdesign/nodepay-core/types'
 import { PaywayPaymentFrequency } from './payment-frequency'
 
 /** @internal */

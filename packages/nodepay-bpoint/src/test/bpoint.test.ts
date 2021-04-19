@@ -1,5 +1,5 @@
 import { Container } from 'typedi'
-import { IBaseResponse } from '@atomixdesign/nodepay-core/build/network'
+import { IBaseResponse } from '@atomixdesign/nodepay-core/network'
 import { BPOINT } from '../bpoint'
 import { BPOINTAPI, testAPI } from '../transport'
 

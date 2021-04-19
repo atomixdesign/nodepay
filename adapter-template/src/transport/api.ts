@@ -3,7 +3,7 @@ import { AxiosInstance } from 'axios'
 import { Config } from '../types'
 import {
   HttpClientFactory,
-} from '@atomixdesign/nodepay-core/build/network'
+} from '@atomixdesign/nodepay-core/network'
 import { APIResponse } from './api-response'
 
 @Service('sample.api')

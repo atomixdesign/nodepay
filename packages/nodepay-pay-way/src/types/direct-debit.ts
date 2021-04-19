@@ -1,4 +1,4 @@
-import { IDirectDebit } from '@atomixdesign/nodepay-core/build/types'
+import { IDirectDebit } from '@atomixdesign/nodepay-core/types'
 
 export class PaywayDirectDebit implements IDirectDebit {
   constructor(

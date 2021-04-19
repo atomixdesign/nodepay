@@ -1,4 +1,4 @@
-import { IBaseResponse } from '@atomixdesign/nodepay-core/build/network'
+import { IBaseResponse } from '@atomixdesign/nodepay-core/network'
 
 export interface IPaystreamAPIResponse extends IBaseResponse {
   originalResponse: any

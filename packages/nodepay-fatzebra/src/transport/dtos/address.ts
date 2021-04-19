@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsPostalCode } from 'class-validator'
-import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/validation'
+import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/validation'
 import { FatzebraAddress } from '../../types'
 
 import debug from 'debug'
