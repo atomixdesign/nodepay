@@ -53,7 +53,7 @@ export class ChargeDTO {
   readonly reference: string;
 
   // * customer_ip
-  @IsIP('4', {
+  @IsIP(undefined, {
     message: ErrorFactory.getErrorMessage(ErrorType.NotAValidIP, 'customer_ip')
   })
   readonly customer_ip: string;
