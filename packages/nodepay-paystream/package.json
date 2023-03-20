@@ -71,7 +71,6 @@
     "class-validator": "^0.13.1",
     "debug": "^4.3.1",
     "moment": "^2.29.1",
-    "soap": "0.37",
     "typedi": "^0.10.0"
   },
   "gitHead": "cdcf5842f4e89039184cefd4fb86786e265aaeb8"
