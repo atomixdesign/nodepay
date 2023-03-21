@@ -1,6 +1,6 @@
 {
   "name": "@atomixdesign/nodepay-core",
-  "version": "0.11.3",
+  "version": "0.11.4",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "license": "MIT",
@@ -67,7 +67,7 @@
     "axios": "^0.21.1",
     "debug": "^4.3.1",
     "reflect-metadata": "^0.1.13",
-    "soap": "^0.36.0",
+    "soap": "^0.37",
     "typedi": "^0.10.0",
     "xml2js": "^0.4.23"
   },
