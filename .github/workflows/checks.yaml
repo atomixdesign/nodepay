@@ -1,0 +1,26 @@
+name: Checks # Workflow name
+
+on:
+  pull_request:
+    types: [opened, synchronize] # Workflow triggering events
+
+jobs: # A workflow can have multiple jobs
+  checks: # Name of the job
+    runs-on: ubuntu-latest # Instance type where job will run
+    steps:
+      - name: "Checkout" # Download code from the repository
+        uses: actions/checkout@v2 # Public action
+        with:
+          fetch-depth: 0 # Checkout all branches and tags
+      - name: "Use NodeJS 12" # Setup node using version 14
+        uses: actions/setup-node@v2 # Public action
+        with:
+          node-version: '12'
+      - name: "Install dependencies"
+        run: | # Install and link dependencies
+          yarn
+          yarn bootstrap
+      - name: Run linters # Run tests of all packages
+        run: yarn lint
+      - name: Run tests # Run tests of all packages
+        run: yarn test
