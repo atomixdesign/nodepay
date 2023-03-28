@@ -15,6 +15,7 @@ import {
 import { PaywayAddress } from '../../types'
 
 import debug from 'debug'
+
 const log = debug('nodepay:pay-way')
 
 /** @internal */
@@ -39,17 +40,17 @@ export class AddressDTO {
   // * customerName
   @IsOptional()
   @MaxLength(60, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'customerName')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'customerName'),
   })
   customerName: string | undefined;
 
   // * emailAddress
   @IsOptional()
   @IsEmail(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotAnEmail, 'emailAddress')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotAnEmail, 'emailAddress'),
   })
   @MaxLength(128, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'emailAddress')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'emailAddress'),
   })
   emailAddress: string | undefined;
 
@@ -59,30 +60,29 @@ export class AddressDTO {
 
   // * phoneNumber
   @IsOptional()
-  // eslint-disable-next-line unicorn/no-null
   @IsPhoneNumber('AU', {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotAPhoneNumber, 'phoneNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotAPhoneNumber, 'phoneNumber'),
   })
   phoneNumber: string | undefined;
 
   // * street1
   @IsOptional()
   @MaxLength(128, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'street1')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'street1'),
   })
   street1: string | undefined;
 
   // * street2
   @IsOptional()
   @MaxLength(128, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'street2')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'street2'),
   })
   street2: string | undefined;
 
   // * cityName
   @IsOptional()
   @MaxLength(60, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'cityName')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'cityName'),
   })
   cityName: string | undefined;
 
@@ -91,17 +91,17 @@ export class AddressDTO {
   @IsIn([
     'ACT', 'NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA',
   ], {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotInAllowedSet, 'state')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotInAllowedSet, 'state'),
   })
   state: string | undefined;
 
   // * postalCode
   @IsOptional()
   @IsNumberString(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'postalCode')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'postalCode'),
   })
   @Length(4, 4, {
-    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'postalCode')
+    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'postalCode'),
   })
   postalCode: string | undefined;
 }

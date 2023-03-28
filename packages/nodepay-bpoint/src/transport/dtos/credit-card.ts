@@ -10,6 +10,7 @@ import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/valida
 import { BPOINTCreditCard } from '../../types'
 
 import debug from 'debug'
+
 const log = debug('nodepay:bpoint')
 
 /** @internal */
@@ -25,40 +26,40 @@ export class CreditCardDTO {
 
   // * CardHolderName
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'CardHolderName')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'CardHolderName'),
   })
   @MaxLength(50, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'CardHolderName')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'CardHolderName'),
   })
   CardHolderName: string;
 
   // * CreditCardNumber
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'CreditCardNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'CreditCardNumber'),
   })
   @IsCreditCard({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotACreditCard, 'CreditCardNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotACreditCard, 'CreditCardNumber'),
   })
   @Length(13, 16, {
-    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardNumber'),
   })
   CardNumber: string;
 
   // Cvn
   @Length(3, 4, {
-    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'Cvn')
+    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'Cvn'),
   })
   @IsNumberString(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'Cvn')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'Cvn'),
   })
   Cvn: string;
 
   // ExpiryDate - MMYY
   @Length(4, 4, {
-    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'ExpiryDate')
+    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'ExpiryDate'),
   })
   @IsNumberString(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'ExpiryDate')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'ExpiryDate'),
   })
   ExpiryDate: string;
 }

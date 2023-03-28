@@ -10,6 +10,7 @@ import {
 import { IPaywayInternalCustomerPaymentDetails } from '../../types'
 
 import debug from 'debug'
+
 const log = debug('nodepay:pay-way')
 
 /** @internal */
@@ -25,7 +26,7 @@ export class PaymentDetailsDTO {
 
   // * singleUseTokenId
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'singleUseTokenId')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'singleUseTokenId'),
   })
   singleUseTokenId: string;
 

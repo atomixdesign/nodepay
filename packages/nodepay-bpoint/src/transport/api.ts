@@ -15,7 +15,6 @@ export class BPOINTAPI {
   constructor(
     private config: BPOINTConfig,
   ) {
-
     const httpClientFactory: HttpClientFactory = new HttpClientFactory()
     const authHeader = this.encodeKey(`${config.username}|${config.merchantId}:${config.password}`)
 
@@ -24,7 +23,7 @@ export class BPOINTAPI {
       headers: {
         Authorization: authHeader,
         'Content-Type': 'application/json; charset=utf-8',
-      }
+      },
     })
   }
 
@@ -38,9 +37,11 @@ export class BPOINTAPI {
       url: '/txns/',
       data: { 'TxnReq': charge },
     })
+
     if (Number(response?.data?.APIResponse?.ResponseCode) !== 0) {
       throw new BPOINTAPIError(response.data.APIResponse)
     }
+
     if (Number(response?.data?.TxnResp?.ResponseCode) !== 0) {
       throw new BPOINTAPIError(response.data.TxnResp)
     }
@@ -59,6 +60,7 @@ export class BPOINTAPI {
       url: '/dvtokens/',
       data: { 'DVTokenReq': customer },
     })
+
     if (Number(response?.data?.APIResponse?.ResponseCode) !== 0) {
       throw new BPOINTAPIError(response.data.APIResponse)
     }
@@ -77,6 +79,7 @@ export class BPOINTAPI {
       url: `/dvtokens/${reference}`,
       data: { 'DVTokenReq': customer },
     })
+
     if (Number(response?.data?.APIResponse?.ResponseCode) !== 0) {
       throw new BPOINTAPIError(response.data.APIResponse)
     }

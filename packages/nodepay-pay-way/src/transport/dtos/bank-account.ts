@@ -9,6 +9,7 @@ import {
 import { PaywayBankAccount } from '../../types'
 
 import debug from 'debug'
+
 const log = debug('nodepay:pay-way')
 
 /** @internal */
@@ -27,19 +28,19 @@ export class BankAccountDTO {
 
   // * bsb
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'bsb')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'bsb'),
   })
   bsb: string;
 
   // * accountNumber
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'accountNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'accountNumber'),
   })
   accountNumber: string;
 
   // * accountName
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'accountName')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'accountName'),
   })
   accountName: string;
 }

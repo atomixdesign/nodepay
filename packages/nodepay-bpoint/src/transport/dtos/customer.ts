@@ -18,6 +18,7 @@ import { CreditCardDTO } from './credit-card'
 import { BankAccountDTO } from './bank-account'
 
 import debug from 'debug'
+
 const log = debug('nodepay:bpoint')
 
 /** @internal */
@@ -61,10 +62,10 @@ export class CustomerDTO {
 
   // * Crn1
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'Crn1')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'Crn1'),
   })
   @MaxLength(50, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'Crn1')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'Crn1'),
   })
   Crn1: string;
 
@@ -74,13 +75,13 @@ export class CustomerDTO {
 
   // * EmailAddress
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'EmailAddress')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'EmailAddress'),
   })
   @IsEmail(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotAnEmail, 'EmailAddress')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotAnEmail, 'EmailAddress'),
   })
   @MaxLength(250, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'EmailAddress')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'EmailAddress'),
   })
   EmailAddress: string;
 
@@ -107,42 +108,42 @@ export class AddressDTO {
   // * AddressLine1
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'AddressLine1')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'AddressLine1'),
   })
   AddressLine1: string | undefined;
 
   // * AddressLine2
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'AddressLine2')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'AddressLine2'),
   })
   AddressLine2: string | undefined;
 
   // * City
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'City')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'City'),
   })
   City: string | undefined;
 
   // * CountryCode
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'CountryCode')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'CountryCode'),
   })
   CountryCode: string | undefined;
 
   // * PostCode
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'PostCode')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'PostCode'),
   })
   PostCode: string | undefined;
 
   // * State
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'State')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'State'),
   })
   State: string | undefined;
 }
@@ -160,41 +161,41 @@ export class ContactDetailsDTO {
   // * EmailAddress
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'EmailAddress')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'EmailAddress'),
   })
   @IsEmail(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotAnEmail, 'EmailAddress')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotAnEmail, 'EmailAddress'),
   })
   @MaxLength(250, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'EmailAddress')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'EmailAddress'),
   })
   EmailAddress: string | undefined;
 
   // * FaxNumber
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'FaxNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'FaxNumber'),
   })
   FaxNumber: string | undefined;
 
   // * HomePhoneNumber
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'HomePhoneNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'HomePhoneNumber'),
   })
   HomePhoneNumber: string | undefined;
 
   // * MobilePhoneNumber
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'MobilePhoneNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'MobilePhoneNumber'),
   })
   MobilePhoneNumber: string | undefined;
 
   // * WorkPhoneNumber
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'WorkPhoneNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'WorkPhoneNumber'),
   })
   WorkPhoneNumber: string | undefined;
 }
@@ -212,35 +213,35 @@ export class PersonalDetailsDTO {
   // * DateOfBirth
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'DateOfBirth')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'DateOfBirth'),
   })
   DateOfBirth: string | undefined;
 
   // * FirstName
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'FirstName')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'FirstName'),
   })
   FirstName: string | undefined;
 
   // * LastName
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'LastName')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'LastName'),
   })
   LastName: string | undefined;
 
   // * MiddleName
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'MiddleName')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'MiddleName'),
   })
   MiddleName: string | undefined;
 
   // * Salutation
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'Salutation')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'Salutation'),
   })
   Salutation: string | undefined;
 }

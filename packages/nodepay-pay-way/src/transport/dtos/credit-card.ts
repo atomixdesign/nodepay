@@ -12,6 +12,7 @@ import {
 import { PaywayCreditCard } from '../../types'
 
 import debug from 'debug'
+
 const log = debug('nodepay:pay-way')
 
 /** @internal */
@@ -32,43 +33,43 @@ export class CreditCardDTO {
 
   // * cardNumber
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'cardNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'cardNumber'),
   })
   @IsCreditCard({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotACreditCard, 'cardNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotACreditCard, 'cardNumber'),
   })
   cardNumber: string;
 
   // * cardholderName
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'cardholderName')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'cardholderName'),
   })
   cardholderName: string;
 
   // * cvn
   @Length(3, 4, {
-    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'cvn')
+    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'cvn'),
   })
   @IsNumberString(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'cvn')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'cvn'),
   })
   cvn: string;
 
   // * expiryDateMonth
   @Length(2, 2, {
-    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'expiryDateMonth')
+    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'expiryDateMonth'),
   })
   @IsNumberString(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'expiryDateMonth')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'expiryDateMonth'),
   })
   expiryDateMonth: string;
 
   // * expiryDateYear
   @Length(2, 2, {
-    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'expiryDateYear')
+    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'expiryDateYear'),
   })
   @IsNumberString(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'expiryDateYear')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'expiryDateYear'),
   })
   expiryDateYear: string;
 }

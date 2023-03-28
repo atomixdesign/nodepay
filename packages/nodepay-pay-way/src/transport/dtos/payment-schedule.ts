@@ -12,12 +12,13 @@ import {
 import { PaywayPaymentFrequency, IPaywayInternalPaymentSchedule } from '../../types'
 
 import debug from 'debug'
+
 const log = debug('nodepay:pay-way')
 
 /** @internal */
 export class PaymentScheduleDTO {
   constructor(
-    paymentSchedule: IPaywayInternalPaymentSchedule
+    paymentSchedule: IPaywayInternalPaymentSchedule,
   ) {
     log(`building ${this.constructor.name}`)
     log({ paymentSchedule })
@@ -32,40 +33,40 @@ export class PaymentScheduleDTO {
 
   // * frequency
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'frequency')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'frequency'),
   })
   frequency: PaywayPaymentFrequency;
 
   // * nextPaymentDate
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'nextPaymentDate')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'nextPaymentDate'),
   })
   nextPaymentDate: string;
 
   // * regularPrincipalAmount
   @IsNumber(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'regularPrincipalAmount')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'regularPrincipalAmount'),
   })
   regularPrincipalAmount: number;
 
   // * nextPrincipalAmount
   @IsOptional()
   @IsNumber(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'nextPrincipalAmount')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'nextPrincipalAmount'),
   })
   nextPrincipalAmount?: number | undefined;
 
   // * numberOfPaymentsRemaining
   @IsOptional()
   @IsNumber(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'numberOfPaymentsRemaining')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'numberOfPaymentsRemaining'),
   })
   numberOfPaymentsRemaining?: number | undefined;
 
   // * finalPrincipalAmount
   @IsOptional()
   @IsNumber(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'finalPrincipalAmount')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'finalPrincipalAmount'),
   })
   finalPrincipalAmount?: number | undefined;
 }

@@ -15,6 +15,7 @@ import {
 import { IEzidebitCreditCardDebit } from '../../types'
 
 import debug from 'debug'
+
 const log = debug('nodepay:ezidebit')
 
 /** @internal */
@@ -30,40 +31,40 @@ export class CardDebitDTO extends BaseDebitDTO {
   }
   // * NameOnCreditCard
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'NameOnCreditCard')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'NameOnCreditCard'),
   })
   @MaxLength(100, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'NameOnCreditCard')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'NameOnCreditCard'),
   })
   NameOnCreditCard: string;
 
   // * CreditCardNumber
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'CreditCardNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'CreditCardNumber'),
   })
   @IsCreditCard({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotACreditCard, 'CreditCardNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotACreditCard, 'CreditCardNumber'),
   })
   @MaxLength(16, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'CreditCardNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'CreditCardNumber'),
   })
   CreditCardNumber: string;
 
   // * CreditCardExpiryMonth
   @Length(2, 2, {
-    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardExpiryMonth')
+    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardExpiryMonth'),
   })
   @IsNumberString(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'CreditCardExpiryMonth')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'CreditCardExpiryMonth'),
   })
   CreditCardExpiryMonth: string;
 
   // * CreditCardExpiryYear
   @Length(4, 4, {
-    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardExpiryYear')
+    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'CreditCardExpiryYear'),
   })
   @IsNumberString(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'CreditCardExpiryYear')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'CreditCardExpiryYear'),
   })
   CreditCardExpiryYear: string;
 }

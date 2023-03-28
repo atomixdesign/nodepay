@@ -1,8 +1,8 @@
-name: Checks # Workflow name
+name: Checks
 
 on:
   pull_request:
-    types: [opened, synchronize] # Workflow triggering events
+    types: [opened, synchronize]
 
 jobs: # A workflow can have multiple jobs
   checks: # Name of the job
