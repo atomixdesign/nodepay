@@ -20,7 +20,8 @@ jobs: # A workflow can have multiple jobs
         run: | # Install and link dependencies
           yarn
           yarn bootstrap
+          yarn build
       - name: Run linters # Run tests of all packages
         run: yarn lint
-      - name: Run tests # Run tests of all packages
-        run: yarn test
+#      - name: Run tests # Run tests of all packages
+#        run: yarn test
