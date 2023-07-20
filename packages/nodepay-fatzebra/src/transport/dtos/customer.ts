@@ -69,6 +69,7 @@ export class CustomerDTO {
   readonly reference: string;
 
   // * email
+  @IsOptional()
   @IsEmail(undefined, {
     message: ErrorFactory.getErrorMessage(ErrorType.NotAnEmail, 'email')
   })
