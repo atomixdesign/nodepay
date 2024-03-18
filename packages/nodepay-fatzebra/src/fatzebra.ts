@@ -50,7 +50,7 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
     return 'fatzebra'
   }
 
-  async getBankAccountToken(
+  async createBankAccount(
     bankAccount: FatzebraBankAccount,
   ): Promise<IFatzebraAPIResponse | BankAccountDTO | FatzebraConfig> {
 

@@ -53,6 +53,15 @@ export class Context implements
     throw new Error(`Method not implemented: ${methodName}, class ${this.gateway.constructor.name}`)
   }
 
+  createBankAccount(
+    bankAccount: IBankAccount | undefined,
+  ): Promise<IBaseResponse> {
+    log(`calling createBankAccount on ${this.gateway.constructor.name}`)
+    log({ bankAccount })
+    return this.dispatch('createBankAccount', {
+      bankAccount,
+    })
+  }
   addCustomer(
     customerDetails: ICustomerDetails,
     creditCard?: ICreditCard | undefined,
