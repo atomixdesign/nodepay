@@ -15,6 +15,7 @@ import {
 } from './types'
 import { IFatzebraAPIResponse } from './transport'
 import {
+  BankAccountDTO,
   ChargeDTO,
   CustomerDTO,
   PaymentPlanDTO,
@@ -47,6 +48,25 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
 
   get shortName(): string {
     return 'fatzebra'
+  }
+
+  async getBankAccountToken(
+    bankAccount: FatzebraBankAccount,
+  ): Promise<IFatzebraAPIResponse | BankAccountDTO | FatzebraConfig> {
+
+    const formattedBankAccount = new BankAccountDTO(bankAccount)
+    
+    await validateOrReject(formattedBankAccount)
+
+    switch(this?.settingsManager?.runMode as string) {
+    case 'dry':
+      return this.config
+    case 'verbose':
+      return formattedBankAccount
+    case 'wet':
+    default:
+      return this.api.getBankAccountToken(formattedBankAccount)
+    }
   }
 
   async addCustomer(
