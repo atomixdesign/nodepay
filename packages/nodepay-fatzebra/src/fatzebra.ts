@@ -4,6 +4,7 @@ import {
   OnceOffPayment,
   RecurringPayment,
   CustomerDetails,
+  BankAccount,
 } from '@atomixdesign/nodepay-core/features'
 import {
   FatzebraConfig,
@@ -25,6 +26,7 @@ import { FatzebraAPI } from './transport/api'
 export class Fatzebra extends BaseGateway<FatzebraConfig> implements
   OnceOffPayment,
   RecurringPayment,
+  BankAccount,
   CustomerDetails
 {
   private api: FatzebraAPI

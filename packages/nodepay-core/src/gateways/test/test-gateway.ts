@@ -52,4 +52,8 @@ export class TestGateway extends BaseGateway<Config> implements DirectDebit, Onc
   async directDebit(): Promise<Record<string, string>> {
     return Promise.resolve({ 'result' : 'direct-debit' })
   }
+
+  async createBankAccount(): Promise<Record<string, string>> {
+    return Promise.resolve({ 'result' : 'direct-debit' })
+  }
 }

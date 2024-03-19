@@ -58,9 +58,7 @@ export class Context implements
   ): Promise<IBaseResponse> {
     log(`calling createBankAccount on ${this.gateway.constructor.name}`)
     log({ bankAccount })
-    return this.dispatch('createBankAccount', {
-      bankAccount,
-    })
+    return this.dispatch('createBankAccount', { bankAccount })
   }
   addCustomer(
     customerDetails: ICustomerDetails,
