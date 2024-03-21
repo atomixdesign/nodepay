@@ -16,7 +16,6 @@ import { DirectDebitDTO } from './dtos/direct-debit'
 
 @Service()
 export class FatzebraAPI {
-
   private httpClient: AxiosInstance
 
   constructor(
@@ -35,6 +34,7 @@ export class FatzebraAPI {
 
   private async _request(method: 'get' | 'put' | 'post', endpoint: string, payload: any): Promise<IFatzebraAPIResponse> {
     let response
+
     try {
       response = await this.httpClient!.request({
         method,

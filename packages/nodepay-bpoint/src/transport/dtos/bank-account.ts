@@ -7,6 +7,7 @@ import {
 import { IBankAccount } from '@atomixdesign/nodepay-core/build/types'
 
 import debug from 'debug'
+
 const log = debug('nodepay:bpoint')
 
 /** @internal */
@@ -21,22 +22,22 @@ export class BankAccountDTO {
 
   // * AccountName
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'AccountName')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'AccountName'),
   })
   AccountName: string;
 
   // * AccountNumber
   @Length(3, 9, {
-    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'AccountNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'AccountNumber'),
   })
   AccountNumber: string;
 
   // * BSBNumber
   @Length(6, 6, {
-    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'BSBNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.LengthOutOfBounds, 'BSBNumber'),
   })
   @IsNumberString(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'BSBNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'BSBNumber'),
   })
   BSBNumber: string;
 }

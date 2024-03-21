@@ -10,6 +10,7 @@ import {
 import { FatzebraDirectDebit } from '../../types'
 
 import debug from 'debug'
+
 const log = debug('nodepay:fatzebra')
 
 /** @internal */
@@ -33,52 +34,52 @@ export class DirectDebitDTO {
   }
 
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'description')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'description'),
   })
   description: string;
 
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'number')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'number'),
   })
   amount: number;
 
   // * bsb
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'bsb')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'bsb'),
   })
   bsb?: string;
 
   // * account_number
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'account_number')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'account_number'),
   })
   account_number?: string;
 
   // * account_name
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'account_name')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'account_name'),
   })
   account_name?: string;
 
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'date')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'date'),
   })
   @IsDate()
   date?: string;
 
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'reference')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'reference'),
   })
   reference?: string;
 
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'bankAccount')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'bankAccount'),
   })
   bank_account?: string;
 }

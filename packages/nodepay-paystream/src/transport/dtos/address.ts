@@ -3,6 +3,7 @@ import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/valida
 import { PaystreamAddress } from '../../types'
 
 import debug from 'debug'
+
 const log = debug('nodepay:paystream')
 
 /** @internal */
@@ -19,32 +20,32 @@ export class AddressDTO {
 
   // * address
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'address')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'address'),
   })
   readonly address: string;
 
   // * city
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'city')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'city'),
   })
   readonly city: string;
 
   // * state
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'state')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'state'),
   })
   readonly state: string;
 
   // * postcode
   // TODO: render locale-aware. Default is 'Australia'.
   @IsPostalCode('AU', {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotAPostalCode, 'postcode')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotAPostalCode, 'postcode'),
   })
   readonly postcode: string;
 
   // * country
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'country')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'country'),
   })
   readonly country: string;
 }

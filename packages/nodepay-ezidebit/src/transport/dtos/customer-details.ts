@@ -15,6 +15,7 @@ import {
 import { IEzidebitInternalCustomerDetails } from '../../types'
 
 import debug from 'debug'
+
 const log = debug('nodepay:ezidebit')
 
 /** @internal */
@@ -45,128 +46,128 @@ export class CustomerDetailsDTO {
 
   // * YourSystemReference
   @MaxLength(50, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'YourSystemReference')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'YourSystemReference'),
   })
   YourSystemReference: string;
 
   // * NewYourSystemReference
   @MaxLength(50, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'NewYourSystemReference')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'NewYourSystemReference'),
   })
   NewYourSystemReference: string;
 
   // * YourGeneralReference
   @IsOptional()
   @MaxLength(50, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'YourGeneralReference')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'YourGeneralReference'),
   })
   YourGeneralReference: string | undefined;
 
   // * LastName
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'LastName')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'LastName'),
   })
   @MaxLength(60, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'LastName')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'LastName'),
   })
   LastName: string;
 
   // * FirstName
   @IsOptional()
   @MaxLength(30, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'FirstName')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'FirstName'),
   })
   FirstName: string | undefined;
 
   // * AddressLine1
   @IsOptional()
   @MaxLength(30, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'AddressLine1')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'AddressLine1'),
   })
   AddressLine1: string | undefined;
 
   // * AddressLine2
   @IsOptional()
   @MaxLength(30, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'AddressLine2')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'AddressLine2'),
   })
   AddressLine2: string | undefined;
 
   // * AddressSuburb
   @IsOptional()
   @MaxLength(20, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'AddressSuburb')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'AddressSuburb'),
   })
   AddressSuburb: string | undefined;
 
   // * AddressState
   @IsOptional()
   @MaxLength(3, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'AddressState')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'AddressState'),
   })
   AddressState: string | undefined;
 
   // * AddressPostCode
   @IsOptional()
   @IsNumberString(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'AddressPostCode')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'AddressPostCode'),
   })
   @MaxLength(4, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'AddressPostCode')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'AddressPostCode'),
   })
   AddressPostCode: string | undefined;
 
   // * EmailAddress
   @IsOptional()
   @MaxLength(255, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'EmailAddress')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'EmailAddress'),
   })
   @IsEmail(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotAnEmail, 'EmailAddress')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotAnEmail, 'EmailAddress'),
   })
   EmailAddress: string | undefined;
 
   // * MobilePhoneNumber
   @IsOptional()
   @MaxLength(10, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'MobilePhoneNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'MobilePhoneNumber'),
   })
   @IsMobilePhone('en-AU', undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotAMobilePhone, 'MobilePhoneNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotAMobilePhone, 'MobilePhoneNumber'),
   })
   MobilePhoneNumber: string | undefined;
 
   // * SmsPaymentReminder
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'SmsPaymentReminder')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'SmsPaymentReminder'),
   })
   @IsIn(['YES', 'NO'], {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotInAllowedSet, 'SmsPaymentReminder')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotInAllowedSet, 'SmsPaymentReminder'),
   })
   SmsPaymentReminder: string;
 
   // * SmsFailedNotification
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'SmsFailedNotification')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'SmsFailedNotification'),
   })
   @IsIn(['YES', 'NO'], {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotInAllowedSet, 'SmsFailedNotification')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotInAllowedSet, 'SmsFailedNotification'),
   })
   SmsFailedNotification: string;
 
   // * SmsExpiredCard
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'SmsExpiredCard')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'SmsExpiredCard'),
   })
   @IsIn(['YES', 'NO'], {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotInAllowedSet, 'SmsExpiredCard')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotInAllowedSet, 'SmsExpiredCard'),
   })
   SmsExpiredCard: string;
 
   // * Username
   @IsOptional()
   @MaxLength(50, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'Username')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'Username'),
   })
   Username: string | undefined;
 }

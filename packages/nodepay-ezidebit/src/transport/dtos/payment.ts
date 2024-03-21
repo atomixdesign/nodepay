@@ -3,6 +3,7 @@ import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/valida
 import { IEzidebitDirectDebitPayment } from '../../types'
 
 import debug from 'debug'
+
 const log = debug('nodepay:ezidebit')
 
 /** @internal */
@@ -22,46 +23,46 @@ export class PaymentDTO {
   // * EziDebitCustomerID
   @IsOptional()
   @IsNumberString(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'EziDebitCustomerID')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'EziDebitCustomerID'),
   })
   @MaxLength(50, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'EziDebitCustomerID')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'EziDebitCustomerID'),
   })
   EziDebitCustomerID: string | undefined;
 
   // * YourSystemReference
   @IsOptional()
   @MaxLength(50, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'YourSystemReference')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'YourSystemReference'),
   })
   YourSystemReference: string | undefined;
 
   // * DebitDate
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'DebitDate')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'DebitDate'),
   })
   @MaxLength(10, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'DebitDate')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'DebitDate'),
   })
   DebitDate: string;
 
   // * PaymentAmountInCents
   @IsNumber(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'PaymentAmountInCents')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'PaymentAmountInCents'),
   })
   PaymentAmountInCents: number;
 
   // * PaymentReference
   @IsOptional()
   @MaxLength(50, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'PaymentReference')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'PaymentReference'),
   })
   PaymentReference: string | undefined;
 
   // * Username
   @IsOptional()
   @MaxLength(50, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'Username')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'Username'),
   })
   Username: string | undefined;
 }

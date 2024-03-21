@@ -9,6 +9,7 @@ import {
 import { FatzebraBankAccount } from '../../types'
 
 import debug from 'debug'
+
 const log = debug('nodepay:fatzebra')
 
 /** @internal */
@@ -27,19 +28,19 @@ export class BankAccountDTO {
 
   // * bsb
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'bsb')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'bsb'),
   })
   bsb: string;
 
   // * account_number
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'account_number')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'account_number'),
   })
   account_number: string;
 
   // * account_name
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'account_name')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'account_name'),
   })
   account_name: string;
 

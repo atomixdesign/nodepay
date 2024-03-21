@@ -89,13 +89,15 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
     }
 
     await validateOrReject(new CustomerDTO(customerObject as IEzidebitInternalCustomer))
+
     for(const key of Object.keys(customerObject)) {
       if (customerObject[key] === undefined) {
         customerObject[key] = ''
       }
     }
+
     const result = await this.api.addCustomer(
-      new CustomerDTO(customerObject as IEzidebitInternalCustomer)
+      new CustomerDTO(customerObject as IEzidebitInternalCustomer),
     )
 
     // TODO: Decouple
@@ -110,6 +112,7 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
           NameOnCreditCard: creditCard.cardHolderName,
         }
         const creditCardDTO: CreditCardDTO = new CreditCardDTO(creditCardObject as IEzidebitNewCreditCard)
+
         await validateOrReject(creditCardDTO)
 
         await this.api.addCustomerCreditCard(creditCardDTO)
@@ -124,6 +127,7 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
           BankAccountNumber: bankAccount.accountNumber,
         }
         const bankAccountDTO: BankAccountDTO = new BankAccountDTO(bankAccountObject as IEzidebitNewBankAccount)
+
         await validateOrReject(bankAccountDTO)
 
         await this.api.addCustomerBankAccount(bankAccountDTO)
@@ -161,6 +165,7 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
     }
 
     await validateOrReject(new CustomerDetailsDTO(detailsObject as IEzidebitInternalCustomerDetails))
+
     for(const key of Object.keys(detailsObject)) {
       if (detailsObject[key] === undefined) {
         detailsObject[key] = ''
@@ -168,7 +173,7 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
     }
 
     const result = await this.api.updateCustomer(
-      new CustomerDetailsDTO(detailsObject as IEzidebitInternalCustomerDetails)
+      new CustomerDetailsDTO(detailsObject as IEzidebitInternalCustomerDetails),
     )
 
     // TODO: Decouple
@@ -183,6 +188,7 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
           NameOnCreditCard: creditCard.cardHolderName,
         }
         const creditCardDTO: CreditCardDTO = new CreditCardDTO(creditCardObject as IEzidebitNewCreditCard)
+
         await validateOrReject(creditCardDTO)
 
         await this.api.addCustomerCreditCard(creditCardDTO)
@@ -197,6 +203,7 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
           BankAccountNumber: bankAccount.accountNumber,
         }
         const bankAccountDTO: BankAccountDTO = new BankAccountDTO(bankAccountObject as IEzidebitNewBankAccount)
+
         await validateOrReject(bankAccountDTO)
 
         await this.api.addCustomerBankAccount(bankAccountDTO)
@@ -221,6 +228,7 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
     }
 
     await validateOrReject(new PaymentDTO(paymentObject))
+
     return this.api.placeDirectCharge(paymentObject)
   }
 
@@ -240,11 +248,12 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
     }
 
     await validateOrReject(new OnceOffChargeDTO(chargeObject))
+
     return this.api.placeCharge(chargeObject)
   }
 
   async chargeRecurring(
-    paymentSchedule: EzidebitPaymentSchedule
+    paymentSchedule: EzidebitPaymentSchedule,
   ): Promise<IEzidebitAPIResponse> {
     const scheduleObject = {
       EziDebitCustomerID: paymentSchedule.ezidebitCustomerId ?? '',
@@ -265,6 +274,7 @@ export class Ezidebit extends BaseGateway<EzidebitConfig> implements
     }
 
     await validateOrReject(new PaymentScheduleDTO(scheduleObject))
+
     return this.api.schedulePayment(scheduleObject)
   }
 }

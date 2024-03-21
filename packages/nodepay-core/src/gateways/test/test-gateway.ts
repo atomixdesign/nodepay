@@ -19,7 +19,7 @@ export class TestGateway extends BaseGateway<Config> implements DirectDebit, Onc
   protected beforeConfig(config?: Partial<Config>): Partial<Config> | undefined {
     if (config?.apiKey === '') {
       config = {
-        apiKey: 'empty-api-key'
+        apiKey: 'empty-api-key',
       }
     }
 

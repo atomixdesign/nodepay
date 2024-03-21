@@ -36,12 +36,13 @@ export class EzidebitAPI {
     this.soapClient = await soapClientFactory.createAsync(this.config)
     this.nonPCISoapClient = await soapClientFactory.createAsync({
       ...this.config,
-      ...{ apiRoot: this.config.nonPCIApiRoot }
+      ...{ apiRoot: this.config.nonPCIApiRoot },
     })
   }
 
   async describe(pci = true): Promise<unknown> {
     await this.ensureClient()
+
     return pci ? this.soapClient!.describe() : this.nonPCISoapClient!.describe()
   }
 
@@ -52,6 +53,7 @@ export class EzidebitAPI {
       ...{ DigitalKey: this.config.digitalKey },
       ...customer,
     })
+
     if (response[0]?.AddCustomerResult?.ErrorMessage !== undefined) {
       return Promise.reject(new EzidebitAPIError(response[0].AddCustomerResult))
     }
@@ -66,6 +68,7 @@ export class EzidebitAPI {
       ...{ DigitalKey: this.config.digitalKey },
       ...customerDetails,
     })
+
     if (response[0]?.EditCustomerDetailsResult?.ErrorMessage !== undefined) {
       return Promise.reject(new EzidebitAPIError(response[0].EditCustomerDetailsResult))
     }
@@ -84,6 +87,7 @@ export class EzidebitAPI {
       },
       ...creditCard,
     })
+
     if (response[0]?.EditCustomerCreditCardResult?.ErrorMessage !== undefined) {
       throw new EzidebitAPIError(response[0].EditCustomerCreditCardResult)
     }
@@ -102,6 +106,7 @@ export class EzidebitAPI {
       },
       ...bankAccount,
     })
+
     if (response[0]?.EditCustomerBankAccountResult?.ErrorMessage !== undefined) {
       throw new EzidebitAPIError(response[0].EditCustomerBankAccountResult)
     }
@@ -116,6 +121,7 @@ export class EzidebitAPI {
       ...{ DigitalKey: this.config.digitalKey },
       ...charge,
     })
+
     if (response[0]?.ProcessRealtimeCreditCardPaymentResult?.ErrorMessage !== undefined) {
       throw new EzidebitAPIError(response[0].ProcessRealtimeCreditCardPaymentResult)
     }
@@ -132,6 +138,7 @@ export class EzidebitAPI {
       ...{ DigitalKey: this.config.digitalKey },
       ...payment,
     })
+
     if (response[0]?.AddPaymentResult?.ErrorMessage !== undefined) {
       throw new EzidebitAPIError(response[0].AddPaymentResult)
     }
@@ -148,6 +155,7 @@ export class EzidebitAPI {
       },
       ...schedule,
     })
+
     if (response[0]?.CreateScheduleResult.ErrorMessage !== undefined) {
       throw new EzidebitAPIError(response[0]?.CreateScheduleResult)
     }

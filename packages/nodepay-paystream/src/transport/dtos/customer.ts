@@ -13,6 +13,7 @@ import { CreditCardDTO } from './credit-card'
 import { AddressDTO } from './address'
 
 import debug from 'debug'
+
 const log = debug('nodepay:paystream')
 
 /** @internal */
@@ -29,10 +30,12 @@ export class CustomerDTO {
     this.reference = customer.reference
     this.email = customer.emailAddress
     this.ipAddress = customer.ipAddress
+
     if (creditCard !== undefined) {
       this.card = new CreditCardDTO(creditCard)
       validateSync(this.card as CreditCardDTO)
     }
+
     if (address !== undefined &&! Object.values(address).every(entry => entry === undefined)) {
       this.address = new AddressDTO(address)
       validateSync(this.address)
@@ -41,25 +44,25 @@ export class CustomerDTO {
 
   // * first_name
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'first_name')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'first_name'),
   })
   readonly first_name: string;
 
   // * last_name
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'last_name')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'last_name'),
   })
   readonly last_name: string;
 
   // * reference
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'reference')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'reference'),
   })
   readonly reference: string;
 
   // * email
   @IsEmail(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotAnEmail, 'email')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotAnEmail, 'email'),
   })
   readonly email: string;
 
@@ -67,7 +70,7 @@ export class CustomerDTO {
   @IsOptional()
   @IsIP('4',
     {
-      message: ErrorFactory.getErrorMessage(ErrorType.NotAValidIP, 'ipAddress')
+      message: ErrorFactory.getErrorMessage(ErrorType.NotAValidIP, 'ipAddress'),
     })
   readonly ipAddress?: string;
 

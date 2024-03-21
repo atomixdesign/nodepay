@@ -3,6 +3,7 @@ import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/valida
 import { PaystreamPaymentFrequency, PaystreamSubscription } from '../../types'
 
 import debug from 'debug'
+
 const log = debug('nodepay:paystream')
 
 /** @internal */
@@ -20,31 +21,31 @@ export class SubscriptionDTO {
 
   // * customer
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'customer')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'customer'),
   })
   customer: string;
 
   // * plan
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'plan')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'plan'),
   })
   plan: string;
 
   // * frequency
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'frequency')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'frequency'),
   })
   frequency: PaystreamPaymentFrequency;
 
   // * start_date
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'start_date')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'start_date'),
   })
   start_date: string;
 
   // * reference
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'reference')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'reference'),
   })
   reference: string;
 
