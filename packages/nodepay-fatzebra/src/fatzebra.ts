@@ -4,6 +4,7 @@ import {
   OnceOffPayment,
   RecurringPayment,
   CustomerDetails,
+  BankAccount,
 } from '@atomixdesign/nodepay-core/features'
 import {
   FatzebraConfig,
@@ -15,6 +16,7 @@ import {
 } from './types'
 import { IFatzebraAPIResponse } from './transport'
 import {
+  BankAccountDTO,
   ChargeDTO,
   CustomerDTO,
   PaymentPlanDTO,
@@ -24,6 +26,7 @@ import { FatzebraAPI } from './transport/api'
 export class Fatzebra extends BaseGateway<FatzebraConfig> implements
   OnceOffPayment,
   RecurringPayment,
+  BankAccount,
   CustomerDetails
 {
   private api: FatzebraAPI
@@ -47,6 +50,25 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
 
   get shortName(): string {
     return 'fatzebra'
+  }
+
+  async createBankAccount(
+    bankAccount: FatzebraBankAccount,
+  ): Promise<IFatzebraAPIResponse | BankAccountDTO | FatzebraConfig> {
+
+    const formattedBankAccount = new BankAccountDTO(bankAccount)
+    
+    await validateOrReject(formattedBankAccount)
+
+    switch(this?.settingsManager?.runMode as string) {
+    case 'dry':
+      return this.config
+    case 'verbose':
+      return formattedBankAccount
+    case 'wet':
+    default:
+      return this.api.getBankAccountToken(formattedBankAccount)
+    }
   }
 
   async addCustomer(

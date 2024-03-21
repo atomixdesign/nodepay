@@ -41,7 +41,7 @@ export class FatzebraAPI {
         url: endpoint,
         data: payload,
       })
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(error?.response?.data?.errors?.toString())
     }
 
