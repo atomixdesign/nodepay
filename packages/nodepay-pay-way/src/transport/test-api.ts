@@ -6,7 +6,7 @@ export const MockResponse = {
   status: 200,
   statusText: 'OK',
   data: 'randomTest',
-  originalResponse: {}
+  originalResponse: {},
 }
 
 /** @internal */

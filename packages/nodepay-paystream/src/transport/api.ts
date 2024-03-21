@@ -16,11 +16,10 @@ import { SubscriptionDTO } from './dtos/subscription'
 
 @Service()
 export class PaystreamAPI {
-
   private httpClient: AxiosInstance
 
   constructor(
-    private config: PaystreamConfig
+    private config: PaystreamConfig,
   ) {
     const httpClientFactory: HttpClientFactory = new HttpClientFactory()
 
@@ -35,6 +34,7 @@ export class PaystreamAPI {
 
   private async _request(method: 'get' | 'put' | 'post', endpoint: string, payload: any): Promise<IPaystreamAPIResponse> {
     let response
+
     try {
       response = await this.httpClient!.request({
         method,

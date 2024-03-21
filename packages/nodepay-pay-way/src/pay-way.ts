@@ -44,7 +44,7 @@ export class Payway extends BaseGateway<PaywayConfig> implements
       secretKey: '',
       publishableKey: '',
       apiRoot: '',
-      responseType: 'json'
+      responseType: 'json',
     }
   }
 
@@ -76,7 +76,9 @@ export class Payway extends BaseGateway<PaywayConfig> implements
         })
 
         await validateOrReject(creditCardObject)
+
         const ccResponse = await this.api.getCCtoken(creditCardObject)
+
         singleUseTokenId = ccResponse?.data?.singleUseTokenId
       } else if (bankAccount !== undefined) {
         const bankAccountObject = new BankAccountDTO({
@@ -84,7 +86,9 @@ export class Payway extends BaseGateway<PaywayConfig> implements
         })
 
         await validateOrReject(bankAccountObject)
+
         const bankAccountResponse = await this.api.getBankAccountToken(bankAccountObject)
+
         singleUseTokenId = bankAccountResponse?.data?.singleUseTokenId
       }
     } catch (error) {
@@ -100,6 +104,7 @@ export class Payway extends BaseGateway<PaywayConfig> implements
     })
 
     await validateOrReject(customerObject)
+
     return this.api.addCustomer(customerObject)
   }
 
@@ -123,6 +128,7 @@ export class Payway extends BaseGateway<PaywayConfig> implements
     })
 
     await validateOrReject(addressObject)
+
     const result = await this.api.updateCustomerDetails(reference, addressObject)
 
     try {
@@ -132,6 +138,7 @@ export class Payway extends BaseGateway<PaywayConfig> implements
         })
 
         await validateOrReject(creditCardObject)
+
         const ccResponse = await this.api.getCCtoken(creditCardObject)
         const token = ccResponse?.data?.singleUseTokenId
 
@@ -139,6 +146,7 @@ export class Payway extends BaseGateway<PaywayConfig> implements
           singleUseTokenId: token,
           merchantId: this.config.merchantId,
         })
+
         await validateOrReject(paymentDetailsObject)
 
         await this.api.updateCustomerPayment(
@@ -153,6 +161,7 @@ export class Payway extends BaseGateway<PaywayConfig> implements
         })
 
         await validateOrReject(bankAccountObject)
+
         const bankAccountResponse = await this.api.getBankAccountToken(bankAccountObject)
         const token = bankAccountResponse?.data?.singleUseTokenId
 
@@ -160,6 +169,7 @@ export class Payway extends BaseGateway<PaywayConfig> implements
           singleUseTokenId: token,
           bankAccountId: this.config.bankAccountId,
         })
+
         await validateOrReject(paymentDetailsObject)
 
         await this.api.updateCustomerPayment(
@@ -167,7 +177,6 @@ export class Payway extends BaseGateway<PaywayConfig> implements
           paymentDetailsObject,
         )
       }
-
     } catch (error) {
       console.error(error)
     }
@@ -186,6 +195,7 @@ export class Payway extends BaseGateway<PaywayConfig> implements
     })
 
     await validateOrReject(chargeObject)
+
     return this.api.placeDirectCharge(chargeObject)
   }
 
@@ -205,10 +215,14 @@ export class Payway extends BaseGateway<PaywayConfig> implements
 
     if (singleUseTokenId === undefined) {
       const creditCardObject = new CreditCardDTO(creditCard!)
+
       await validateOrReject(creditCardObject)
+
       const ccTokenResponse = await this.api.getCCtoken(creditCardObject)
+
       singleUseTokenId = ccTokenResponse.data.singleUseTokenId
     }
+
     return this.api.placeCharge(singleUseTokenId!, chargeObject)
   }
 
@@ -226,6 +240,7 @@ export class Payway extends BaseGateway<PaywayConfig> implements
     })
 
     await validateOrReject(scheduleObject)
+
     return this.api.schedulePayment(paymentSchedule.customerId, scheduleObject)
   }
 }

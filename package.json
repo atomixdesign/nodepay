@@ -38,6 +38,7 @@
     "publish:dev": "yarn prepublishLocal && lerna publish --registry http://localhost:4873"
   },
   "devDependencies": {
+    "@atomixdesign/eslint-config": "^1.0.3",
     "@types/inquirer": "^7.3.1",
     "@types/node": "^14.11.7",
     "@types/yargs": "^16.0.0",

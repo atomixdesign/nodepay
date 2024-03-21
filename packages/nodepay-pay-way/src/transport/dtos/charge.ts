@@ -14,6 +14,7 @@ import {
 import { IPaywayInternalCharge } from '../../types'
 
 import debug from 'debug'
+
 const log = debug('nodepay:pay-way')
 
 /** @internal */
@@ -33,13 +34,13 @@ export class ChargeDTO {
 
   // * customerNumber
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'customerNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'customerNumber'),
   })
   @IsAlphanumeric('en-US', {
-    message: ErrorFactory.getErrorMessage(ErrorType.AlphanumRequired, 'customerNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.AlphanumRequired, 'customerNumber'),
   })
   @MaxLength(20, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'customerNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'customerNumber'),
   })
   customerNumber: string;
 
@@ -51,21 +52,21 @@ export class ChargeDTO {
 
   // * principalAmount
   @IsNumber(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'principalAmount')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'principalAmount'),
   })
   principalAmount: number;
 
   // * orderNumber
   @IsOptional()
   @MaxLength(20, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'orderNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'orderNumber'),
   })
   orderNumber: string | undefined;
 
   // * customerIpAddress
   @IsOptional()
   @IsIP('4', {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotAValidIP, 'customerIpAddress')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotAValidIP, 'customerIpAddress'),
   })
   customerIpAddress: string | undefined;
 

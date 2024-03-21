@@ -1,39 +1,8 @@
 {
-  "parser": "@typescript-eslint/parser",
-  "env": {
-    "node": true,
-    "jest": true
-  },
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:unicorn/recommended",
-    "plugin:import/errors",
-    "plugin:import/warnings",
-    "plugin:import/typescript"
-  ],
+  "extends": "@atomixdesign/eslint-config/recommended",
   "rules": {
-    "indent": ["error", 2],
-    "semi": ["warn", "never"],
-    "quotes": ["warn", "single"],
-    "jsx-quotes": ["warn", "prefer-double"],
-    "object-curly-spacing": ["warn", "always"],
-    "@typescript-eslint/ban-ts-comment": "off",
-    "@typescript-eslint/no-empty-function": "off",
-    "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/no-empty-interface": "off",
-    "@typescript-eslint/no-non-null-assertion": "off",
-    "@typescript-eslint/no-unused-vars": ["error", {
-      "varsIgnorePattern": "^_",
-      "argsIgnorePattern": "^_",
-      "ignoreRestSiblings": true
-    }],
-    "@typescript-eslint/member-delimiter-style": ["warn", {
-      "multiline": {
-        "delimiter": "none"
-      }
-    }],
-    "import/no-extraneous-dependencies" : "warn",
-    "import/no-unresolved" : "off"
-  }
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-non-null-assertion": "off"
+  },
+  "ignorePatterns": ["**/*.test.ts"]
 }

@@ -4,6 +4,7 @@ import { IEzidebitNewBankAccount } from '../../types'
 import { IsOptionalIfEmpty } from './IsOptionalIfEmpty'
 
 import debug from 'debug'
+
 const log = debug('nodepay:ezidebit')
 
 /** @internal */
@@ -24,49 +25,49 @@ export class BankAccountDTO {
   // * EziDebitCustomerID
   @IsOptionalIfEmpty()
   @IsNumberString(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'EziDebitCustomerID')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'EziDebitCustomerID'),
   })
   @MaxLength(50, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'EziDebitCustomerID')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'EziDebitCustomerID'),
   })
   EziDebitCustomerID = '';
 
   // * BankAccountName
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'BankAccountName')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'BankAccountName'),
   })
   BankAccountName: string;
 
   // * BankAccountBSB
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'BankAccountBSB')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'BankAccountBSB'),
   })
   BankAccountBSB: string;
 
   // * BankAccountNumber
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'BankAccountNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'BankAccountNumber'),
   })
   BankAccountNumber: string;
 
   // * Reactivate
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'Reactivate')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'Reactivate'),
   })
   @IsIn(['YES', 'NO'], {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotInAllowedSet, 'Reactivate')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotInAllowedSet, 'Reactivate'),
   })
   Reactivate: string
 
   // * YourSystemReference
   @MaxLength(50, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'YourSystemReference')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'YourSystemReference'),
   })
   YourSystemReference = '';
 
   // * Username
   @MaxLength(50, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'Username')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'Username'),
   })
   Username = '';
 }

@@ -47,7 +47,9 @@ describe('nodepay entry', () => {
 
     it('can be created with a map', () => {
       const gatewayMap = new Map()
+
       gatewayMap.set('mock', gateway)
+
       const nodepay = new Nodepay(gatewayMap)
 
       expect(nodepay.gateways.size).toBe(1)
@@ -67,7 +69,9 @@ describe('nodepay entry', () => {
 
     it('can be created with a map', () => {
       const gatewayMap = new Map()
+
       gatewayMap.set('myMock', gateway)
+
       const nodepay = new Nodepay(gatewayMap)
 
       expect(nodepay.gateways.size).toBe(1)

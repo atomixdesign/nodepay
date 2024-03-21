@@ -3,6 +3,7 @@ import { ErrorFactory, ErrorType } from '@atomixdesign/nodepay-core/build/valida
 import { FatzebraPaymentFrequency, FatzebraPaymentPlan } from '../../types'
 
 import debug from 'debug'
+
 const log = debug('nodepay:fatzebra')
 
 
@@ -30,12 +31,12 @@ export class PaymentPlanDTO {
 
   // * customer
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'customer')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'customer'),
   })
   customer: string;
 
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'amount')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'amount'),
   })
   amount: number;
 
@@ -43,12 +44,12 @@ export class PaymentPlanDTO {
 
   // * frequency
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'frequency')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'frequency'),
   })
   frequency: FatzebraPaymentFrequency;
 
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'payment_method')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'payment_method'),
   })
   payment_method = 'Credit Card';
 
@@ -56,55 +57,55 @@ export class PaymentPlanDTO {
 
   // * start_date
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'start_date')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'start_date'),
   })
   start_date: string;
 
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'end_date')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'end_date'),
   })
   end_date?: string;
 
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'reference')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'reference'),
   })
   reference?: string;
 
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'description')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'description'),
   })
   description?: string;
 
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'currency')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'currency'),
   })
   currency?: string;
 
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'total_count')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'total_count'),
   })
   total_count?: number;
 
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'total_amount')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'total_amount'),
   })
   total_amount?: number;
 
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'failed_payment_fee')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'failed_payment_fee'),
   })
   failed_payment_fee?: number;
 
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'retry_interval')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'retry_interval'),
   })
   retry_interval?: number;
 }

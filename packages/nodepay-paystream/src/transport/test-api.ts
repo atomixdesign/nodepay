@@ -1,5 +1,5 @@
 import { IPaystreamAPIResponse } from './api-response'
-import { CustomerDTO, ChargeDTO, SubscriptionDTO, } from './dtos'
+import { CustomerDTO, ChargeDTO, SubscriptionDTO } from './dtos'
 
 /** @internal */
 export const MockResponse = {
@@ -9,7 +9,7 @@ export const MockResponse = {
     response: {},
     successful: true,
   },
-  originalResponse: {}
+  originalResponse: {},
 }
 
 /** @internal */

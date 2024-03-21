@@ -70,10 +70,11 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
         state: customerDetails.state,
         postcode: customerDetails.postCode,
         country: customerDetails.country,
-      }
+      },
     )
 
     await validateOrReject(customerObject)
+
     return this.api.addCustomer(customerObject)
   }
 
@@ -100,10 +101,11 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
         state: customerDetails.state,
         postcode: customerDetails.postCode,
         country: customerDetails.country,
-      }
+      },
     )
 
     await validateOrReject(customerObject)
+
     return this.api.updateCustomer(reference, customerObject)
   }
 
@@ -115,7 +117,9 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
       onceOffCharge,
       creditCard,
     )
+
     await validateOrReject(chargeObject)
+
     return this.api.placeCharge(chargeObject)
   }
 
@@ -123,7 +127,9 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
     subscription: PaystreamSubscription,
   ): Promise<IPaystreamAPIResponse> {
     const subscriptionObject = new SubscriptionDTO(subscription)
+
     await validateOrReject(subscriptionObject)
+
     return this.api.addSubscription(subscriptionObject)
   }
 
@@ -133,7 +139,9 @@ export class Paystream extends BaseGateway<PaystreamConfig> implements
 
   async createPlan(paymentPlan: PaystreamPaymentPlan): Promise<IPaystreamAPIResponse> {
     const planObject = new PlanDTO(paymentPlan)
+
     await validateOrReject(planObject)
+
     return this.api.addPlan(planObject)
   }
 }

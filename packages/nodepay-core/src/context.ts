@@ -15,6 +15,7 @@ import { IBaseResponse } from './network'
 
 import debug from 'debug'
 import { BaseGateway } from './gateways'
+
 const log = debug('nodepay:core')
 
 const _hasOwnProperty = (object: any, methodName: string) => {
@@ -69,6 +70,7 @@ export class Context implements
     log({ customerDetails })
     log({ creditCard })
     log({ bankAccount })
+
     return this.dispatch('addCustomer', {
       customerDetails,
       creditCard,
@@ -86,6 +88,7 @@ export class Context implements
     log({ customerDetails })
     log({ creditCard })
     log({ bankAccount })
+
     return this.dispatch('updateCustomer', {
       reference,
       customerDetails,
@@ -96,6 +99,7 @@ export class Context implements
   directDebit(directDebitCharge: IDirectDebit): Promise<IBaseResponse> {
     log(`calling directDebit on ${this.gateway.constructor.name}`)
     log({ directDebitCharge })
+
     return this.dispatch('directDebit', {
       directDebitCharge,
     })
@@ -107,6 +111,7 @@ export class Context implements
     log(`calling charge on ${this.gateway.constructor.name}`)
     log({ onceOffCharge })
     log({ creditCard })
+
     return this.dispatch('charge', {
       onceOffCharge,
       creditCard,
@@ -115,8 +120,9 @@ export class Context implements
   chargeRecurring(...arguments_: unknown[]): Promise<unknown> {
     log(`calling chargeRecurring on ${this.gateway.constructor.name}`)
     log({ arguments_ })
+
     return this.dispatch('chargeRecurring', {
-      ...arguments_
+      ...arguments_,
     })
   }
 
@@ -124,6 +130,7 @@ export class Context implements
     log('warning: no such method on standard interface')
     log(`non-standard method ${name} called on ${this.gateway.constructor.name}`)
     log('attempting dispatch')
+
     return this.dispatch(name, {
       ...arguments_,
     })
@@ -140,6 +147,6 @@ function augmentWithNoSuchMethod(object: any) {
           return target.__noSuchMethod__.call(target, p, arguments_)
         }
       }
-    }
+    },
   })
 }

@@ -57,7 +57,7 @@ export class BPOINT extends BaseGateway<BPOINTConfig> implements
   private async _processCharge(
     charge: BPOINTCharge,
     creditCard: BPOINTCreditCard,
-    subType: 'single' | 'recurring' = 'single'
+    subType: 'single' | 'recurring' = 'single',
   ): Promise<IBaseResponse> {
     const chargeObject = {
       Action: BPOINTActionType.payment,
@@ -72,7 +72,9 @@ export class BPOINT extends BaseGateway<BPOINTConfig> implements
     }
 
     const chargeDTO = new ChargeDTO(chargeObject, creditCard)
+
     await validateOrReject(chargeDTO)
+
     return this.api.placeCharge(chargeDTO)
   }
 
@@ -99,7 +101,9 @@ export class BPOINT extends BaseGateway<BPOINTConfig> implements
       creditCard,
       bankAccount,
     )
+
     await validateOrReject(customerDTO)
+
     return this.api.addCustomer(customerDTO)
   }
 
@@ -127,7 +131,9 @@ export class BPOINT extends BaseGateway<BPOINTConfig> implements
       creditCard,
       bankAccount,
     )
+
     await validateOrReject(customerDTO)
+
     return this.api.updateCustomer(reference, customerDTO)
   }
 

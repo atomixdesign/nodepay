@@ -16,7 +16,7 @@ export abstract class BaseGateway<T extends Record<string, unknown> = Record<str
   private buildConfig(config?: P): T {
     return this.afterConfig({
       ...this.baseConfig,
-      ...this.beforeConfig(config)
+      ...this.beforeConfig(config),
     })
   }
 

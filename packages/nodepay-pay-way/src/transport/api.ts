@@ -27,9 +27,10 @@ export class PaywayAPI {
   private httpClient: AxiosInstance
 
   constructor(
-    private config: PaywayConfig
+    private config: PaywayConfig,
   ) {
     const httpClientFactory: HttpClientFactory = new HttpClientFactory()
+
     this.idempotencyKey = uuidv4()
     this.secretAuthHeader = `Basic ${this.encodeKey(config.secretKey)}`
     this.publicAuthHeader = `Basic ${this.encodeKey(config.publishableKey)}`
@@ -40,7 +41,7 @@ export class PaywayAPI {
         Authorization: this.secretAuthHeader,
         Accept: `application/${config.responseType}`,
         'Idempotency-Key': this.idempotencyKey,
-      }
+      },
     })
   }
 
@@ -64,9 +65,11 @@ export class PaywayAPI {
     const response = await this.httpClient!.request({
       url: '/api-keys/latest',
     })
+
     if (response.status === 200 && response?.data.key !== this.config.secretKey) {
       console.error('Payway API key is about to expire. Please log in to your Payway admin and generate a new api key.')
     }
+
     return {
       status: response.status,
       statusText: response.statusText,
@@ -82,7 +85,7 @@ export class PaywayAPI {
       data: qs.stringify({ ...creditCard }),
       headers: {
         Authorization: this.publicAuthHeader,
-      }
+      },
     })
   }
 
@@ -93,12 +96,13 @@ export class PaywayAPI {
       data: qs.stringify({ ...bankAccount }),
       headers: {
         Authorization: this.publicAuthHeader,
-      }
+      },
     })
   }
 
   async addCustomer(customer: CustomerDTO): Promise<IPaywayAPIResponse> {
     const payload: any = { ...customer }
+
     delete payload.customerNumber
 
     return this._process({
@@ -140,6 +144,7 @@ export class PaywayAPI {
 
   async deleteCustomer(customerId: string): Promise<IPaywayAPIResponse> {
     await this.stopCustomerPayments(customerId)
+
     const response = await this.httpClient!.request({
       method: 'delete',
       url: `/customers/${customerId}`,

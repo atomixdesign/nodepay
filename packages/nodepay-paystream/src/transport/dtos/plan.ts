@@ -11,6 +11,7 @@ import {
 import { PaystreamPaymentPlan } from '../../types'
 
 import debug from 'debug'
+
 const log = debug('nodepay:paystream')
 
 /** @internal */
@@ -26,25 +27,25 @@ export class PlanDTO {
 
   // * name
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'name')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'name'),
   })
   readonly name: string;
 
   // * amount
   @IsNumber(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'amount')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'amount'),
   })
   readonly amount: number;
 
   // * reference
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'reference')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'reference'),
   })
   readonly reference: string;
 
   // * description
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'description')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'description'),
   })
   readonly description: string;
 }

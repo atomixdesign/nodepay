@@ -22,6 +22,7 @@ import {
 import { CreditCardDTO } from './credit-card'
 
 import debug from 'debug'
+
 const log = debug('nodepay:bpoint')
 
 /** @internal */
@@ -48,7 +49,7 @@ export class ChargeDTO {
 
   // * Amount
   @IsNumber(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'Amount')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotANumber, 'Amount'),
   })
   Amount: number;
 
@@ -58,10 +59,10 @@ export class ChargeDTO {
 
   // * Crn1
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'Crn1')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'Crn1'),
   })
   @MaxLength(50, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'Crn1')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'Crn1'),
   })
   Crn1: string;
 
@@ -74,7 +75,7 @@ export class ChargeDTO {
   // * TestMode
   @IsOptional()
   @IsBoolean({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotABoolean, 'TestMode')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotABoolean, 'TestMode'),
   })
   TestMode: boolean | undefined = false;
 
@@ -84,23 +85,23 @@ export class ChargeDTO {
   // * EmailAddress
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'EmailAddress')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'EmailAddress'),
   })
   @IsEmail(undefined, {
-    message: ErrorFactory.getErrorMessage(ErrorType.NotAnEmail, 'EmailAddress')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotAnEmail, 'EmailAddress'),
   })
   @MaxLength(250, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'EmailAddress')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'EmailAddress'),
   })
   EmailAddress: string | undefined;
 
   // * MerchantReference
   @IsOptional()
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'MerchantReference')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'MerchantReference'),
   })
   @MaxLength(50, {
-    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'MerchantReference')
+    message: ErrorFactory.getErrorMessage(ErrorType.FieldTooLong, 'MerchantReference'),
   })
   MerchantReference: string | undefined;
 }

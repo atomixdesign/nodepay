@@ -11,6 +11,7 @@ import {
 import { IEzidebitBankAccountDebit } from '../../types'
 
 import debug from 'debug'
+
 const log = debug('nodepay:ezidebit')
 
 /** @internal */
@@ -25,19 +26,19 @@ export class BankDebitDTO extends BaseDebitDTO {
   }
   // * BankAccountName
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'BankAccountName')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'BankAccountName'),
   })
   BankAccountName: string;
 
   // * BankAccountBSB
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'BankAccountBSB')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'BankAccountBSB'),
   })
   BankAccountBSB: string;
 
   // * BankAccountNumber
   @IsNotEmpty({
-    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'BankAccountNumber')
+    message: ErrorFactory.getErrorMessage(ErrorType.NotEmpty, 'BankAccountNumber'),
   })
   BankAccountNumber: string;
 }

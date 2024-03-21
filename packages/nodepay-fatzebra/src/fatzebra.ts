@@ -96,7 +96,7 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
         state: customerDetails.state,
         postcode: customerDetails.postCode,
         country: customerDetails.country,
-      }
+      },
     )
 
     await validateOrReject(customerObject)
@@ -138,10 +138,11 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
         state: customerDetails.state,
         postcode: customerDetails.postCode,
         country: customerDetails.country,
-      }
+      },
     )
 
     await validateOrReject(customerObject)
+
     switch(this?.settingsManager?.runMode as string) {
     case 'dry':
       return this.config
@@ -161,7 +162,9 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
       onceOffCharge,
       creditCard,
     )
+
     await validateOrReject(chargeObject)
+
     switch(this?.settingsManager?.runMode as string) {
     case 'dry':
       return this.config
@@ -187,6 +190,7 @@ export class Fatzebra extends BaseGateway<FatzebraConfig> implements
     const subscriptionObject = new PaymentPlanDTO(subscription)
 
     await validateOrReject(subscriptionObject)
+
     switch(this?.settingsManager?.runMode as string) {
     case 'dry':
       return this.config

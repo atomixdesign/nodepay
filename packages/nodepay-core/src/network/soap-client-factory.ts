@@ -6,13 +6,13 @@ import { NetworkClientAsyncFactory } from './types/network-client-factory'
 
 import debug from 'debug'
 import { parseString } from 'xml2js'
+
 const log = debug('nodepay:core')
 
 @Service('soap.client')
 export class SoapClientFactory extends NetworkClientAsyncFactory<Client> {
   private parseResponse(parsingError: Error, result: Record<string, unknown>) {
     if (parsingError) log(parsingError)
-    /* eslint-disable unicorn/no-null */
     else log(inspect(result, false, null))
   }
 
@@ -21,7 +21,7 @@ export class SoapClientFactory extends NetworkClientAsyncFactory<Client> {
 
     if (typeof config?.apiRoot === 'string') {
       soapClient = await createClientAsync(`${config.apiRoot}?singleWsdl`, {
-        preserveWhitespace: true
+        preserveWhitespace: true,
       })
       soapClient.on('request', (xml: string) => {
         // console.dirxml(xml)
@@ -36,6 +36,7 @@ export class SoapClientFactory extends NetworkClientAsyncFactory<Client> {
 
       return soapClient
     }
+
     return Promise.reject('Couldn\'t instantiate soap client')
   }
 }
