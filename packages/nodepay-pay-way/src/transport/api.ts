@@ -52,17 +52,13 @@ export class PaywayAPI {
   }
 
   private async _process(requestConfig: any): Promise<IPaywayAPIResponse> {
-    try {
-      const response = await this.httpClient!.request(requestConfig)
-      return {
-        status: response.status,
-        statusText: response.statusText,
-        data: response.data,
-        originalResponse: response,
-      }
-    } catch (e) {
-      console.log(e)
-      throw e
+    const response = await this.httpClient!.request(requestConfig)
+
+    return {
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
+      originalResponse: response,
     }
   }
 
