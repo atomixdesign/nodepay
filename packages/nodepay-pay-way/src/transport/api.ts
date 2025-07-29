@@ -31,9 +31,11 @@ export class PaywayAPI {
   ) {
     const httpClientFactory: HttpClientFactory = new HttpClientFactory()
 
+    console.log(config)
+
     this.idempotencyKey = uuidv4()
-    this.secretAuthHeader = `Basic ${this.encodeKey(config.secretKey)}`
-    this.publicAuthHeader = `Basic ${this.encodeKey(config.publishableKey)}`
+    this.secretAuthHeader = `Basic ${this.encodeKey(config.secretKey + ':')}`
+    this.publicAuthHeader = `Basic ${this.encodeKey(config.publishableKey + ':')}`
 
     this.httpClient = httpClientFactory.create({
       baseURL: config.apiRoot,
@@ -50,13 +52,17 @@ export class PaywayAPI {
   }
 
   private async _process(requestConfig: any): Promise<IPaywayAPIResponse> {
-    const response = await this.httpClient!.request(requestConfig)
-
-    return {
-      status: response.status,
-      statusText: response.statusText,
-      data: response.data,
-      originalResponse: response,
+    try {
+      const response = await this.httpClient!.request(requestConfig)
+      return {
+        status: response.status,
+        statusText: response.statusText,
+        data: response.data,
+        originalResponse: response,
+      }
+    } catch (e) {
+      console.log(e)
+      throw e
     }
   }
 
