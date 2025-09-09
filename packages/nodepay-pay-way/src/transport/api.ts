@@ -20,7 +20,6 @@ import {
 
 @Service()
 export class PaywayAPI {
-  private idempotencyKey: string
   private secretAuthHeader: string
   private publicAuthHeader: string
 
@@ -31,9 +30,6 @@ export class PaywayAPI {
   ) {
     const httpClientFactory: HttpClientFactory = new HttpClientFactory()
 
-    console.log(config)
-
-    this.idempotencyKey = uuidv4()
     this.secretAuthHeader = `Basic ${this.encodeKey(config.secretKey + ':')}`
     this.publicAuthHeader = `Basic ${this.encodeKey(config.publishableKey + ':')}`
 
@@ -42,7 +38,6 @@ export class PaywayAPI {
       headers: {
         Authorization: this.secretAuthHeader,
         Accept: `application/${config.responseType}`,
-        'Idempotency-Key': this.idempotencyKey,
       },
     })
   }
