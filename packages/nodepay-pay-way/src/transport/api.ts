@@ -1,6 +1,5 @@
 import { Service } from 'typedi'
 import { AxiosInstance } from 'axios'
-import { v4 as uuidv4 } from 'uuid'
 import qs from 'qs'
 import { PaywayConfig } from '../types'
 import {
