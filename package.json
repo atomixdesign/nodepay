@@ -55,7 +55,7 @@
     "eslint-plugin-unicorn": "^27.0.0",
     "glob": "^7.1.6",
     "jest": "^26.5.2",
-    "lerna": "^8.0.0",
+    "lerna": "^3.22.1",
     "mkdirp": "^1.0.4",
     "mustache": "^4.0.1",
     "ncp": "^2.0.0",
