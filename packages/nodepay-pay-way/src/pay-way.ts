@@ -1,4 +1,3 @@
-import { Container } from 'typedi'
 import { validateOrReject } from 'class-validator'
 import { BaseGateway } from '@atomixdesign/nodepay-core'
 import {
@@ -48,10 +47,9 @@ export class Payway extends BaseGateway<PaywayConfig> implements
     }
   }
 
-  constructor(config?: Partial<PaywayConfig>) {
+  constructor(config: PaywayConfig) {
     super(config)
-    Container.set('payway.config', config)
-    this.api = Container.get(PaywayAPI)
+    this.api = new PaywayAPI(config)
   }
 
   get name(): string {
@@ -64,22 +62,26 @@ export class Payway extends BaseGateway<PaywayConfig> implements
 
   async addCustomer(
     customerDetails: PaywayCustomer,
-    creditCard?: PaywayCreditCard,
+    creditCard?: PaywayCreditCard | string,
     bankAccount?: PaywayBankAccount,
   ): Promise<IPaywayAPIResponse> {
     let singleUseTokenId: string | undefined
 
     try {
       if (creditCard !== undefined) {
-        const creditCardObject = new CreditCardDTO({
-          ...creditCard,
-        })
+        if (typeof creditCard === 'string') {
+          singleUseTokenId = creditCard
+        } else {
+          const creditCardObject = new CreditCardDTO({
+            ...creditCard,
+          })
 
-        await validateOrReject(creditCardObject)
+          await validateOrReject(creditCardObject)
 
-        const ccResponse = await this.api.getCCtoken(creditCardObject)
+          const ccResponse = await this.api.getCCtoken(creditCardObject)
 
-        singleUseTokenId = ccResponse?.data?.singleUseTokenId
+          singleUseTokenId = ccResponse?.data?.singleUseTokenId
+        }
       } else if (bankAccount !== undefined) {
         const bankAccountObject = new BankAccountDTO({
           ...bankAccount,
@@ -133,14 +135,19 @@ export class Payway extends BaseGateway<PaywayConfig> implements
 
     try {
       if (creditCard !== undefined) {
-        const creditCardObject = new CreditCardDTO({
-          ...creditCard,
-        })
+        let token: string
+        if (typeof creditCard === 'string') {
+          token = creditCard
+        } else {
+          const creditCardObject = new CreditCardDTO({
+            ...creditCard,
+          })
 
-        await validateOrReject(creditCardObject)
+          await validateOrReject(creditCardObject)
 
-        const ccResponse = await this.api.getCCtoken(creditCardObject)
-        const token = ccResponse?.data?.singleUseTokenId
+          const ccResponse = await this.api.getCCtoken(creditCardObject)
+          token = ccResponse?.data?.singleUseTokenId
+        }
 
         const paymentDetailsObject = new PaymentDetailsDTO({
           singleUseTokenId: token,

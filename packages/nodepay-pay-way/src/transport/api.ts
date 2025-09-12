@@ -1,6 +1,5 @@
 import { Service } from 'typedi'
 import { AxiosInstance } from 'axios'
-import { v4 as uuidv4 } from 'uuid'
 import qs from 'qs'
 import { PaywayConfig } from '../types'
 import {
@@ -20,7 +19,6 @@ import {
 
 @Service()
 export class PaywayAPI {
-  private idempotencyKey: string
   private secretAuthHeader: string
   private publicAuthHeader: string
 
@@ -31,16 +29,14 @@ export class PaywayAPI {
   ) {
     const httpClientFactory: HttpClientFactory = new HttpClientFactory()
 
-    this.idempotencyKey = uuidv4()
-    this.secretAuthHeader = `Basic ${this.encodeKey(config.secretKey)}`
-    this.publicAuthHeader = `Basic ${this.encodeKey(config.publishableKey)}`
+    this.secretAuthHeader = `Basic ${this.encodeKey(config.secretKey + ':')}`
+    this.publicAuthHeader = `Basic ${this.encodeKey(config.publishableKey + ':')}`
 
     this.httpClient = httpClientFactory.create({
       baseURL: config.apiRoot,
       headers: {
         Authorization: this.secretAuthHeader,
         Accept: `application/${config.responseType}`,
-        'Idempotency-Key': this.idempotencyKey,
       },
     })
   }
